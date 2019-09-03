@@ -11,6 +11,7 @@ namespace SkysJSONGenerator
     {
         private Profile _profile;
 
+        private string _basePath;
         private string _blockstatesPath;
         private string _modelsPath;
         private string _modelsBlockPath;
@@ -21,9 +22,10 @@ namespace SkysJSONGenerator
         {
             _profile = profile;
 
-            _lootTablePath = "out\\data\\" + _profile.Modid + "\\loot_tables\\blocks";
-            _blockstatesPath = "out\\assets\\" + _profile.Modid + "\\blockstates";
-            _modelsPath = "out\\assets\\" + _profile.Modid + "\\models";
+            _basePath = "out\\" + _profile.Modid + "\\" + _profile.Version;
+            _lootTablePath = _basePath + "\\data\\" + _profile.Modid + "\\loot_tables\\blocks";
+            _blockstatesPath = _basePath + "\\assets\\" + _profile.Modid + "\\blockstates";
+            _modelsPath = _basePath + "\\assets\\" + _profile.Modid + "\\models";
             _modelsBlockPath = _modelsPath + "\\block";
             _modelsItemPath = _modelsPath + "\\item";
         }
@@ -94,24 +96,32 @@ namespace SkysJSONGenerator
         {
             if (!Directory.Exists("out"))
                 Directory.CreateDirectory("out");
+
+            if (!Directory.Exists("out\\" + _profile.Modid))
+                Directory.CreateDirectory("out\\" + _profile.Modid);
+
+            if (!Directory.Exists("out\\" + _profile.Modid + "\\" + _profile.Version))
+                Directory.CreateDirectory("out\\" + _profile.Modid + "\\" + _profile.Version);
+
+            //  _basePath = "out\\" + _profile.Modid + "\\" + _profile.Version;
+
+            if (!Directory.Exists(_basePath + "\\assets"))
+                Directory.CreateDirectory(_basePath + "\\assets");
             
-            if (!Directory.Exists("out\\assets"))
-                Directory.CreateDirectory("out\\assets");
-            
-            if (!Directory.Exists("out\\data"))
-                Directory.CreateDirectory("out\\data");
+            if (!Directory.Exists(_basePath + "\\data"))
+                Directory.CreateDirectory(_basePath + "\\data");
 
-            if (!Directory.Exists("out\\data\\" + _profile.Modid))
-                Directory.CreateDirectory("out\\data\\" + _profile.Modid);
+            if (!Directory.Exists(_basePath + "\\data\\" + _profile.Modid))
+                Directory.CreateDirectory(_basePath + "\\data\\" + _profile.Modid);
 
-            if (!Directory.Exists("out\\data\\" + _profile.Modid + "\\loot_tables"))
-                Directory.CreateDirectory("out\\data\\" + _profile.Modid + "\\loot_tables");
+            if (!Directory.Exists(_basePath + "\\data\\" + _profile.Modid + "\\loot_tables"))
+                Directory.CreateDirectory(_basePath + "\\data\\" + _profile.Modid + "\\loot_tables");
 
-            if (!Directory.Exists("out\\data\\" + _profile.Modid + "\\loot_tables\\blocks"))
-                Directory.CreateDirectory("out\\data\\" + _profile.Modid + "\\loot_tables\\blocks");
+            if (!Directory.Exists(_basePath + "\\data\\" + _profile.Modid + "\\loot_tables\\blocks"))
+                Directory.CreateDirectory(_basePath + "\\data\\" + _profile.Modid + "\\loot_tables\\blocks");
 
-            if (!Directory.Exists("out\\assets\\" + _profile.Modid))
-                Directory.CreateDirectory("out\\assets\\" + _profile.Modid);
+            if (!Directory.Exists(_basePath + "\\assets\\" + _profile.Modid))
+                Directory.CreateDirectory(_basePath + "\\assets\\" + _profile.Modid);
 
             if (!Directory.Exists(_blockstatesPath))
                 Directory.CreateDirectory(_blockstatesPath);
