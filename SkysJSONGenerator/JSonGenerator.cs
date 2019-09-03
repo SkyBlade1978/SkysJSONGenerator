@@ -31,6 +31,110 @@ namespace SkysJSONGenerator
             _modelsItemPath = _modelsPath + "\\item";
         }
 
+        private void RenderStairJSON(bool smooth)
+        {
+            foreach (var item in _profile.Materials)
+            {
+                var materialName = item;
+
+                if (smooth)
+                    materialName += "_smooth";
+
+                var name = materialName + "_stairs";
+
+                var fileName = "\\" + name + ".json";
+
+                var blockstate = @"{
+                    ""variants"": {
+                        ""facing=east,half=bottom,shape=straight"":  { ""model"": """ + _profile.Modid + @":block/" + name + @""" },
+                        ""facing=west,half=bottom,shape=straight"":  { ""model"": """ + _profile.Modid + @":block/" + name + @""", ""y"": 180, ""uvlock"": true },
+                        ""facing=south,half=bottom,shape=straight"": { ""model"": """ + _profile.Modid + @":block/" + name + @""", ""y"": 90, ""uvlock"": true },
+                        ""facing=north,half=bottom,shape=straight"": { ""model"": """ + _profile.Modid + @":block/" + name + @""", ""y"": 270, ""uvlock"": true },
+                        ""facing=east,half=bottom,shape=outer_right"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"" },
+                        ""facing=west,half=bottom,shape=outer_right"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"", ""y"": 180, ""uvlock"": true },
+                        ""facing=south,half=bottom,shape=outer_right"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"", ""y"": 90, ""uvlock"": true },
+                        ""facing=north,half=bottom,shape=outer_right"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"", ""y"": 270, ""uvlock"": true },
+                        ""facing=east,half=bottom,shape=outer_left"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"", ""y"": 270, ""uvlock"": true },
+                        ""facing=west,half=bottom,shape=outer_left"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"", ""y"": 90, ""uvlock"": true },
+                        ""facing=south,half=bottom,shape=outer_left"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"" },
+                        ""facing=north,half=bottom,shape=outer_left"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"", ""y"": 180, ""uvlock"": true },
+                        ""facing=east,half=bottom,shape=inner_right"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"" },
+                        ""facing=west,half=bottom,shape=inner_right"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"", ""y"": 180, ""uvlock"": true },
+                        ""facing=south,half=bottom,shape=inner_right"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"", ""y"": 90, ""uvlock"": true },
+                        ""facing=north,half=bottom,shape=inner_right"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"", ""y"": 270, ""uvlock"": true },
+                        ""facing=east,half=bottom,shape=inner_left"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"", ""y"": 270, ""uvlock"": true },
+                        ""facing=west,half=bottom,shape=inner_left"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"", ""y"": 90, ""uvlock"": true },
+                        ""facing=south,half=bottom,shape=inner_left"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"" },
+                        ""facing=north,half=bottom,shape=inner_left"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"", ""y"": 180, ""uvlock"": true },
+                        ""facing=east,half=top,shape=straight"":  { ""model"": """ + _profile.Modid + @":block/" + name + @""", ""x"": 180, ""uvlock"": true },
+                        ""facing=west,half=top,shape=straight"":  { ""model"": """ + _profile.Modid + @":block/" + name + @""", ""x"": 180, ""y"": 180, ""uvlock"": true },
+                        ""facing=south,half=top,shape=straight"": { ""model"": """ + _profile.Modid + @":block/" + name + @""", ""x"": 180, ""y"": 90, ""uvlock"": true },
+                        ""facing=north,half=top,shape=straight"": { ""model"": """ + _profile.Modid + @":block/" + name + @""", ""x"": 180, ""y"": 270, ""uvlock"": true },
+                        ""facing=east,half=top,shape=outer_right"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"", ""x"": 180, ""y"": 90, ""uvlock"": true },
+                        ""facing=west,half=top,shape=outer_right"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"", ""x"": 180, ""y"": 270, ""uvlock"": true },
+                        ""facing=south,half=top,shape=outer_right"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"", ""x"": 180, ""y"": 180, ""uvlock"": true },
+                        ""facing=north,half=top,shape=outer_right"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"", ""x"": 180, ""uvlock"": true },
+                        ""facing=east,half=top,shape=outer_left"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"", ""x"": 180, ""uvlock"": true },
+                        ""facing=west,half=top,shape=outer_left"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"", ""x"": 180, ""y"": 180, ""uvlock"": true },
+                        ""facing=south,half=top,shape=outer_left"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"", ""x"": 180, ""y"": 90, ""uvlock"": true },
+                        ""facing=north,half=top,shape=outer_left"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_outer"", ""x"": 180, ""y"": 270, ""uvlock"": true },
+                        ""facing=east,half=top,shape=inner_right"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"", ""x"": 180, ""y"": 90, ""uvlock"": true },
+                        ""facing=west,half=top,shape=inner_right"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"", ""x"": 180, ""y"": 270, ""uvlock"": true },
+                        ""facing=south,half=top,shape=inner_right"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"", ""x"": 180, ""y"": 180, ""uvlock"": true },
+                        ""facing=north,half=top,shape=inner_right"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"", ""x"": 180, ""uvlock"": true },
+                        ""facing=east,half=top,shape=inner_left"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"", ""x"": 180, ""uvlock"": true },
+                        ""facing=west,half=top,shape=inner_left"":  { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"", ""x"": 180, ""y"": 180, ""uvlock"": true },
+                        ""facing=south,half=top,shape=inner_left"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"", ""x"": 180, ""y"": 90, ""uvlock"": true },
+                        ""facing=north,half=top,shape=inner_left"": { ""model"": """ + _profile.Modid + @":block/" + name + @"_inner"", ""x"": 180, ""y"": 270, ""uvlock"": true }
+                    }
+                }";
+
+                WriteFile(_blockstatesPath + fileName, blockstate);
+
+                var model = @"{
+                            ""parent"": ""block/stairs"",
+                            ""textures"": {
+                                ""bottom"": """ + _profile.Modid + @":" + _profile.TextureBlocksFolder + @"/" + materialName + @""",
+                                ""top"": """ + _profile.Modid + @":" + _profile.TextureBlocksFolder + @"/" + materialName + @""",
+                                ""side"": """ + _profile.Modid + @":" + _profile.TextureBlocksFolder + @"/" + materialName + @"""
+                            }
+                        }";
+
+                var model_inner = @"{
+                                ""parent"": ""block/inner_stairs"",
+                                ""textures"": {
+                                    ""bottom"": """ + _profile.Modid + @":" + _profile.TextureBlocksFolder + @"/" + materialName + @""",
+                                    ""top"": """ + _profile.Modid + @":" + _profile.TextureBlocksFolder + @"/" + materialName + @""",
+                                    ""side"": """ + _profile.Modid + @":" + _profile.TextureBlocksFolder + @"/" + materialName + @"""
+                                }
+                            }";
+
+                var model_outer = @"{
+                                ""parent"": ""block/outer_stairs"",
+                                ""textures"": {
+                                    ""bottom"": """ + _profile.Modid + @":" + _profile.TextureBlocksFolder + @"/" + materialName + @""",
+                                    ""top"": """ + _profile.Modid + @":" + _profile.TextureBlocksFolder + @"/" + materialName + @""",
+                                    ""side"": """ + _profile.Modid + @":" + _profile.TextureBlocksFolder + @"/" + materialName + @"""
+                                }
+                            }";
+
+
+                WriteFile(_modelsBlockPath + fileName, model);
+                WriteFile(_modelsBlockPath + "\\" + name + "_inner.json", model_inner);
+                WriteFile(_modelsBlockPath + "\\" + name + "_outer.json", model_outer);
+
+                var itemModel = @"{
+                                    ""parent"": """ + _profile.Modid + @":block/" + name + @"""
+                                }";
+
+
+                WriteFile(_modelsItemPath + fileName, itemModel);
+
+            }
+
+
+        }
+
         private void RenderBlockJSON(bool smooth)
         {
             foreach (var item in _profile.Materials)
@@ -141,10 +245,20 @@ namespace SkysJSONGenerator
                 Directory.CreateDirectory(_modelsItemPath);
 
             if (blocks)
+            {
                 RenderBlockJSON(false);
 
-            if (smooth)
-                RenderBlockJSON(true);
+                if (smooth)
+                    RenderBlockJSON(true);
+            }
+
+            if (stairs)
+            {
+                RenderStairJSON(false);
+
+                if (smooth)
+                    RenderStairJSON(true);
+            }
 
             return _filesGenerated;
         }

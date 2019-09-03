@@ -26,6 +26,7 @@ namespace SkysJSONGenerator
             comboBoxVersion.SelectedIndex = 0;
 
             checkedListBoxOutput.SetItemChecked(0, true);
+            checkedListBoxOutput.SetItemChecked(1, true);
             checkedListBoxOutput.SetItemChecked(4, true);
         }
 
