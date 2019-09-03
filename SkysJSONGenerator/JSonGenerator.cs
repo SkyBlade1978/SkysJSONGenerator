@@ -17,6 +17,7 @@ namespace SkysJSONGenerator
         private string _modelsBlockPath;
         private string _modelsItemPath;
         private string _lootTablePath;
+        private int _filesGenerated;
 
         public JSonGenerator(Profile profile)
         {
@@ -90,10 +91,14 @@ namespace SkysJSONGenerator
                 File.Delete(path);
 
             File.WriteAllLines(path, new string[] { content });
+
+            _filesGenerated++;
         }
 
-        public void RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth)
+        public int RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth)
         {
+            _filesGenerated = 0;
+
             if (!Directory.Exists("out"))
                 Directory.CreateDirectory("out");
 
@@ -140,6 +145,8 @@ namespace SkysJSONGenerator
 
             if (smooth)
                 RenderBlockJSON(true);
+
+            return _filesGenerated;
         }
     }
 }

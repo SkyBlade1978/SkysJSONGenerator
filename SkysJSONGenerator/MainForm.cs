@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +15,7 @@ namespace SkysJSONGenerator
     public partial class MainForm : Form
     {
         private List<Profile> _profiles;
+        private List<string> _versions;
 
         public MainForm()
         {
@@ -21,15 +24,27 @@ namespace SkysJSONGenerator
             LoadProfiles("All");
 
             comboBoxVersion.SelectedIndex = 0;
+
+            checkedListBoxOutput.SetItemChecked(0, true);
+            checkedListBoxOutput.SetItemChecked(4, true);
         }
 
         private void LoadConfig()
         {
             _profiles = new List<Profile>();
+            _versions = new List<string>();
 
-            // TODO: move this to config file
-            // mineralogy config
-            var mineralogyProfile = new Profile("1.14", "mineralogy", new List<string>
+            if (File.Exists(@"profiles.cfg"))
+            {
+                using (StreamReader file = File.OpenText(@"profiles.cfg"))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    _profiles = (List<Profile>)serializer.Deserialize(file, typeof(List<Profile>));
+                }
+            }
+            else
+            {
+                var mineralogyProfile = new Profile("1.14", "mineralogy", new List<string>
                     {  "andesite"
                      , "basalt"
                      , "diorite"
@@ -47,10 +62,25 @@ namespace SkysJSONGenerator
                      , "phyllite"
                      , "amphibolite"
                     },
-            "blocks", "items");
+                    "blocks", "items");
 
-            _profiles.Add(mineralogyProfile);
-            //
+                _profiles.Add(mineralogyProfile);
+                
+                using (StreamWriter file = File.CreateText(@"profiles.cfg"))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(file, _profiles);
+                }
+            }
+
+            foreach (var item in _profiles)
+            {
+                if (!_versions.Contains(item.Version))
+                    _versions.Add(item.Version);
+            }
+
+            comboBoxVersion.DataSource = _versions;
+            
         }
 
         private void LoadProfiles(string version)
@@ -78,8 +108,15 @@ namespace SkysJSONGenerator
             if (comboBoxMod.SelectedIndex >= 0)
             {
                 var generator = new JSonGenerator((Profile)comboBoxMod.SelectedItem);
-                generator.RenderJSON(true, true, true, true, true);
+                var generated = generator.RenderJSON(checkedListBoxOutput.GetItemChecked(0), checkedListBoxOutput.GetItemChecked(1), checkedListBoxOutput.GetItemChecked(2), checkedListBoxOutput.GetItemChecked(3), checkedListBoxOutput.GetItemChecked(4));
+
+                if (generated == 0)
+                    MessageBox.Show("No files generated", "Result", MessageBoxButtons.OK);
+                else
+                    MessageBox.Show(generated + " files generated", "Result", MessageBoxButtons.OK);
             }
+            else
+                MessageBox.Show("Please select a mod profile above", "Which mod?", MessageBoxButtons.OK);
 
             buttonGenerate.Enabled = true;
         }
