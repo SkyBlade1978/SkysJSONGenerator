@@ -108,13 +108,24 @@ namespace SkysJSONGenerator
 
             if (comboBoxMod.SelectedIndex >= 0)
             {
-                var generator = new JSonGenerator((Profile)comboBoxMod.SelectedItem);
+                var selectedProfile = (Profile)comboBoxMod.SelectedItem;
+                var basePath = "out\\" + selectedProfile.Modid + "\\" + selectedProfile.Version;
+                var generator = new JSonGenerator(selectedProfile, basePath);
                 var generated = generator.RenderJSON(checkedListBoxOutput.GetItemChecked(0), checkedListBoxOutput.GetItemChecked(1), checkedListBoxOutput.GetItemChecked(2), checkedListBoxOutput.GetItemChecked(3), checkedListBoxOutput.GetItemChecked(4));
 
                 if (generated == 0)
                     MessageBox.Show("No files generated", "Result", MessageBoxButtons.OK);
                 else
+                {
                     MessageBox.Show(generated + " files generated", "Result", MessageBoxButtons.OK);
+
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
+                    {
+                        FileName = basePath,
+                        UseShellExecute = true,
+                        Verb = "open"
+                    });
+                }
             }
             else
                 MessageBox.Show("Please select a mod profile above", "Which mod?", MessageBoxButtons.OK);

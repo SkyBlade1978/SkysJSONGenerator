@@ -32,6 +32,7 @@
             this.comboBoxVersion = new System.Windows.Forms.ComboBox();
             this.checkedListBoxOutput = new System.Windows.Forms.CheckedListBox();
             this.buttonGenerate = new System.Windows.Forms.Button();
+            this.linkLabelEmail = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // comboBoxMod
@@ -82,19 +83,30 @@
             // buttonGenerate
             // 
             this.buttonGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGenerate.Location = new System.Drawing.Point(218, 234);
+            this.buttonGenerate.Location = new System.Drawing.Point(218, 229);
             this.buttonGenerate.Name = "buttonGenerate";
-            this.buttonGenerate.Size = new System.Drawing.Size(75, 23);
+            this.buttonGenerate.Size = new System.Drawing.Size(75, 46);
             this.buttonGenerate.TabIndex = 4;
             this.buttonGenerate.Text = "Generate";
             this.buttonGenerate.UseVisualStyleBackColor = true;
             this.buttonGenerate.Click += new System.EventHandler(this.buttonGenerate_Click);
             // 
+            // linkLabelEmail
+            // 
+            this.linkLabelEmail.AutoSize = true;
+            this.linkLabelEmail.Location = new System.Drawing.Point(21, 262);
+            this.linkLabelEmail.Name = "linkLabelEmail";
+            this.linkLabelEmail.Size = new System.Drawing.Size(161, 13);
+            this.linkLabelEmail.TabIndex = 5;
+            this.linkLabelEmail.TabStop = true;
+            this.linkLabelEmail.Text = "JohnBraham1978@Outlook.com";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(305, 269);
+            this.ClientSize = new System.Drawing.Size(305, 287);
+            this.Controls.Add(this.linkLabelEmail);
             this.Controls.Add(this.buttonGenerate);
             this.Controls.Add(this.checkedListBoxOutput);
             this.Controls.Add(this.comboBoxVersion);
@@ -102,6 +114,7 @@
             this.Name = "MainForm";
             this.Text = "Sky\'s JSON Generator";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -111,6 +124,7 @@
         private System.Windows.Forms.ComboBox comboBoxVersion;
         private System.Windows.Forms.CheckedListBox checkedListBoxOutput;
         private System.Windows.Forms.Button buttonGenerate;
+        private System.Windows.Forms.LinkLabel linkLabelEmail;
     }
 }
 

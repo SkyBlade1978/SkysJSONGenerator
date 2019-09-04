@@ -21,14 +21,23 @@ namespace SkysJSONGenerator
         private string _lootTablePath;
         private int _filesGenerated;
 
-        public JSonGenerator(Profile profile)
+        // interpolated fields
+        private string modid;
+        private string blocktexturefolder;
+        private string version;
+
+        public JSonGenerator(Profile profile, string basePath)
         {
+            modid = profile.Modid;
+            blocktexturefolder = profile.TextureBlocksFolder;
+            version = profile.Version;
+
             _profile = profile;
 
-            _basePath = "out\\" + _profile.Modid + "\\" + _profile.Version;
-            _lootTablePath = _basePath + "\\data\\" + _profile.Modid + "\\loot_tables\\blocks";
-            _blockstatesPath = _basePath + "\\assets\\" + _profile.Modid + "\\blockstates";
-            _modelsPath = _basePath + "\\assets\\" + _profile.Modid + "\\models";
+            _basePath = basePath;
+            _lootTablePath = $"{_basePath}\\data\\{modid}\\loot_tables\\blocks";
+            _blockstatesPath = $"{_basePath}\\assets\\{modid}\\blockstates";
+            _modelsPath = $"{_basePath}\\assets\\{modid}\\models";
             _modelsBlockPath = _modelsPath + "\\block";
             _modelsItemPath = _modelsPath + "\\item";
         }
@@ -37,57 +46,59 @@ namespace SkysJSONGenerator
         {
             foreach (var item in _profile.Materials)
             {
-                var materialName = item;
+                var materialname = item;
 
                 if (smooth)
-                    materialName += "_smooth";
+                    materialname += "_smooth";
 
-                var name = materialName + "_stairs";
+                var blockname = materialname + "_stairs";
 
-                var fileName = "\\" + name + ".json";
+                var fileName = $"\\{blockname}.json";
+
+                string text = File.ReadAllText($@"templates\{version}\blockstates\stairs.template");
 
                 var blockstate = $@"{{
                     ""variants"": {{
-                        ""facing=east,half=bottom,shape=straight"":  {{ ""model"": ""{_profile.Modid}:block/{name}"" }},
-                        ""facing=west,half=bottom,shape=straight"":  {{ ""model"": ""{_profile.Modid}:block/{name}"", ""y"": 180, ""uvlock"": true }},
-                        ""facing=south,half=bottom,shape=straight"": {{ ""model"": ""{_profile.Modid}:block/{name}"", ""y"": 90, ""uvlock"": true }},
-                        ""facing=north,half=bottom,shape=straight"": {{ ""model"": ""{_profile.Modid}:block/{name}"", ""y"": 270, ""uvlock"": true }},
-                        ""facing=east,half=bottom,shape=outer_right"":  {{ ""model"": ""{_profile.Modid}:block/{name}_outer"" }},
-                        ""facing=west,half=bottom,shape=outer_right"":  {{ ""model"": ""{_profile.Modid}:block/{name}_outer"", ""y"": 180, ""uvlock"": true }},
-                        ""facing=south,half=bottom,shape=outer_right"": {{ ""model"": ""{_profile.Modid}:block/{name}_outer"", ""y"": 90, ""uvlock"": true }},
-                        ""facing=north,half=bottom,shape=outer_right"": {{ ""model"": ""{_profile.Modid}:block/{name}_outer"", ""y"": 270, ""uvlock"": true }},
-                        ""facing=east,half=bottom,shape=outer_left"":  {{ ""model"": ""{_profile.Modid}:block/{name}_outer"", ""y"": 270, ""uvlock"": true }},
-                        ""facing=west,half=bottom,shape=outer_left"":  {{ ""model"": ""{_profile.Modid}:block/{name}_outer"", ""y"": 90, ""uvlock"": true }},
-                        ""facing=south,half=bottom,shape=outer_left"": {{ ""model"": ""{_profile.Modid}:block/{name}_outer"" }},
-                        ""facing=north,half=bottom,shape=outer_left"": {{ ""model"": ""{_profile.Modid}:block/{name}_outer"", ""y"": 180, ""uvlock"": true }},
-                        ""facing=east,half=bottom,shape=inner_right"":  {{ ""model"": ""{_profile.Modid}:block/{name}_inner"" }},
-                        ""facing=west,half=bottom,shape=inner_right"":  {{ ""model"": ""{_profile.Modid}:block/{name}_inner"", ""y"": 180, ""uvlock"": true }},
-                        ""facing=south,half=bottom,shape=inner_right"": {{ ""model"": ""{_profile.Modid}:block/{name}_inner"", ""y"": 90, ""uvlock"": true }},
-                        ""facing=north,half=bottom,shape=inner_right"": {{ ""model"": ""{_profile.Modid}:block/{name}_inner"", ""y"": 270, ""uvlock"": true }},
-                        ""facing=east,half=bottom,shape=inner_left"":  {{ ""model"": ""{_profile.Modid}:block/{name}_inner"", ""y"": 270, ""uvlock"": true }},
-                        ""facing=west,half=bottom,shape=inner_left"":  {{ ""model"": ""{_profile.Modid}:block/{name}_inner"", ""y"": 90, ""uvlock"": true }},
-                        ""facing=south,half=bottom,shape=inner_left"": {{ ""model"": ""{_profile.Modid}:block/{name}_inner"" }},
-                        ""facing=north,half=bottom,shape=inner_left"": {{ ""model"": ""{_profile.Modid}:block/{name}_inner"", ""y"": 180, ""uvlock"": true }},
-                        ""facing=east,half=top,shape=straight"":  {{ ""model"": ""{_profile.Modid}:block/{name}"", ""x"": 180, ""uvlock"": true }},
-                        ""facing=west,half=top,shape=straight"":  {{ ""model"": ""{_profile.Modid}:block/{name}"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
-                        ""facing=south,half=top,shape=straight"": {{ ""model"": ""{_profile.Modid}:block/{name}"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
-                        ""facing=north,half=top,shape=straight"": {{ ""model"": ""{_profile.Modid}:block/{name}"", ""x"": 180, ""y"": 270, ""uvlock"": true }},
-                        ""facing=east,half=top,shape=outer_right"":  {{ ""model"": ""{_profile.Modid}:block/{name}_outer"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
-                        ""facing=west,half=top,shape=outer_right"":  {{ ""model"": ""{_profile.Modid}:block/{name}_outer"", ""x"": 180, ""y"": 270, ""uvlock"": true }},
-                        ""facing=south,half=top,shape=outer_right"": {{ ""model"": ""{_profile.Modid}:block/{name}_outer"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
-                        ""facing=north,half=top,shape=outer_right"": {{ ""model"": ""{_profile.Modid}:block/{name}_outer"", ""x"": 180, ""uvlock"": true }},
-                        ""facing=east,half=top,shape=outer_left"":  {{ ""model"": ""{_profile.Modid}:block/{name}_outer"", ""x"": 180, ""uvlock"": true }},
-                        ""facing=west,half=top,shape=outer_left"":  {{ ""model"": ""{_profile.Modid}:block/{name}_outer"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
-                        ""facing=south,half=top,shape=outer_left"": {{ ""model"": ""{_profile.Modid}:block/{name}_outer"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
-                        ""facing=north,half=top,shape=outer_left"": {{ ""model"": ""{_profile.Modid}:block/{name}_outer"", ""x"": 180, ""y"": 270, ""uvlock"": true }},
-                        ""facing=east,half=top,shape=inner_right"":  {{ ""model"": ""{_profile.Modid}:block/{name}_inner"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
-                        ""facing=west,half=top,shape=inner_right"":  {{ ""model"": ""{_profile.Modid}:block/{name}_inner"", ""x"": 180, ""y"": 270, ""uvlock"": true }},
-                        ""facing=south,half=top,shape=inner_right"": {{ ""model"": ""{_profile.Modid}:block/{name}_inner"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
-                        ""facing=north,half=top,shape=inner_right"": {{ ""model"": ""{_profile.Modid}:block/{name}_inner"", ""x"": 180, ""uvlock"": true }},
-                        ""facing=east,half=top,shape=inner_left"":  {{ ""model"": ""{_profile.Modid}:block/{name}_inner"", ""x"": 180, ""uvlock"": true }},
-                        ""facing=west,half=top,shape=inner_left"":  {{ ""model"": ""{_profile.Modid}:block/{name}_inner"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
-                        ""facing=south,half=top,shape=inner_left"": {{ ""model"": ""{_profile.Modid}:block/{name}_inner"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
-                        ""facing=north,half=top,shape=inner_left"": {{ ""model"": ""{_profile.Modid}:block/{name}_inner"", ""x"": 180, ""y"": 270, ""uvlock"": true }}
+                        ""facing=east,half=bottom,shape=straight"":  {{ ""model"": ""{modid}:block/{blockname}"" }},
+                        ""facing=west,half=bottom,shape=straight"":  {{ ""model"": ""{modid}:block/{blockname}"", ""y"": 180, ""uvlock"": true }},
+                        ""facing=south,half=bottom,shape=straight"": {{ ""model"": ""{modid}:block/{blockname}"", ""y"": 90, ""uvlock"": true }},
+                        ""facing=north,half=bottom,shape=straight"": {{ ""model"": ""{modid}:block/{blockname}"", ""y"": 270, ""uvlock"": true }},
+                        ""facing=east,half=bottom,shape=outer_right"":  {{ ""model"": ""{modid}:block/{blockname}_outer"" }},
+                        ""facing=west,half=bottom,shape=outer_right"":  {{ ""model"": ""{modid}:block/{blockname}_outer"", ""y"": 180, ""uvlock"": true }},
+                        ""facing=south,half=bottom,shape=outer_right"": {{ ""model"": ""{modid}:block/{blockname}_outer"", ""y"": 90, ""uvlock"": true }},
+                        ""facing=north,half=bottom,shape=outer_right"": {{ ""model"": ""{modid}:block/{blockname}_outer"", ""y"": 270, ""uvlock"": true }},
+                        ""facing=east,half=bottom,shape=outer_left"":  {{ ""model"": ""{modid}:block/{blockname}_outer"", ""y"": 270, ""uvlock"": true }},
+                        ""facing=west,half=bottom,shape=outer_left"":  {{ ""model"": ""{modid}:block/{blockname}_outer"", ""y"": 90, ""uvlock"": true }},
+                        ""facing=south,half=bottom,shape=outer_left"": {{ ""model"": ""{modid}:block/{blockname}_outer"" }},
+                        ""facing=north,half=bottom,shape=outer_left"": {{ ""model"": ""{modid}:block/{blockname}_outer"", ""y"": 180, ""uvlock"": true }},
+                        ""facing=east,half=bottom,shape=inner_right"":  {{ ""model"": ""{modid}:block/{blockname}_inner"" }},
+                        ""facing=west,half=bottom,shape=inner_right"":  {{ ""model"": ""{modid}:block/{blockname}_inner"", ""y"": 180, ""uvlock"": true }},
+                        ""facing=south,half=bottom,shape=inner_right"": {{ ""model"": ""{modid}:block/{blockname}_inner"", ""y"": 90, ""uvlock"": true }},
+                        ""facing=north,half=bottom,shape=inner_right"": {{ ""model"": ""{modid}:block/{blockname}_inner"", ""y"": 270, ""uvlock"": true }},
+                        ""facing=east,half=bottom,shape=inner_left"":  {{ ""model"": ""{modid}:block/{blockname}_inner"", ""y"": 270, ""uvlock"": true }},
+                        ""facing=west,half=bottom,shape=inner_left"":  {{ ""model"": ""{modid}:block/{blockname}_inner"", ""y"": 90, ""uvlock"": true }},
+                        ""facing=south,half=bottom,shape=inner_left"": {{ ""model"": ""{modid}:block/{blockname}_inner"" }},
+                        ""facing=north,half=bottom,shape=inner_left"": {{ ""model"": ""{modid}:block/{blockname}_inner"", ""y"": 180, ""uvlock"": true }},
+                        ""facing=east,half=top,shape=straight"":  {{ ""model"": ""{modid}:block/{blockname}"", ""x"": 180, ""uvlock"": true }},
+                        ""facing=west,half=top,shape=straight"":  {{ ""model"": ""{modid}:block/{blockname}"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
+                        ""facing=south,half=top,shape=straight"": {{ ""model"": ""{modid}:block/{blockname}"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
+                        ""facing=north,half=top,shape=straight"": {{ ""model"": ""{modid}:block/{blockname}"", ""x"": 180, ""y"": 270, ""uvlock"": true }},
+                        ""facing=east,half=top,shape=outer_right"":  {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
+                        ""facing=west,half=top,shape=outer_right"":  {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""y"": 270, ""uvlock"": true }},
+                        ""facing=south,half=top,shape=outer_right"": {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
+                        ""facing=north,half=top,shape=outer_right"": {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""uvlock"": true }},
+                        ""facing=east,half=top,shape=outer_left"":  {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""uvlock"": true }},
+                        ""facing=west,half=top,shape=outer_left"":  {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
+                        ""facing=south,half=top,shape=outer_left"": {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
+                        ""facing=north,half=top,shape=outer_left"": {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""y"": 270, ""uvlock"": true }},
+                        ""facing=east,half=top,shape=inner_right"":  {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
+                        ""facing=west,half=top,shape=inner_right"":  {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""y"": 270, ""uvlock"": true }},
+                        ""facing=south,half=top,shape=inner_right"": {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
+                        ""facing=north,half=top,shape=inner_right"": {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""uvlock"": true }},
+                        ""facing=east,half=top,shape=inner_left"":  {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""uvlock"": true }},
+                        ""facing=west,half=top,shape=inner_left"":  {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
+                        ""facing=south,half=top,shape=inner_left"": {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
+                        ""facing=north,half=top,shape=inner_left"": {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""y"": 270, ""uvlock"": true }}
                     }}
                 }}";
 
@@ -96,45 +107,64 @@ namespace SkysJSONGenerator
                 var model = $@"{{
                             ""parent"": ""block/stairs"",
                             ""textures"": {{
-                                ""bottom"": ""{_profile.Modid}:{_profile.TextureBlocksFolder}/{materialName}"",
-                                ""top"": ""{_profile.Modid}:{_profile.TextureBlocksFolder}/{materialName}"",
-                                ""side"": ""{_profile.Modid}:{_profile.TextureBlocksFolder}/{materialName}""
+                                ""bottom"": ""{modid}:{blocktexturefolder}/{materialname}"",
+                                ""top"": ""{modid}:{blocktexturefolder}/{materialname}"",
+                                ""side"": ""{modid}:{blocktexturefolder}/{materialname}""
                             }}
                         }}";
 
                 var model_inner = $@"{{
                                 ""parent"": ""block/inner_stairs"",
                                 ""textures"": {{
-                                    ""bottom"": ""{_profile.Modid}:{_profile.TextureBlocksFolder}/{materialName}"",
-                                    ""top"": ""{_profile.Modid}:{_profile.TextureBlocksFolder}/{materialName}"",
-                                    ""side"": ""{_profile.Modid}:{_profile.TextureBlocksFolder}/{materialName}""
+                                    ""bottom"": ""{modid}:{blocktexturefolder}/{materialname}"",
+                                    ""top"": ""{modid}:{blocktexturefolder}/{materialname}"",
+                                    ""side"": ""{modid}:{blocktexturefolder}/{materialname}""
                                 }}
                             }}";
 
                 var model_outer = $@"{{
                                 ""parent"": ""block/outer_stairs"",
                                 ""textures"": {{
-                                    ""bottom"": ""{_profile.Modid}:{_profile.TextureBlocksFolder}/{materialName}"",
-                                    ""top"": ""{_profile.Modid}:{_profile.TextureBlocksFolder}/{materialName}"",
-                                    ""side"": ""{_profile.Modid}:{_profile.TextureBlocksFolder}/{materialName}""
+                                    ""bottom"": ""{modid}:{blocktexturefolder}/{materialname}"",
+                                    ""top"": ""{modid}:{blocktexturefolder}/{materialname}"",
+                                    ""side"": ""{modid}:{blocktexturefolder}/{materialname}""
                                 }}
                             }}";
 
-
                 WriteFile(_modelsBlockPath + fileName, model);
-                WriteFile(_modelsBlockPath + "\\" + name + "_inner.json", model_inner);
-                WriteFile(_modelsBlockPath + "\\" + name + "_outer.json", model_outer);
+                WriteFile($"{_modelsBlockPath}\\{blockname}_inner.json", model_inner);
+                WriteFile($"{_modelsBlockPath}\\{blockname}_outer.json", model_outer);
 
-                var itemModel = @"{
-                                    ""parent"": ""{_profile.Modid}:block/{name}""
-                                }";
+                var itemModel = $@"{{
+                                    ""parent"": ""{modid}:block/{blockname}""
+                                }}";
 
 
                 WriteFile(_modelsItemPath + fileName, itemModel);
 
+                var lootTable = $@"{{
+                      ""type"": ""minecraft:block"",
+                      ""pools"": [
+                        {{
+                          ""name"": ""{blockname}"",
+                          ""rolls"": 1,
+                          ""entries"": [
+                            {{
+                              ""type"": ""minecraft:item"",
+                              ""name"": ""{modid}:{blockname}""
+                            }}
+                          ],
+                          ""conditions"": [
+                            {{
+                              ""condition"": ""minecraft:survives_explosion""
+                            }}
+                          ]
+                        }}
+                      ]
+                    }}";
+
+                WriteFile(_lootTablePath + fileName, lootTable);
             }
-
-
         }
 
         private void RenderBlockJSON(bool smooth)
@@ -151,7 +181,7 @@ namespace SkysJSONGenerator
                 var modelBlock = $@"{{
                                     ""parent"": ""block/cube_all"", 
                                     ""textures"": {{
-                                        ""all"": ""{_profile.Modid}:{_profile.TextureBlocksFolder}/{name}""
+                                        ""all"": ""{modid}:{blocktexturefolder}/{name}""
                                     }}
                                 }}";
 
@@ -160,7 +190,7 @@ namespace SkysJSONGenerator
                 var blockstate = $@"{{
                                     ""variants"": {{
                                         """": [
-                                            {{ ""model"": ""{_profile.Modid}:block/{name}"" }}
+                                            {{ ""model"": ""{modid}:block/{name}"" }}
                                         ]
                                     }}
                                   }}";
@@ -168,7 +198,7 @@ namespace SkysJSONGenerator
                 WriteFile(_blockstatesPath + fileName, blockstate);
 
                 var itemModel = $@"{{
-                        ""parent"": ""{_profile.Modid}:block/{name}""
+                        ""parent"": ""{modid}:block/{name}""
                     }}";
 
                 WriteFile(_modelsItemPath + fileName, itemModel);
@@ -182,7 +212,7 @@ namespace SkysJSONGenerator
                           ""entries"": [
                             {{
                               ""type"": ""minecraft:item"",
-                              ""name"": ""{_profile.Modid}:{name}""
+                              ""name"": ""{modid}:{name}""
                             }}
                           ],
                           ""conditions"": [
@@ -219,13 +249,13 @@ namespace SkysJSONGenerator
             if (!Directory.Exists("out"))
                 Directory.CreateDirectory("out");
 
-            if (!Directory.Exists("out\\" + _profile.Modid))
-                Directory.CreateDirectory("out\\" + _profile.Modid);
+            if (!Directory.Exists("out\\" + modid))
+                Directory.CreateDirectory("out\\" + modid);
 
-            if (!Directory.Exists("out\\" + _profile.Modid + "\\" + _profile.Version))
-                Directory.CreateDirectory("out\\" + _profile.Modid + "\\" + _profile.Version);
+            if (!Directory.Exists("out\\" + modid + "\\" + _profile.Version))
+                Directory.CreateDirectory("out\\" + modid + "\\" + _profile.Version);
 
-            //  _basePath = "out\\" + _profile.Modid + "\\" + _profile.Version;
+            //  _basePath = "out\\" + modid + "\\" + _profile.Version;
 
             if (!Directory.Exists(_basePath + "\\assets"))
                 Directory.CreateDirectory(_basePath + "\\assets");
@@ -233,17 +263,17 @@ namespace SkysJSONGenerator
             if (!Directory.Exists(_basePath + "\\data"))
                 Directory.CreateDirectory(_basePath + "\\data");
 
-            if (!Directory.Exists(_basePath + "\\data\\" + _profile.Modid))
-                Directory.CreateDirectory(_basePath + "\\data\\" + _profile.Modid);
+            if (!Directory.Exists(_basePath + "\\data\\" + modid))
+                Directory.CreateDirectory(_basePath + "\\data\\" + modid);
 
-            if (!Directory.Exists(_basePath + "\\data\\" + _profile.Modid + "\\loot_tables"))
-                Directory.CreateDirectory(_basePath + "\\data\\" + _profile.Modid + "\\loot_tables");
+            if (!Directory.Exists(_basePath + "\\data\\" + modid + "\\loot_tables"))
+                Directory.CreateDirectory(_basePath + "\\data\\" + modid + "\\loot_tables");
 
-            if (!Directory.Exists(_basePath + "\\data\\" + _profile.Modid + "\\loot_tables\\blocks"))
-                Directory.CreateDirectory(_basePath + "\\data\\" + _profile.Modid + "\\loot_tables\\blocks");
+            if (!Directory.Exists(_basePath + "\\data\\" + modid + "\\loot_tables\\blocks"))
+                Directory.CreateDirectory(_basePath + "\\data\\" + modid + "\\loot_tables\\blocks");
 
-            if (!Directory.Exists(_basePath + "\\assets\\" + _profile.Modid))
-                Directory.CreateDirectory(_basePath + "\\assets\\" + _profile.Modid);
+            if (!Directory.Exists(_basePath + "\\assets\\" + modid))
+                Directory.CreateDirectory(_basePath + "\\assets\\" + modid);
 
             if (!Directory.Exists(_blockstatesPath))
                 Directory.CreateDirectory(_blockstatesPath);
