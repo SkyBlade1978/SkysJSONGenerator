@@ -33,6 +33,7 @@
             this.checkedListBoxOutput = new System.Windows.Forms.CheckedListBox();
             this.buttonGenerate = new System.Windows.Forms.Button();
             this.linkLabelEmail = new System.Windows.Forms.LinkLabel();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // comboBoxMod
@@ -43,7 +44,7 @@
             this.comboBoxMod.FormattingEnabled = true;
             this.comboBoxMod.Location = new System.Drawing.Point(113, 12);
             this.comboBoxMod.Name = "comboBoxMod";
-            this.comboBoxMod.Size = new System.Drawing.Size(178, 21);
+            this.comboBoxMod.Size = new System.Drawing.Size(172, 21);
             this.comboBoxMod.TabIndex = 1;
             // 
             // comboBoxVersion
@@ -77,15 +78,15 @@
             "Polished Variants"});
             this.checkedListBoxOutput.Location = new System.Drawing.Point(12, 39);
             this.checkedListBoxOutput.Name = "checkedListBoxOutput";
-            this.checkedListBoxOutput.Size = new System.Drawing.Size(279, 184);
+            this.checkedListBoxOutput.Size = new System.Drawing.Size(273, 139);
             this.checkedListBoxOutput.TabIndex = 3;
             // 
             // buttonGenerate
             // 
             this.buttonGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGenerate.Location = new System.Drawing.Point(218, 229);
+            this.buttonGenerate.Location = new System.Drawing.Point(212, 234);
             this.buttonGenerate.Name = "buttonGenerate";
-            this.buttonGenerate.Size = new System.Drawing.Size(75, 46);
+            this.buttonGenerate.Size = new System.Drawing.Size(75, 32);
             this.buttonGenerate.TabIndex = 4;
             this.buttonGenerate.Text = "Generate";
             this.buttonGenerate.UseVisualStyleBackColor = true;
@@ -94,18 +95,29 @@
             // linkLabelEmail
             // 
             this.linkLabelEmail.AutoSize = true;
-            this.linkLabelEmail.Location = new System.Drawing.Point(21, 262);
+            this.linkLabelEmail.Location = new System.Drawing.Point(9, 233);
             this.linkLabelEmail.Name = "linkLabelEmail";
             this.linkLabelEmail.Size = new System.Drawing.Size(161, 13);
             this.linkLabelEmail.TabIndex = 5;
             this.linkLabelEmail.TabStop = true;
             this.linkLabelEmail.Text = "JohnBraham1978@Outlook.com";
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(9, 207);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(272, 13);
+            this.linkLabel1.TabIndex = 6;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "https://github.com/SkyBlade1978/SkysJSONGenerator";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(305, 287);
+            this.ClientSize = new System.Drawing.Size(299, 278);
+            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.linkLabelEmail);
             this.Controls.Add(this.buttonGenerate);
             this.Controls.Add(this.checkedListBoxOutput);
@@ -125,6 +137,7 @@
         private System.Windows.Forms.CheckedListBox checkedListBoxOutput;
         private System.Windows.Forms.Button buttonGenerate;
         private System.Windows.Forms.LinkLabel linkLabelEmail;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }
 
