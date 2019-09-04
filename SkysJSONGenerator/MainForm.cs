@@ -111,7 +111,7 @@ namespace SkysJSONGenerator
                 var selectedProfile = (Profile)comboBoxMod.SelectedItem;
                 var basePath = "out\\" + selectedProfile.Modid + "\\" + selectedProfile.Version;
                 var generator = new JSonGenerator(selectedProfile, basePath);
-                var generated = generator.RenderJSON(checkedListBoxOutput.GetItemChecked(0), checkedListBoxOutput.GetItemChecked(1), checkedListBoxOutput.GetItemChecked(2), checkedListBoxOutput.GetItemChecked(3), checkedListBoxOutput.GetItemChecked(4));
+                var generated = generator.RenderJSON(checkedListBoxOutput.GetItemChecked(0), checkedListBoxOutput.GetItemChecked(1), checkedListBoxOutput.GetItemChecked(2), checkedListBoxOutput.GetItemChecked(3), checkedListBoxOutput.GetItemChecked(4), checkedListBoxOutput.GetItemChecked(5));
 
                 if (generated == 0)
                     MessageBox.Show("No files generated", "Result", MessageBoxButtons.OK);

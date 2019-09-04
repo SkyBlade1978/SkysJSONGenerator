@@ -42,7 +42,7 @@ namespace SkysJSONGenerator
             _modelsItemPath = _modelsPath + "\\item";
         }
 
-        private void RenderStairJSON(bool smooth)
+        private void RenderStairJSON(bool smooth, bool brick)
         {
             foreach (var item in _profile.Materials)
             {
@@ -51,12 +51,13 @@ namespace SkysJSONGenerator
                 if (smooth)
                     materialname += "_smooth";
 
+                if (brick)
+                    materialname += "_brick";
+
                 var blockname = materialname + "_stairs";
 
                 var fileName = $"\\{blockname}.json";
-
-                string text = File.ReadAllText($@"templates\{version}\blockstates\stairs.template");
-
+  
                 var blockstate = $@"{{
                     ""variants"": {{
                         ""facing=east,half=bottom,shape=straight"":  {{ ""model"": ""{modid}:block/{blockname}"" }},
@@ -167,7 +168,7 @@ namespace SkysJSONGenerator
             }
         }
 
-        private void RenderBlockJSON(bool smooth)
+        private void RenderBlockJSON(bool smooth, bool brick)
         {
             foreach (var item in _profile.Materials)
             {
@@ -175,6 +176,9 @@ namespace SkysJSONGenerator
 
                 if (smooth)
                     name += "_smooth";
+
+                if (brick)
+                    name += "_brick";
 
                 var fileName = "\\" + name + ".json";
 
@@ -242,7 +246,7 @@ namespace SkysJSONGenerator
             _filesGenerated++;
         }
 
-        public int RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth)
+        public int RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick)
         {
             _filesGenerated = 0;
 
@@ -289,18 +293,30 @@ namespace SkysJSONGenerator
 
             if (blocks)
             {
-                RenderBlockJSON(false);
+                RenderBlockJSON(false, false);
 
                 if (smooth)
-                    RenderBlockJSON(true);
+                    RenderBlockJSON(true, false);
+
+                if (brick)
+                    RenderBlockJSON(false, true);
+
+                if (brick && smooth)
+                    RenderBlockJSON(true, true);
             }
 
             if (stairs)
             {
-                RenderStairJSON(false);
+                RenderStairJSON(false, false);
 
                 if (smooth)
-                    RenderStairJSON(true);
+                    RenderStairJSON(true, false);
+
+                if (brick)
+                    RenderStairJSON(false, true);
+
+                if (brick && smooth)
+                    RenderStairJSON(true, true);
             }
 
             return _filesGenerated;
