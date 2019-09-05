@@ -168,7 +168,7 @@ namespace SkysJSONGenerator
             }
         }
 
-        private void RenderBlockJSON(bool smooth, bool brick)
+        private void RenderBlockJSON(bool smooth)
         {
             foreach (var item in _profile.Materials)
             {
@@ -176,10 +176,7 @@ namespace SkysJSONGenerator
 
                 if (smooth)
                     name += "_smooth";
-
-                if (brick)
-                    name += "_brick";
-
+                
                 var fileName = "\\" + name + ".json";
 
                 var modelBlock = $@"{{
@@ -188,6 +185,85 @@ namespace SkysJSONGenerator
                                         ""all"": ""{modid}:{blocktexturefolder}/{name}""
                                     }}
                                 }}";
+
+                WriteFile(_modelsBlockPath + fileName, modelBlock);
+
+                var blockstate = $@"{{
+                                    ""variants"": {{
+                                        """": [
+                                            {{ ""model"": ""{modid}:block/{name}"" }}
+                                        ]
+                                    }}
+                                  }}";
+
+                WriteFile(_blockstatesPath + fileName, blockstate);
+
+                var itemModel = $@"{{
+                        ""parent"": ""{modid}:block/{name}""
+                    }}";
+
+                WriteFile(_modelsItemPath + fileName, itemModel);
+
+                var lootTable = $@"{{
+                      ""type"": ""minecraft:block"",
+                      ""pools"": [
+                        {{
+                          ""name"": ""{name}"",
+                          ""rolls"": 1,
+                          ""entries"": [
+                            {{
+                              ""type"": ""minecraft:item"",
+                              ""name"": ""{modid}:{name}""
+                            }}
+                          ],
+                          ""conditions"": [
+                            {{
+                              ""condition"": ""minecraft:survives_explosion""
+                            }}
+                          ]
+                        }}
+                      ]
+                    }}";
+
+                WriteFile(_lootTablePath + fileName, lootTable);
+            }
+        }
+
+        private void RenderBrickBlockJSON(bool smooth)
+        {
+            foreach (var item in _profile.Materials)
+            {
+                var name = item;
+
+                if (smooth)
+                    name += "_smooth";
+
+                name += "_brick";
+
+                var fileName = "\\" + name + ".json";
+
+                var topSuffix = string.Empty;
+                var sideSuffix = string.Empty;
+
+                Block block = _profile.Blocks.Find(b => b.Name == "Brick");
+
+                if (!smooth) /// TODO: this logic is very minealogy specific, make generic and/or make _side and _top textures
+                {
+                    if (block.Side)
+                        sideSuffix = "_side";
+
+                    if (block.Side)
+                        topSuffix = "_top";
+                }
+
+                var modelBlock = $@"{{
+                        ""parent"": ""block/cube_column"",
+                        ""textures"": {{
+                            ""end"": ""{modid}:{blocktexturefolder}/{name}{topSuffix}"",
+                            ""side"": ""{modid}:{blocktexturefolder}/{name}{sideSuffix}""
+                        }}
+                    }}";
+
 
                 WriteFile(_modelsBlockPath + fileName, modelBlock);
 
@@ -293,16 +369,16 @@ namespace SkysJSONGenerator
 
             if (blocks)
             {
-                RenderBlockJSON(false, false);
+                RenderBlockJSON(false);
 
                 if (smooth)
-                    RenderBlockJSON(true, false);
+                    RenderBlockJSON(true);
 
                 if (brick)
-                    RenderBlockJSON(false, true);
+                    RenderBrickBlockJSON(false);
 
                 if (brick && smooth)
-                    RenderBlockJSON(true, true);
+                    RenderBrickBlockJSON(true);
             }
 
             if (stairs)

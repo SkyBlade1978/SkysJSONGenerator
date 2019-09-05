@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,10 +25,6 @@ namespace SkysJSONGenerator
             LoadProfiles("All");
 
             comboBoxVersion.SelectedIndex = 0;
-
-            checkedListBoxOutput.SetItemChecked(0, true);
-            checkedListBoxOutput.SetItemChecked(1, true);
-            checkedListBoxOutput.SetItemChecked(4, true);
         }
 
         private void LoadConfig()
@@ -35,12 +32,44 @@ namespace SkysJSONGenerator
             _profiles = new List<Profile>();
             _versions = new List<string>();
 
+            JsonSerializer serializer = new JsonSerializer();
+
             if (File.Exists(@"profiles.cfg"))
             {
+                var dirty = false;
+
                 using (StreamReader file = File.OpenText(@"profiles.cfg"))
                 {
-                    JsonSerializer serializer = new JsonSerializer();
                     _profiles = (List<Profile>)serializer.Deserialize(file, typeof(List<Profile>));
+
+                    foreach (var item in _profiles)
+                        if(item.ProfileVersion < 2)
+                        {
+                            dirty = true;
+                            item.ProfileVersion = 2;
+                        }
+                            
+                }
+
+                if (dirty)
+                {
+                    int fileCount = 2;
+
+                    while (File.Exists(@"profiles" + fileCount + ".old"))
+                    {
+                        fileCount++;
+
+                        if (fileCount > 100)
+                        {
+                            MessageBox.Show("Please delete some old cfg files");
+                            throw new Exception("Too many old config files");
+                        }
+                    }
+                    
+                    File.Copy(@"profiles.cfg", @"profiles" + fileCount + ".old");
+                    File.Delete(@"profiles.cfg");
+
+                    WriteFile(@"profiles.cfg", JsonConvert.SerializeObject(_profiles));
                 }
             }
             else
@@ -63,15 +92,19 @@ namespace SkysJSONGenerator
                      , "phyllite"
                      , "amphibolite"
                     },
-                    "blocks", "items");
+                    "blocks", "items", 2, new List<Block>
+                    {
+                        new Block { Name = "Blocks", Side = false, Top = false },
+                        new Block { Name = "Stairs", Side = false, Top = false },
+                        new Block { Name = "Walls", Side = false, Top = false },
+                        new Block { Name = "Slabs", Side = false, Top = false },
+                        new Block { Name = "Smooth", Side = false, Top = false },
+                        new Block { Name = "Brick", Side = true, Top = true },
+                    });
 
                 _profiles.Add(mineralogyProfile);
-                
-                using (StreamWriter file = File.CreateText(@"profiles.cfg"))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Serialize(file, _profiles);
-                }
+
+                WriteFile(@"profiles.cfg", JsonConvert.SerializeObject(_profiles));
             }
 
             foreach (var item in _profiles)
@@ -81,7 +114,20 @@ namespace SkysJSONGenerator
             }
 
             comboBoxVersion.DataSource = _versions;
+            checkedListBoxOutput.Items.Clear();
             
+        }
+
+        private void WriteFile(string path, string content)
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+
+            JToken parsedJson = JToken.Parse(content);
+
+            var beautified = parsedJson.ToString(Formatting.Indented);
+
+            File.WriteAllLines(path, new string[] { beautified });
         }
 
         private void LoadProfiles(string version)
@@ -95,6 +141,7 @@ namespace SkysJSONGenerator
                 if (version == "All" || version == item.Version)
                     comboBoxMod.Items.Add(item);
             }
+            
         }
 
         private void comboBoxVersion_SelectedIndexChanged(object sender, EventArgs e)
@@ -108,10 +155,56 @@ namespace SkysJSONGenerator
 
             if (comboBoxMod.SelectedIndex >= 0)
             {
+                var renderBlocks = false;
+                var renderStairs = false;
+                var renderWalls = false;
+                var renderSlabs = false;
+                var renderSmooth = false;
+                var renderBrick = false;
+
                 var selectedProfile = (Profile)comboBoxMod.SelectedItem;
                 var basePath = "out\\" + selectedProfile.Modid + "\\" + selectedProfile.Version;
                 var generator = new JSonGenerator(selectedProfile, basePath);
-                var generated = generator.RenderJSON(checkedListBoxOutput.GetItemChecked(0), checkedListBoxOutput.GetItemChecked(1), checkedListBoxOutput.GetItemChecked(2), checkedListBoxOutput.GetItemChecked(3), checkedListBoxOutput.GetItemChecked(4), checkedListBoxOutput.GetItemChecked(5));
+
+                for (int i = 0; i < checkedListBoxOutput.Items.Count; i++)
+                {
+                    if (checkedListBoxOutput.GetItemChecked(i))
+                    {
+                        var blockItem = (Block)checkedListBoxOutput.Items[i];
+
+                        switch (blockItem.Name)
+                        {
+                            case "Blocks":
+                                renderBlocks = true;
+                                break;
+
+                            case "Stairs":
+                                renderStairs = true;
+                                break;
+
+                            case "Walls":
+                                renderWalls = true;
+                                break;
+
+                            case "Slabs":
+                                renderSlabs = true;
+                                break;
+
+                            case "Smooth":
+                                renderSmooth = true;
+                                break;
+
+                            case "Brick":
+                                renderBrick = true;
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+                var generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick);
 
                 if (generated == 0)
                     MessageBox.Show("No files generated", "Result", MessageBoxButtons.OK);
@@ -131,6 +224,30 @@ namespace SkysJSONGenerator
                 MessageBox.Show("Please select a mod profile above", "Which mod?", MessageBoxButtons.OK);
 
             buttonGenerate.Enabled = true;
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var about = new AboutBox();
+
+            about.ShowDialog(this);
+        }
+
+        private void comboBoxMod_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxMod.SelectedIndex >= 0)
+            {
+                var profile = (Profile)comboBoxMod.SelectedItem;
+                listBoxMaterials.DataSource = profile.Materials;
+
+                checkedListBoxOutput.Items.Clear();
+
+                foreach (var item in profile.Blocks)
+                {
+                    checkedListBoxOutput.Items.Add(item);
+                    checkedListBoxOutput.SetItemChecked(checkedListBoxOutput.Items.Count - 1, true);
+                }
+            }
         }
     }
 }
