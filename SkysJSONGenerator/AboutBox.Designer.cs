@@ -44,7 +44,7 @@
             this.labelProductName.Name = "labelProductName";
             this.labelProductName.Size = new System.Drawing.Size(358, 17);
             this.labelProductName.TabIndex = 30;
-            this.labelProductName.Text = "Skys JSON Generator 0.4";
+            this.labelProductName.Text = "Skys JSON Generator 0.5";
             this.labelProductName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelVersion
