@@ -13,7 +13,9 @@ namespace SkysJSONGenerator
         private string _itemModelTemplateFolder;
         private string _blockstateTemplateFolder;
         private string _lootTableTemplateFolder;
-        
+        private string _tagTemplateFolder;
+        private string _wallItemTagPath;
+        private string _wallTagPath;
         private string _basePath;
         private string _blockstatesPath;
         private string _modelsPath;
@@ -26,6 +28,8 @@ namespace SkysJSONGenerator
         private string modid;
         private string blocktexturefolder;
         private string version;
+
+        string _wallTags = "";
 
         public JSonGenerator(Profile profile, string basePath)
         {
@@ -41,19 +45,22 @@ namespace SkysJSONGenerator
             _modelsPath = $"{_basePath}\\assets\\{modid}\\models";
             _modelsBlockPath = _modelsPath + "\\block";
             _modelsItemPath = _modelsPath + "\\item";
+            _wallTagPath = $"{_basePath}\\data\\minecraft\\tags\\blocks";
+            _wallItemTagPath = $"{_basePath}\\data\\minecraft\\tags\\items";
 
             _baseTemplateFolder = $"templates\\{version}";
             _blockModelTemplateFolder = _baseTemplateFolder + "\\blockmodels";
             _itemModelTemplateFolder = _baseTemplateFolder + "\\itemmodels";
             _blockstateTemplateFolder = _baseTemplateFolder + "\\blockstates";
             _lootTableTemplateFolder = _baseTemplateFolder + "\\loot_table";
+            _tagTemplateFolder = _baseTemplateFolder + "\\tags";
         }
 
-        private string LoadTemplate(string path, string name, string blockname, string materialname, string topsuffix, string sidesuffix)
+        private string LoadTemplate(string path, string name, string blockname, string materialname, string topsuffix, string sidesuffix, string walllist)
         {
-            var template =  File.ReadAllText(path + "\\" + name + ".template").Replace("{modid}", "{0}").Replace("{blockname}", "{1}").Replace("{materialname}", "{2}").Replace("{topsuffix}", "{3}").Replace("{sidesuffix}", "{4}").Replace("{blocktexturefolder}", "{5}");
+            var template =  File.ReadAllText(path + "\\" + name + ".template").Replace("{modid}", "{0}").Replace("{blockname}", "{1}").Replace("{materialname}", "{2}").Replace("{topsuffix}", "{3}").Replace("{sidesuffix}", "{4}").Replace("{blocktexturefolder}", "{5}").Replace("{walllist}", "{6}");
 
-            return string.Format(@template, modid, blockname, materialname, topsuffix, sidesuffix, blocktexturefolder);
+            return string.Format(@template, modid, blockname, materialname, topsuffix, sidesuffix, blocktexturefolder, walllist);
         }
 
         private void RenderStairJSON(bool smooth, bool brick)
@@ -85,13 +92,52 @@ namespace SkysJSONGenerator
 
                 var fileName = $"\\{blockname}.json";
 
-                WriteFile(_blockstatesPath + fileName, @LoadTemplate(path:_blockstateTemplateFolder, name: "stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix));         
-                WriteFile(_modelsBlockPath + fileName, @LoadTemplate(path: _blockModelTemplateFolder, name: "stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix));
-                WriteFile($"{_modelsBlockPath}\\{blockname}_inner.json", @LoadTemplate(path: _blockModelTemplateFolder, name: "inner_stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix));
-                WriteFile($"{_modelsBlockPath}\\{blockname}_outer.json", @LoadTemplate(path: _blockModelTemplateFolder, name: "outer_stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix));
-                WriteFile(_modelsItemPath + fileName, @LoadTemplate(path: _itemModelTemplateFolder, name: "stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix));
-                WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix));
+                WriteFile(_blockstatesPath + fileName, @LoadTemplate(path:_blockstateTemplateFolder, name: "stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));         
+                WriteFile(_modelsBlockPath + fileName, @LoadTemplate(path: _blockModelTemplateFolder, name: "stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile($"{_modelsBlockPath}\\{blockname}_inner.json", @LoadTemplate(path: _blockModelTemplateFolder, name: "inner_stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile($"{_modelsBlockPath}\\{blockname}_outer.json", @LoadTemplate(path: _blockModelTemplateFolder, name: "outer_stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile(_modelsItemPath + fileName, @LoadTemplate(path: _itemModelTemplateFolder, name: "stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
             }
+        }
+
+        private void RenderWallJSON(bool smooth, bool brick)
+        {
+            foreach (var item in _profile.Materials)
+            {
+                var materialname = item;
+                var topSuffix = string.Empty;
+                var sideSuffix = string.Empty;
+
+                if (smooth)
+                    materialname += "_smooth";
+
+                if (brick)
+                    materialname += "_brick";
+
+                Block block = _profile.Blocks.Find(b => b.Name == "Walls");
+                
+                var blockname = materialname + "_wall";
+                var fileName = $"\\{blockname}.json";
+
+                if (_wallTags != "")
+                    _wallTags += ", ";
+
+                _wallTags += "\"" + modid + ":" + blockname + "\"";
+
+                WriteFile(_blockstatesPath + fileName, @LoadTemplate(path: _blockstateTemplateFolder, name: "wall", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+
+                WriteFile($"{_modelsBlockPath}\\{blockname}_inventory.json", @LoadTemplate(path: _blockModelTemplateFolder, name: "wall_inventory", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile($"{_modelsBlockPath}\\{blockname}_post.json", @LoadTemplate(path: _blockModelTemplateFolder, name: "wall_post", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile($"{_modelsBlockPath}\\{blockname}_side.json", @LoadTemplate(path: _blockModelTemplateFolder, name: "wall_side", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+
+                WriteFile(_modelsItemPath + fileName, @LoadTemplate(path: _itemModelTemplateFolder, name: "wall", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "wall", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+            }
+
+            WriteFile(_wallTagPath + "\\walls.json", @LoadTemplate(path: _tagTemplateFolder, name: "wall", blockname: "", materialname: "", topsuffix: "", sidesuffix: "", walllist: _wallTags));
+            WriteFile(_wallItemTagPath + "\\walls.json", @LoadTemplate(path: _tagTemplateFolder, name: "wall", blockname: "", materialname: "", topsuffix: "", sidesuffix: "", walllist: _wallTags));
+
         }
 
         private void RenderBlockJSON(bool smooth)
@@ -105,10 +151,10 @@ namespace SkysJSONGenerator
                 
                 var fileName = "\\" + blockname + ".json";
 
-                WriteFile(_modelsBlockPath + fileName, @LoadTemplate(path: _blockModelTemplateFolder, name: "block", blockname: blockname, materialname: "", topsuffix: "", sidesuffix: ""));
-                WriteFile(_blockstatesPath + fileName, @LoadTemplate(path: _blockstateTemplateFolder, name: "block", blockname: blockname, materialname: "", topsuffix: "", sidesuffix: ""));
-                WriteFile(_modelsItemPath + fileName, @LoadTemplate(path: _itemModelTemplateFolder, name: "block", blockname: blockname, materialname: "", topsuffix: "", sidesuffix: ""));
-                WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "block", blockname: blockname, materialname: "", topsuffix: "", sidesuffix: ""));
+                WriteFile(_modelsBlockPath + fileName, @LoadTemplate(path: _blockModelTemplateFolder, name: "block", blockname: blockname, materialname: "", topsuffix: "", sidesuffix: "", walllist: ""));
+                WriteFile(_blockstatesPath + fileName, @LoadTemplate(path: _blockstateTemplateFolder, name: "block", blockname: blockname, materialname: "", topsuffix: "", sidesuffix: "", walllist: ""));
+                WriteFile(_modelsItemPath + fileName, @LoadTemplate(path: _itemModelTemplateFolder, name: "block", blockname: blockname, materialname: "", topsuffix: "", sidesuffix: "", walllist: ""));
+                WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "block", blockname: blockname, materialname: "", topsuffix: "", sidesuffix: "", walllist: ""));
             }
         }
 
@@ -136,10 +182,10 @@ namespace SkysJSONGenerator
                 if (block.Top)
                     topSuffix = "_top";
 
-                WriteFile(_modelsBlockPath + fileName, @LoadTemplate(path: _blockModelTemplateFolder, name: "brick", blockname: blockname, materialname: "", topsuffix: topSuffix, sidesuffix: sideSuffix));
-                WriteFile(_blockstatesPath + fileName, @LoadTemplate(path: _blockstateTemplateFolder, name: "brick", blockname: blockname, materialname: "", topsuffix: topSuffix, sidesuffix: sideSuffix));
-                WriteFile(_modelsItemPath + fileName, @LoadTemplate(path: _itemModelTemplateFolder, name: "brick", blockname: blockname, materialname: "", topsuffix: topSuffix, sidesuffix: sideSuffix));
-                WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "brick", blockname: blockname, materialname: "", topsuffix: topSuffix, sidesuffix: sideSuffix));
+                WriteFile(_modelsBlockPath + fileName, @LoadTemplate(path: _blockModelTemplateFolder, name: "brick", blockname: blockname, materialname: "", topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile(_blockstatesPath + fileName, @LoadTemplate(path: _blockstateTemplateFolder, name: "brick", blockname: blockname, materialname: "", topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile(_modelsItemPath + fileName, @LoadTemplate(path: _itemModelTemplateFolder, name: "brick", blockname: blockname, materialname: "", topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "brick", blockname: blockname, materialname: "", topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
             }
         }
 
@@ -175,6 +221,18 @@ namespace SkysJSONGenerator
             
             if (!Directory.Exists(_basePath + "\\data"))
                 Directory.CreateDirectory(_basePath + "\\data");
+
+            if (!Directory.Exists(_basePath + "\\data\\minecraft"))
+                Directory.CreateDirectory(_basePath + "\\data\\minecraft");
+
+            if (!Directory.Exists(_basePath + "\\data\\minecraft\\tags"))
+                Directory.CreateDirectory(_basePath + "\\data\\minecraft\\tags");
+
+            if (!Directory.Exists(_basePath + "\\data\\minecraft\\tags\\blocks"))
+                Directory.CreateDirectory(_basePath + "\\data\\minecraft\\tags\\blocks");
+
+            if (!Directory.Exists(_basePath + "\\data\\minecraft\\tags\\items"))
+                Directory.CreateDirectory(_basePath + "\\data\\minecraft\\tags\\items");
 
             if (!Directory.Exists(_basePath + "\\data\\" + modid))
                 Directory.CreateDirectory(_basePath + "\\data\\" + modid);
@@ -226,6 +284,20 @@ namespace SkysJSONGenerator
 
                 if (brick && smooth)
                     RenderStairJSON(true, true);
+            }
+
+            if (walls)
+            {
+                RenderWallJSON(false, false);
+
+                if (smooth)
+                    RenderWallJSON(true, false);
+
+                if (brick)
+                    RenderWallJSON(false, true);
+
+                if (brick && smooth)
+                    RenderWallJSON(true, true);
             }
 
             return _filesGenerated;

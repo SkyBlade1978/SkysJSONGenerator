@@ -2,13 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SkysJSONGenerator
@@ -47,8 +41,7 @@ namespace SkysJSONGenerator
                         {
                             dirty = true;
                             item.ProfileVersion = 2;
-                        }
-                            
+                        }       
                 }
 
                 if (dirty)
@@ -115,7 +108,6 @@ namespace SkysJSONGenerator
 
             comboBoxVersion.DataSource = _versions;
             checkedListBoxOutput.Items.Clear();
-            
         }
 
         private void WriteFile(string path, string content)
@@ -140,15 +132,14 @@ namespace SkysJSONGenerator
             {
                 if (version == "All" || version == item.Version)
                     comboBoxMod.Items.Add(item);
-            }
-            
+            }          
         }
 
         private void comboBoxVersion_SelectedIndexChanged(object sender, EventArgs e)
         {
                 LoadProfiles(comboBoxVersion.SelectedItem.ToString());
         }
-
+   
         private void buttonGenerate_Click(object sender, EventArgs e)
         {
             if (comboBoxMod.SelectedIndex >= 0)
@@ -163,8 +154,7 @@ namespace SkysJSONGenerator
                 var selectedProfile = (Profile)comboBoxMod.SelectedItem;
                 var basePath = "out\\" + selectedProfile.Modid + "\\" + selectedProfile.Version;
                 var generator = new JSonGenerator(selectedProfile, basePath);
-
-
+                
                 if (!Directory.Exists("templates\\" + selectedProfile.Version))
                 {
                     MessageBox.Show("Whoops, there doesn't appear to be a templates folder for version " + selectedProfile.Version);
