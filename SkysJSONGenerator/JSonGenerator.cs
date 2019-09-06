@@ -105,12 +105,26 @@ namespace SkysJSONGenerator
 
                 WriteFile(_blockstatesPath + fileName, blockstate);
 
+                var topSuffix = string.Empty;
+                var sideSuffix = string.Empty;
+
+                Block block = _profile.Blocks.Find(b => b.Name == "Brick");
+
+                if (!smooth) /// TODO: this logic is very mineralogy specific, make generic and/or make _side and _top textures
+                {
+                    if (block.Side)
+                        sideSuffix = "_side";
+
+                    if (block.Side)
+                        topSuffix = "_top";
+                }
+
                 var model = $@"{{
                             ""parent"": ""block/stairs"",
                             ""textures"": {{
-                                ""bottom"": ""{modid}:{blocktexturefolder}/{materialname}"",
-                                ""top"": ""{modid}:{blocktexturefolder}/{materialname}"",
-                                ""side"": ""{modid}:{blocktexturefolder}/{materialname}""
+                                ""bottom"": ""{modid}:{blocktexturefolder}/{materialname}{topSuffix}"",
+                                ""top"": ""{modid}:{blocktexturefolder}/{materialname}{topSuffix}"",
+                                ""side"": ""{modid}:{blocktexturefolder}/{materialname}{sideSuffix}""
                             }}
                         }}";
 
@@ -247,7 +261,7 @@ namespace SkysJSONGenerator
 
                 Block block = _profile.Blocks.Find(b => b.Name == "Brick");
 
-                if (!smooth) /// TODO: this logic is very minealogy specific, make generic and/or make _side and _top textures
+                if (!smooth) /// TODO: this logic is very mineralogy specific, make generic and/or make _side and _top textures
                 {
                     if (block.Side)
                         sideSuffix = "_side";
