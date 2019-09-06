@@ -151,8 +151,6 @@ namespace SkysJSONGenerator
 
         private void buttonGenerate_Click(object sender, EventArgs e)
         {
-            buttonGenerate.Enabled = false;
-
             if (comboBoxMod.SelectedIndex >= 0)
             {
                 var renderBlocks = false;
@@ -165,6 +163,15 @@ namespace SkysJSONGenerator
                 var selectedProfile = (Profile)comboBoxMod.SelectedItem;
                 var basePath = "out\\" + selectedProfile.Modid + "\\" + selectedProfile.Version;
                 var generator = new JSonGenerator(selectedProfile, basePath);
+
+
+                if (!Directory.Exists("templates\\" + selectedProfile.Version))
+                {
+                    MessageBox.Show("Whoops, there doesn't appear to be a templates folder for version " + selectedProfile.Version);
+                    return;
+                }
+
+                buttonGenerate.Enabled = false;
 
                 for (int i = 0; i < checkedListBoxOutput.Items.Count; i++)
                 {

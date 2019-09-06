@@ -1,0 +1,2 @@
+{modid} = 0
+{blockname} = 1

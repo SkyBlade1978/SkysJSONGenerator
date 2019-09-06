@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using System.IO;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
@@ -13,6 +8,12 @@ namespace SkysJSONGenerator
     {
         private Profile _profile;
 
+        private string _baseTemplateFolder;
+        private string _blockModelTemplateFolder;
+        private string _itemModelTemplateFolder;
+        private string _blockstateTemplateFolder;
+        private string _lootTableTemplateFolder;
+        
         private string _basePath;
         private string _blockstatesPath;
         private string _modelsPath;
@@ -40,6 +41,19 @@ namespace SkysJSONGenerator
             _modelsPath = $"{_basePath}\\assets\\{modid}\\models";
             _modelsBlockPath = _modelsPath + "\\block";
             _modelsItemPath = _modelsPath + "\\item";
+
+            _baseTemplateFolder = $"templates\\{version}";
+            _blockModelTemplateFolder = _baseTemplateFolder + "\\blockmodels";
+            _itemModelTemplateFolder = _baseTemplateFolder + "\\itemmodels";
+            _blockstateTemplateFolder = _baseTemplateFolder + "\\blockstates";
+            _lootTableTemplateFolder = _baseTemplateFolder + "\\loot_table";
+        }
+
+        private string LoadTemplate(string path, string name, string blockname, string materialname, string topsuffix, string sidesuffix)
+        {
+            var template =  File.ReadAllText(path + "\\" + name + ".template").Replace("{modid}", "{0}").Replace("{blockname}", "{1}").Replace("{materialname}", "{2}").Replace("{topsuffix}", "{3}").Replace("{sidesuffix}", "{4}").Replace("{blocktexturefolder}", "{5}");
+
+            return string.Format(@template, modid, blockname, materialname, topsuffix, sidesuffix, blocktexturefolder);
         }
 
         private void RenderStairJSON(bool smooth, bool brick)
@@ -47,6 +61,8 @@ namespace SkysJSONGenerator
             foreach (var item in _profile.Materials)
             {
                 var materialname = item;
+                var topSuffix = string.Empty;
+                var sideSuffix = string.Empty;
 
                 if (smooth)
                     materialname += "_smooth";
@@ -54,63 +70,9 @@ namespace SkysJSONGenerator
                 if (brick)
                     materialname += "_brick";
 
-                var blockname = materialname + "_stairs";
-
-                var fileName = $"\\{blockname}.json";
-  
-                var blockstate = $@"{{
-                    ""variants"": {{
-                        ""facing=east,half=bottom,shape=straight"":  {{ ""model"": ""{modid}:block/{blockname}"" }},
-                        ""facing=west,half=bottom,shape=straight"":  {{ ""model"": ""{modid}:block/{blockname}"", ""y"": 180, ""uvlock"": true }},
-                        ""facing=south,half=bottom,shape=straight"": {{ ""model"": ""{modid}:block/{blockname}"", ""y"": 90, ""uvlock"": true }},
-                        ""facing=north,half=bottom,shape=straight"": {{ ""model"": ""{modid}:block/{blockname}"", ""y"": 270, ""uvlock"": true }},
-                        ""facing=east,half=bottom,shape=outer_right"":  {{ ""model"": ""{modid}:block/{blockname}_outer"" }},
-                        ""facing=west,half=bottom,shape=outer_right"":  {{ ""model"": ""{modid}:block/{blockname}_outer"", ""y"": 180, ""uvlock"": true }},
-                        ""facing=south,half=bottom,shape=outer_right"": {{ ""model"": ""{modid}:block/{blockname}_outer"", ""y"": 90, ""uvlock"": true }},
-                        ""facing=north,half=bottom,shape=outer_right"": {{ ""model"": ""{modid}:block/{blockname}_outer"", ""y"": 270, ""uvlock"": true }},
-                        ""facing=east,half=bottom,shape=outer_left"":  {{ ""model"": ""{modid}:block/{blockname}_outer"", ""y"": 270, ""uvlock"": true }},
-                        ""facing=west,half=bottom,shape=outer_left"":  {{ ""model"": ""{modid}:block/{blockname}_outer"", ""y"": 90, ""uvlock"": true }},
-                        ""facing=south,half=bottom,shape=outer_left"": {{ ""model"": ""{modid}:block/{blockname}_outer"" }},
-                        ""facing=north,half=bottom,shape=outer_left"": {{ ""model"": ""{modid}:block/{blockname}_outer"", ""y"": 180, ""uvlock"": true }},
-                        ""facing=east,half=bottom,shape=inner_right"":  {{ ""model"": ""{modid}:block/{blockname}_inner"" }},
-                        ""facing=west,half=bottom,shape=inner_right"":  {{ ""model"": ""{modid}:block/{blockname}_inner"", ""y"": 180, ""uvlock"": true }},
-                        ""facing=south,half=bottom,shape=inner_right"": {{ ""model"": ""{modid}:block/{blockname}_inner"", ""y"": 90, ""uvlock"": true }},
-                        ""facing=north,half=bottom,shape=inner_right"": {{ ""model"": ""{modid}:block/{blockname}_inner"", ""y"": 270, ""uvlock"": true }},
-                        ""facing=east,half=bottom,shape=inner_left"":  {{ ""model"": ""{modid}:block/{blockname}_inner"", ""y"": 270, ""uvlock"": true }},
-                        ""facing=west,half=bottom,shape=inner_left"":  {{ ""model"": ""{modid}:block/{blockname}_inner"", ""y"": 90, ""uvlock"": true }},
-                        ""facing=south,half=bottom,shape=inner_left"": {{ ""model"": ""{modid}:block/{blockname}_inner"" }},
-                        ""facing=north,half=bottom,shape=inner_left"": {{ ""model"": ""{modid}:block/{blockname}_inner"", ""y"": 180, ""uvlock"": true }},
-                        ""facing=east,half=top,shape=straight"":  {{ ""model"": ""{modid}:block/{blockname}"", ""x"": 180, ""uvlock"": true }},
-                        ""facing=west,half=top,shape=straight"":  {{ ""model"": ""{modid}:block/{blockname}"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
-                        ""facing=south,half=top,shape=straight"": {{ ""model"": ""{modid}:block/{blockname}"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
-                        ""facing=north,half=top,shape=straight"": {{ ""model"": ""{modid}:block/{blockname}"", ""x"": 180, ""y"": 270, ""uvlock"": true }},
-                        ""facing=east,half=top,shape=outer_right"":  {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
-                        ""facing=west,half=top,shape=outer_right"":  {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""y"": 270, ""uvlock"": true }},
-                        ""facing=south,half=top,shape=outer_right"": {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
-                        ""facing=north,half=top,shape=outer_right"": {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""uvlock"": true }},
-                        ""facing=east,half=top,shape=outer_left"":  {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""uvlock"": true }},
-                        ""facing=west,half=top,shape=outer_left"":  {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
-                        ""facing=south,half=top,shape=outer_left"": {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
-                        ""facing=north,half=top,shape=outer_left"": {{ ""model"": ""{modid}:block/{blockname}_outer"", ""x"": 180, ""y"": 270, ""uvlock"": true }},
-                        ""facing=east,half=top,shape=inner_right"":  {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
-                        ""facing=west,half=top,shape=inner_right"":  {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""y"": 270, ""uvlock"": true }},
-                        ""facing=south,half=top,shape=inner_right"": {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
-                        ""facing=north,half=top,shape=inner_right"": {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""uvlock"": true }},
-                        ""facing=east,half=top,shape=inner_left"":  {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""uvlock"": true }},
-                        ""facing=west,half=top,shape=inner_left"":  {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""y"": 180, ""uvlock"": true }},
-                        ""facing=south,half=top,shape=inner_left"": {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""y"": 90, ""uvlock"": true }},
-                        ""facing=north,half=top,shape=inner_left"": {{ ""model"": ""{modid}:block/{blockname}_inner"", ""x"": 180, ""y"": 270, ""uvlock"": true }}
-                    }}
-                }}";
-
-                WriteFile(_blockstatesPath + fileName, blockstate);
-
-                var topSuffix = string.Empty;
-                var sideSuffix = string.Empty;
-
                 Block block = _profile.Blocks.Find(b => b.Name == "Brick");
 
-                if (!smooth) /// TODO: this logic is very mineralogy specific, make generic and/or make _side and _top textures
+                if (brick)
                 {
                     if (block.Side)
                         sideSuffix = "_side";
@@ -119,66 +81,16 @@ namespace SkysJSONGenerator
                         topSuffix = "_top";
                 }
 
-                var model = $@"{{
-                            ""parent"": ""block/stairs"",
-                            ""textures"": {{
-                                ""bottom"": ""{modid}:{blocktexturefolder}/{materialname}{topSuffix}"",
-                                ""top"": ""{modid}:{blocktexturefolder}/{materialname}{topSuffix}"",
-                                ""side"": ""{modid}:{blocktexturefolder}/{materialname}{sideSuffix}""
-                            }}
-                        }}";
+                var blockname = materialname + "_stairs";
 
-                var model_inner = $@"{{
-                                ""parent"": ""block/inner_stairs"",
-                                ""textures"": {{
-                                    ""bottom"": ""{modid}:{blocktexturefolder}/{materialname}"",
-                                    ""top"": ""{modid}:{blocktexturefolder}/{materialname}"",
-                                    ""side"": ""{modid}:{blocktexturefolder}/{materialname}""
-                                }}
-                            }}";
+                var fileName = $"\\{blockname}.json";
 
-                var model_outer = $@"{{
-                                ""parent"": ""block/outer_stairs"",
-                                ""textures"": {{
-                                    ""bottom"": ""{modid}:{blocktexturefolder}/{materialname}"",
-                                    ""top"": ""{modid}:{blocktexturefolder}/{materialname}"",
-                                    ""side"": ""{modid}:{blocktexturefolder}/{materialname}""
-                                }}
-                            }}";
-
-                WriteFile(_modelsBlockPath + fileName, model);
-                WriteFile($"{_modelsBlockPath}\\{blockname}_inner.json", model_inner);
-                WriteFile($"{_modelsBlockPath}\\{blockname}_outer.json", model_outer);
-
-                var itemModel = $@"{{
-                                    ""parent"": ""{modid}:block/{blockname}""
-                                }}";
-
-
-                WriteFile(_modelsItemPath + fileName, itemModel);
-
-                var lootTable = $@"{{
-                      ""type"": ""minecraft:block"",
-                      ""pools"": [
-                        {{
-                          ""name"": ""{blockname}"",
-                          ""rolls"": 1,
-                          ""entries"": [
-                            {{
-                              ""type"": ""minecraft:item"",
-                              ""name"": ""{modid}:{blockname}""
-                            }}
-                          ],
-                          ""conditions"": [
-                            {{
-                              ""condition"": ""minecraft:survives_explosion""
-                            }}
-                          ]
-                        }}
-                      ]
-                    }}";
-
-                WriteFile(_lootTablePath + fileName, lootTable);
+                WriteFile(_blockstatesPath + fileName, @LoadTemplate(path:_blockstateTemplateFolder, name: "stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix));         
+                WriteFile(_modelsBlockPath + fileName, @LoadTemplate(path: _blockModelTemplateFolder, name: "stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix));
+                WriteFile($"{_modelsBlockPath}\\{blockname}_inner.json", @LoadTemplate(path: _blockModelTemplateFolder, name: "inner_stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix));
+                WriteFile($"{_modelsBlockPath}\\{blockname}_outer.json", @LoadTemplate(path: _blockModelTemplateFolder, name: "outer_stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix));
+                WriteFile(_modelsItemPath + fileName, @LoadTemplate(path: _itemModelTemplateFolder, name: "stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix));
+                WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "stairs", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix));
             }
         }
 
@@ -186,60 +98,17 @@ namespace SkysJSONGenerator
         {
             foreach (var item in _profile.Materials)
             {
-                var name = item;
+                var blockname = item;
 
                 if (smooth)
-                    name += "_smooth";
+                    blockname += "_smooth";
                 
-                var fileName = "\\" + name + ".json";
+                var fileName = "\\" + blockname + ".json";
 
-                var modelBlock = $@"{{
-                                    ""parent"": ""block/cube_all"", 
-                                    ""textures"": {{
-                                        ""all"": ""{modid}:{blocktexturefolder}/{name}""
-                                    }}
-                                }}";
-
-                WriteFile(_modelsBlockPath + fileName, modelBlock);
-
-                var blockstate = $@"{{
-                                    ""variants"": {{
-                                        """": [
-                                            {{ ""model"": ""{modid}:block/{name}"" }}
-                                        ]
-                                    }}
-                                  }}";
-
-                WriteFile(_blockstatesPath + fileName, blockstate);
-
-                var itemModel = $@"{{
-                        ""parent"": ""{modid}:block/{name}""
-                    }}";
-
-                WriteFile(_modelsItemPath + fileName, itemModel);
-
-                var lootTable = $@"{{
-                      ""type"": ""minecraft:block"",
-                      ""pools"": [
-                        {{
-                          ""name"": ""{name}"",
-                          ""rolls"": 1,
-                          ""entries"": [
-                            {{
-                              ""type"": ""minecraft:item"",
-                              ""name"": ""{modid}:{name}""
-                            }}
-                          ],
-                          ""conditions"": [
-                            {{
-                              ""condition"": ""minecraft:survives_explosion""
-                            }}
-                          ]
-                        }}
-                      ]
-                    }}";
-
-                WriteFile(_lootTablePath + fileName, lootTable);
+                WriteFile(_modelsBlockPath + fileName, @LoadTemplate(path: _blockModelTemplateFolder, name: "block", blockname: blockname, materialname: "", topsuffix: "", sidesuffix: ""));
+                WriteFile(_blockstatesPath + fileName, @LoadTemplate(path: _blockstateTemplateFolder, name: "block", blockname: blockname, materialname: "", topsuffix: "", sidesuffix: ""));
+                WriteFile(_modelsItemPath + fileName, @LoadTemplate(path: _itemModelTemplateFolder, name: "block", blockname: blockname, materialname: "", topsuffix: "", sidesuffix: ""));
+                WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "block", blockname: blockname, materialname: "", topsuffix: "", sidesuffix: ""));
             }
         }
 
@@ -247,78 +116,30 @@ namespace SkysJSONGenerator
         {
             foreach (var item in _profile.Materials)
             {
-                var name = item;
+                var blockname = item;
 
                 if (smooth)
-                    name += "_smooth";
+                    blockname += "_smooth";
 
-                name += "_brick";
+                blockname += "_brick";
 
-                var fileName = "\\" + name + ".json";
+                var fileName = "\\" + blockname + ".json";
 
                 var topSuffix = string.Empty;
                 var sideSuffix = string.Empty;
 
                 Block block = _profile.Blocks.Find(b => b.Name == "Brick");
 
-                if (!smooth) /// TODO: this logic is very mineralogy specific, make generic and/or make _side and _top textures
-                {
-                    if (block.Side)
-                        sideSuffix = "_side";
+                if (block.Side)
+                    sideSuffix = "_side";
 
-                    if (block.Side)
-                        topSuffix = "_top";
-                }
+                if (block.Top)
+                    topSuffix = "_top";
 
-                var modelBlock = $@"{{
-                        ""parent"": ""block/cube_column"",
-                        ""textures"": {{
-                            ""end"": ""{modid}:{blocktexturefolder}/{name}{topSuffix}"",
-                            ""side"": ""{modid}:{blocktexturefolder}/{name}{sideSuffix}""
-                        }}
-                    }}";
-
-
-                WriteFile(_modelsBlockPath + fileName, modelBlock);
-
-                var blockstate = $@"{{
-                                    ""variants"": {{
-                                        """": [
-                                            {{ ""model"": ""{modid}:block/{name}"" }}
-                                        ]
-                                    }}
-                                  }}";
-
-                WriteFile(_blockstatesPath + fileName, blockstate);
-
-                var itemModel = $@"{{
-                        ""parent"": ""{modid}:block/{name}""
-                    }}";
-
-                WriteFile(_modelsItemPath + fileName, itemModel);
-
-                var lootTable = $@"{{
-                      ""type"": ""minecraft:block"",
-                      ""pools"": [
-                        {{
-                          ""name"": ""{name}"",
-                          ""rolls"": 1,
-                          ""entries"": [
-                            {{
-                              ""type"": ""minecraft:item"",
-                              ""name"": ""{modid}:{name}""
-                            }}
-                          ],
-                          ""conditions"": [
-                            {{
-                              ""condition"": ""minecraft:survives_explosion""
-                            }}
-                          ]
-                        }}
-                      ]
-                    }}";
-
-                WriteFile(_lootTablePath + fileName, lootTable);
+                WriteFile(_modelsBlockPath + fileName, @LoadTemplate(path: _blockModelTemplateFolder, name: "brick", blockname: blockname, materialname: "", topsuffix: topSuffix, sidesuffix: sideSuffix));
+                WriteFile(_blockstatesPath + fileName, @LoadTemplate(path: _blockstateTemplateFolder, name: "brick", blockname: blockname, materialname: "", topsuffix: topSuffix, sidesuffix: sideSuffix));
+                WriteFile(_modelsItemPath + fileName, @LoadTemplate(path: _itemModelTemplateFolder, name: "brick", blockname: blockname, materialname: "", topsuffix: topSuffix, sidesuffix: sideSuffix));
+                WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "brick", blockname: blockname, materialname: "", topsuffix: topSuffix, sidesuffix: sideSuffix));
             }
         }
 
@@ -348,9 +169,7 @@ namespace SkysJSONGenerator
 
             if (!Directory.Exists("out\\" + modid + "\\" + _profile.Version))
                 Directory.CreateDirectory("out\\" + modid + "\\" + _profile.Version);
-
-            //  _basePath = "out\\" + modid + "\\" + _profile.Version;
-
+            
             if (!Directory.Exists(_basePath + "\\assets"))
                 Directory.CreateDirectory(_basePath + "\\assets");
             
