@@ -101,7 +101,7 @@ namespace SkysJSONGenerator
             }
         }
 
-        private void RenderWallJSON(bool smooth, bool brick)
+        private void RenderFurnaceJSON(bool smooth, bool brick)
         {
             foreach (var item in _profile.Materials)
             {
@@ -115,8 +115,50 @@ namespace SkysJSONGenerator
                 if (brick)
                     materialname += "_brick";
 
-                Block block = _profile.Blocks.Find(b => b.Name == "Walls");
+                Block block = _profile.Blocks.Find(b => b.Name == "Furnace");
                 
+                if (block.Side)
+                    sideSuffix = "_side";
+
+                if (block.Side)
+                    topSuffix = "_top";
+                
+                var blockname = materialname + "_furnace";
+
+                var fileName = $"\\{blockname}.json";
+                var fileNameLit = $"\\lit_{blockname}.json";
+
+                WriteFile(_blockstatesPath + fileName, @LoadTemplate(path: _blockstateTemplateFolder, name: "furnace", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile(_modelsBlockPath + fileName, @LoadTemplate(path: _blockModelTemplateFolder, name: "furnace", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile(_blockstatesPath + fileNameLit, @LoadTemplate(path: _blockstateTemplateFolder, name: "lit_furnace", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile(_modelsBlockPath + fileNameLit, @LoadTemplate(path: _blockModelTemplateFolder, name: "lit_furnace", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile(_modelsItemPath + fileName, @LoadTemplate(path: _itemModelTemplateFolder, name: "furnace", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "furnace", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+            }
+        }
+
+        private void RenderWallJSON(bool smooth, bool brick)
+        {
+            foreach (var item in _profile.Materials)
+            {
+                var materialname = item;
+                var topSuffix = string.Empty;
+                var sideSuffix = string.Empty;
+                
+                if (smooth)
+                    materialname += "_smooth";
+
+                if (brick)
+                    materialname += "_brick";
+
+                Block block = _profile.Blocks.Find(b => b.Name == "Walls");
+
+                if (block.Side && brick)
+                    sideSuffix = "_side";
+
+                if (block.Side && brick)
+                    topSuffix = "_top";
+
                 var blockname = materialname + "_wall";
                 var fileName = $"\\{blockname}.json";
 
@@ -203,7 +245,7 @@ namespace SkysJSONGenerator
             _filesGenerated++;
         }
 
-        public int RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick)
+        public int RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, bool furnace)
         {
             _filesGenerated = 0;
 
@@ -298,6 +340,35 @@ namespace SkysJSONGenerator
 
                 if (brick && smooth)
                     RenderWallJSON(true, true);
+            }
+
+
+            if (stairs)
+            {
+                RenderStairJSON(false, false);
+
+                if (smooth)
+                    RenderStairJSON(true, false);
+
+                if (brick)
+                    RenderStairJSON(false, true);
+
+                if (brick && smooth)
+                    RenderStairJSON(true, true);
+            }
+
+            if (furnace)
+            {
+                RenderFurnaceJSON(false, false);
+
+                if (smooth)
+                    RenderFurnaceJSON(true, false);
+
+                if (brick)
+                    RenderFurnaceJSON(false, true);
+
+                if (brick && smooth)
+                    RenderFurnaceJSON(true, true);
             }
 
             return _filesGenerated;

@@ -29,14 +29,13 @@
         private void InitializeComponent()
         {
             this.comboBoxMod = new System.Windows.Forms.ComboBox();
-            this.comboBoxVersion = new System.Windows.Forms.ComboBox();
             this.checkedListBoxOutput = new System.Windows.Forms.CheckedListBox();
             this.buttonGenerate = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.listBoxMaterials = new System.Windows.Forms.ListBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.listBoxMaterials = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -50,28 +49,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxMod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMod.FormattingEnabled = true;
-            this.comboBoxMod.Location = new System.Drawing.Point(113, 27);
+            this.comboBoxMod.Location = new System.Drawing.Point(15, 27);
             this.comboBoxMod.Name = "comboBoxMod";
-            this.comboBoxMod.Size = new System.Drawing.Size(398, 21);
+            this.comboBoxMod.Size = new System.Drawing.Size(496, 21);
             this.comboBoxMod.TabIndex = 1;
             this.comboBoxMod.SelectedIndexChanged += new System.EventHandler(this.comboBoxMod_SelectedIndexChanged);
-            // 
-            // comboBoxVersion
-            // 
-            this.comboBoxVersion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxVersion.FormattingEnabled = true;
-            this.comboBoxVersion.Items.AddRange(new object[] {
-            "All",
-            "1.10",
-            "1.11",
-            "1.12",
-            "1.13",
-            "1.14"});
-            this.comboBoxVersion.Location = new System.Drawing.Point(12, 27);
-            this.comboBoxVersion.Name = "comboBoxVersion";
-            this.comboBoxVersion.Size = new System.Drawing.Size(95, 21);
-            this.comboBoxVersion.TabIndex = 0;
-            this.comboBoxVersion.SelectedIndexChanged += new System.EventHandler(this.comboBoxVersion_SelectedIndexChanged);
             // 
             // checkedListBoxOutput
             // 
@@ -114,6 +96,17 @@
             this.splitContainer1.SplitterDistance = 217;
             this.splitContainer1.TabIndex = 7;
             // 
+            // listBoxMaterials
+            // 
+            this.listBoxMaterials.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listBoxMaterials.FormattingEnabled = true;
+            this.listBoxMaterials.Location = new System.Drawing.Point(3, 0);
+            this.listBoxMaterials.Name = "listBoxMaterials";
+            this.listBoxMaterials.Size = new System.Drawing.Size(211, 147);
+            this.listBoxMaterials.TabIndex = 0;
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -135,20 +128,9 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
-            // listBoxMaterials
-            // 
-            this.listBoxMaterials.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listBoxMaterials.FormattingEnabled = true;
-            this.listBoxMaterials.Location = new System.Drawing.Point(3, 0);
-            this.listBoxMaterials.Name = "listBoxMaterials";
-            this.listBoxMaterials.Size = new System.Drawing.Size(211, 147);
-            this.listBoxMaterials.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -157,7 +139,6 @@
             this.ClientSize = new System.Drawing.Size(525, 278);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.buttonGenerate);
-            this.Controls.Add(this.comboBoxVersion);
             this.Controls.Add(this.comboBoxMod);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -177,7 +158,6 @@
         #endregion
 
         private System.Windows.Forms.ComboBox comboBoxMod;
-        private System.Windows.Forms.ComboBox comboBoxVersion;
         private System.Windows.Forms.CheckedListBox checkedListBoxOutput;
         private System.Windows.Forms.Button buttonGenerate;
         private System.Windows.Forms.SplitContainer splitContainer1;

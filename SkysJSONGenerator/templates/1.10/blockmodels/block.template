@@ -1,0 +1,6 @@
+﻿{{
+    "parent": "{modid}:block/block",
+    "textures": {{
+        "face": "{modid}:{blocktexturefolder}/{blockname}"
+    }}
+}}

@@ -1,0 +1,8 @@
+﻿{{
+    "parent": "block/orientable",
+    "textures": {{
+        "top": "{modid}:{blocktexturefolder}/{blockname}{topsuffix}",
+        "front": "{modid}:{blocktexturefolder}/{blockname}_front_off",
+        "side": "{modid}:{blocktexturefolder}/{blockname}{sidesuffix}"
+    }}
+}}

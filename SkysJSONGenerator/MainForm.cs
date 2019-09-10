@@ -17,8 +17,6 @@ namespace SkysJSONGenerator
             InitializeComponent();
 
             LoadProfiles("All");
-
-            comboBoxVersion.SelectedIndex = 0;
         }
 
         private void LoadConfig()
@@ -89,10 +87,39 @@ namespace SkysJSONGenerator
                     {
                         new Block { Name = "Blocks", Side = false, Top = false },
                         new Block { Name = "Stairs", Side = false, Top = false },
-                        new Block { Name = "Walls", Side = false, Top = false },
+                        new Block { Name = "Walls", Side = true, Top = true },
                         new Block { Name = "Slabs", Side = false, Top = false },
                         new Block { Name = "Smooth", Side = false, Top = false },
                         new Block { Name = "Brick", Side = true, Top = true },
+                    });
+
+                var mineralogyProfile110 = new Profile("1.10", "mineralogy", new List<string>
+                    {  "andesite"
+                     , "basalt"
+                     , "diorite"
+                     , "granite"
+                     , "rhyolite"
+                     , "pegmatite"
+                     , "shale"
+                     , "conglomerate"
+                     , "dolomite"
+                     , "limestone"
+                     , "marble"
+                     , "slate"
+                     , "schist"
+                     , "gneiss"
+                     , "phyllite"
+                     , "amphibolite"
+                    },
+                    "blocks", "items", 2, new List<Block>
+                    {
+                        new Block { Name = "Blocks", Side = false, Top = false },
+                        new Block { Name = "Stairs", Side = false, Top = false },
+                        new Block { Name = "Walls", Side = true, Top = true},
+                        new Block { Name = "Slabs", Side = false, Top = false },
+                        new Block { Name = "Smooth", Side = false, Top = false },
+                        new Block { Name = "Brick", Side = true, Top = true },
+                        new Block { Name = "Furnace", Side = true, Top = true }
                     });
 
                 _profiles.Add(mineralogyProfile);
@@ -106,7 +133,6 @@ namespace SkysJSONGenerator
                     _versions.Add(item.Version);
             }
 
-            comboBoxVersion.DataSource = _versions;
             checkedListBoxOutput.Items.Clear();
         }
 
@@ -134,11 +160,6 @@ namespace SkysJSONGenerator
                     comboBoxMod.Items.Add(item);
             }          
         }
-
-        private void comboBoxVersion_SelectedIndexChanged(object sender, EventArgs e)
-        {
-                LoadProfiles(comboBoxVersion.SelectedItem.ToString());
-        }
    
         private void buttonGenerate_Click(object sender, EventArgs e)
         {
@@ -150,6 +171,7 @@ namespace SkysJSONGenerator
                 var renderSlabs = false;
                 var renderSmooth = false;
                 var renderBrick = false;
+                var renderFurnace = false;
 
                 var selectedProfile = (Profile)comboBoxMod.SelectedItem;
                 var basePath = "out\\" + selectedProfile.Modid + "\\" + selectedProfile.Version;
@@ -195,13 +217,17 @@ namespace SkysJSONGenerator
                                 renderBrick = true;
                                 break;
 
+                            case "Furnace":
+                                renderFurnace = true;
+                                break;
+
                             default:
                                 break;
                         }
                     }
                 }
 
-                var generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick);
+                var generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace);
 
                 if (generated == 0)
                     MessageBox.Show("No files generated", "Result", MessageBoxButtons.OK);

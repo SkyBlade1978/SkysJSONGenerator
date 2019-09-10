@@ -1,0 +1,6 @@
+﻿{{
+    "parent": "block/wall_side",
+    "textures": {{
+        "wall": "{modid}:{blocktexturefolder}/{blockname}{sidesuffix}"
+    }}
+}}
