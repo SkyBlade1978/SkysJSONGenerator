@@ -11,6 +11,7 @@ namespace SkysJSONGenerator
         public int ProfileVersion { get; set; }
         public string Version { get; set; }
         public string Modid { get; set; }
+        public string Name { get; set; }
         public List<string> Materials { get; set; }
         public string TextureBlocksFolder { get; set; }
         public string TextureItemsFolder { get; set; }
@@ -21,10 +22,11 @@ namespace SkysJSONGenerator
             Blocks = new List<Block>();
         }
 
-        public Profile(string version, string modid, List<string> materials, string textureBlocksFolder, string textureItemsFolder, int profileVersion, List<Block> blocks)
+        public Profile(string version, string modid, List<string> materials, string textureBlocksFolder, string textureItemsFolder, int profileVersion, List<Block> blocks, string name)
         {
             Version = version;
             Modid = modid;
+            Name = name;
             Materials = materials;
             TextureBlocksFolder = textureBlocksFolder;
             TextureItemsFolder = textureItemsFolder;
@@ -34,7 +36,10 @@ namespace SkysJSONGenerator
 
         public override string ToString()
         {
-            return Modid + " - " + Version;
+            if (Name != null && Name != string.Empty)
+                return Name;
+            else
+                return Modid + " - " + Version;
         }
     }
 }

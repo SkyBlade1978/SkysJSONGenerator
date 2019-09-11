@@ -35,10 +35,10 @@ namespace SkysJSONGenerator
                     _profiles = (List<Profile>)serializer.Deserialize(file, typeof(List<Profile>));
 
                     foreach (var item in _profiles)
-                        if(item.ProfileVersion < 2)
+                        if(item.ProfileVersion < 3)
                         {
                             dirty = true;
-                            item.ProfileVersion = 2;
+                            item.ProfileVersion = 3;
                         }       
                 }
 
@@ -83,16 +83,16 @@ namespace SkysJSONGenerator
                      , "phyllite"
                      , "amphibolite"
                     },
-                    "blocks", "items", 2, new List<Block>
+                    "blocks", "items", 3, new List<Block>
                     {
                         new Block { Name = "Blocks", Side = false, Top = false },
                         new Block { Name = "Stairs", Side = false, Top = false },
                         new Block { Name = "Walls", Side = true, Top = true },
-                        new Block { Name = "Slabs", Side = false, Top = false },
+                        new Block { Name = "Slabs", Side = true, Top = true },
                         new Block { Name = "Smooth", Side = false, Top = false },
                         new Block { Name = "Brick", Side = true, Top = true },
-                    });
-
+                    }, "Mineralogy 1.14 - Regular Stone");
+                
                 var mineralogyProfile110 = new Profile("1.10", "mineralogy", new List<string>
                     {  "andesite"
                      , "basalt"
@@ -110,19 +110,40 @@ namespace SkysJSONGenerator
                      , "gneiss"
                      , "phyllite"
                      , "amphibolite"
+                     , "diabase" // new from here
+                     , "gabbro"
+                     , "peridotite"
+                     , "basaltic_glass"
+                     , "scoria"
+                     , "tuff"
+                     , "siltstone"
+                     , "rock_salt"
+                     , "hornfels"
+                     , "quartzite"
+                     , "novaculite"
                     },
-                    "blocks", "items", 2, new List<Block>
+                    "blocks", "items", 3, new List<Block>
                     {
                         new Block { Name = "Blocks", Side = false, Top = false },
                         new Block { Name = "Stairs", Side = false, Top = false },
                         new Block { Name = "Walls", Side = true, Top = true},
-                        new Block { Name = "Slabs", Side = false, Top = false },
+                        new Block { Name = "Slabs", Side = true, Top = true },
                         new Block { Name = "Smooth", Side = false, Top = false },
                         new Block { Name = "Brick", Side = true, Top = true },
                         new Block { Name = "Furnace", Side = true, Top = true }
-                    });
+                    }, "Mineralogy 1.10 - Regular Stone");
+
+                var mineralogyProfileSedimentary = new Profile("1.10", "mineralogy", new List<string>
+                    {  "chalk"         
+                    },
+                    "blocks", "items", 3, new List<Block>
+                    {
+                        new Block { Name = "Blocks", Side = false, Top = false }
+                    }, "Mineralogy 1.10 - Irregular Blocks");
 
                 _profiles.Add(mineralogyProfile);
+                _profiles.Add(mineralogyProfile110);
+                _profiles.Add(mineralogyProfileSedimentary);
 
                 WriteFile(@"profiles.cfg", JsonConvert.SerializeObject(_profiles));
             }

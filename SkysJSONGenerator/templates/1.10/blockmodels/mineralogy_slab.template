@@ -1,0 +1,7 @@
+﻿{{
+    "parent": "{modid}:block/slab",
+    "textures": {{
+        "face": "{modid}:{blocktexturefolder}/{materialname}{sidesuffix}",
+        "side": "{modid}:{blocktexturefolder}/{materialname}{topsuffix}"
+    }}
+}}

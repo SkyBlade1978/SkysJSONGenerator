@@ -1,0 +1,6 @@
+﻿{{
+    "variants": {{
+        "half=bottom": {{ "model": "{modid}:half_slab_{blockname}" }},
+        "half=top": {{ "model": "{modid}:upper_slab_{blockname}" }}
+    }}
+}}
