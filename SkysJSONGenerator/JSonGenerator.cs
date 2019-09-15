@@ -154,6 +154,40 @@ namespace SkysJSONGenerator
             }
         }
 
+        private void RenderReleifJSON()
+        {
+            foreach (var item in _profile.Materials)
+            {
+                var materialname = item;
+                var topSuffix = string.Empty;
+                var sideSuffix = string.Empty;
+
+                Block block = _profile.Blocks.Find(b => b.Name == "Relief");
+
+                var blockname = materialname + "_relief";
+
+                var fileName = $"\\{blockname}.json";
+                string blockModelFilename = string.Empty;
+                
+                foreach (var file in Directory.EnumerateFiles(_blockModelTemplateFolder))
+                {
+                    if (file.Contains("relief"))
+                    {
+                        var filenameArray = file.Split('_');
+                        var reliefName = filenameArray[1].Split('.');
+                        blockModelFilename = $"\\{blockname}_{reliefName[0]}.json";
+                        WriteFile(_modelsBlockPath + blockModelFilename, @LoadTemplate(path: _blockModelTemplateFolder, name: $"relief_{reliefName[0]}", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+
+                        WriteFile(_blockstatesPath + blockModelFilename, @LoadTemplate(path: _blockstateTemplateFolder, name: "relief", blockname: blockname + $"_{ reliefName[0]}", materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                        WriteFile(_modelsItemPath + blockModelFilename, @LoadTemplate(path: _itemModelTemplateFolder, name: "relief", blockname: blockname + $"_{ reliefName[0]}", materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                    }
+                }
+
+                
+                //WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "relief", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+            }
+        }
+
         private void RenderFurnaceJSON(bool smooth, bool brick)
         {
             foreach (var item in _profile.Materials)
@@ -301,7 +335,7 @@ namespace SkysJSONGenerator
             }
         }
 
-        public int RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, bool furnace)
+        public int RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, bool furnace, bool releifs)
         {
             _filesGenerated = 0;
 
@@ -438,6 +472,11 @@ namespace SkysJSONGenerator
 
                 if (brick && smooth)
                     RenderSlabJSON(true, true);
+            }
+
+            if (releifs)
+            {
+                RenderReleifJSON();
             }
 
             return _filesGenerated;

@@ -130,7 +130,8 @@ namespace SkysJSONGenerator
                         new Block { Name = "Slabs", Side = true, Top = true },
                         new Block { Name = "Smooth", Side = false, Top = false },
                         new Block { Name = "Brick", Side = true, Top = true },
-                        new Block { Name = "Furnace", Side = true, Top = true }
+                        new Block { Name = "Furnace", Side = true, Top = true },
+                        new Block { Name = "Relief", Side = true, Top = true }
                     }, "Mineralogy 1.10 - Regular Stone");
 
                 var mineralogyProfileSedimentary = new Profile("1.10", "mineralogy", new List<string>
@@ -193,6 +194,7 @@ namespace SkysJSONGenerator
                 var renderSmooth = false;
                 var renderBrick = false;
                 var renderFurnace = false;
+                var renderReliefs = false;
 
                 var selectedProfile = (Profile)comboBoxMod.SelectedItem;
                 var basePath = "out\\" + selectedProfile.Modid + "\\" + selectedProfile.Version;
@@ -242,13 +244,17 @@ namespace SkysJSONGenerator
                                 renderFurnace = true;
                                 break;
 
+                            case "Relief":
+                                renderReliefs = true;
+                                break;
+
                             default:
                                 break;
                         }
                     }
                 }
 
-                var generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace);
+                var generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs);
 
                 if (generated == 0)
                     MessageBox.Show("No files generated", "Result", MessageBoxButtons.OK);
