@@ -175,14 +175,25 @@ namespace SkysJSONGenerator
                     {
                         var filenameArray = file.Split('_');
                         var reliefName = filenameArray[1].Split('.');
-                        blockModelFilename = $"\\{blockname}_{reliefName[0]}.json";
-                        WriteFile(_modelsBlockPath + blockModelFilename, @LoadTemplate(path: _blockModelTemplateFolder, name: $"relief_{reliefName[0]}", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                        var templateName = $"relief_{reliefName[0]}";
 
-                        WriteFile(_blockstatesPath + blockModelFilename, @LoadTemplate(path: _blockstateTemplateFolder, name: "relief", blockname: blockname + $"_{ reliefName[0]}", materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
-                        WriteFile(_modelsItemPath + blockModelFilename, @LoadTemplate(path: _itemModelTemplateFolder, name: "relief", blockname: blockname + $"_{ reliefName[0]}", materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                        if (filenameArray.Length > 2)
+                        {
+                            blockModelFilename = $"\\{blockname}_{reliefName[0]}_inventory.json";
+                            templateName = $"relief_{reliefName[0]}_inventory";
+                        }
+                        else
+                            blockModelFilename = $"\\{blockname}_{reliefName[0]}.json";
+
+                        WriteFile(_modelsBlockPath + blockModelFilename, @LoadTemplate(path: _blockModelTemplateFolder, name: templateName, blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+
+                        if (filenameArray.Length < 3)
+                        {
+                            WriteFile(_blockstatesPath + blockModelFilename, @LoadTemplate(path: _blockstateTemplateFolder, name: "relief", blockname: blockname + $"_{ reliefName[0]}", materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                            WriteFile(_modelsItemPath + blockModelFilename, @LoadTemplate(path: _itemModelTemplateFolder, name: "relief", blockname: blockname + $"_{ reliefName[0]}", materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+                        }
                     }
                 }
-
                 
                 //WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "relief", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
             }
