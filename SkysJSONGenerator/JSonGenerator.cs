@@ -2,9 +2,25 @@
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace SkysJSONGenerator
 {
+    public static class StringExtensions
+    {
+        public static string FirstCharToUpper(this string input)
+        {
+            switch (input)
+            {
+                case null: throw new ArgumentNullException(nameof(input));
+                case "": throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
+                default: return input.First().ToString().ToUpper() + input.Substring(1);
+            }
+        }
+    }
+
     public class JSonGenerator
     {
         private Profile _profile;
@@ -14,6 +30,7 @@ namespace SkysJSONGenerator
         private string _itemModelTemplateFolder;
         private string _blockstateTemplateFolder;
         private string _lootTableTemplateFolder;
+        private string _langTemplateFolder;
         private string _tagTemplateFolder;
         private string _wallItemTagPath;
         private string _wallTagPath;
@@ -23,6 +40,7 @@ namespace SkysJSONGenerator
         private string _modelsBlockPath;
         private string _modelsItemPath;
         private string _lootTablePath;
+        private string _langPath;
         private int _filesGenerated;
 
         // interpolated fields
@@ -43,6 +61,7 @@ namespace SkysJSONGenerator
             _basePath = basePath;
             _lootTablePath = $"{_basePath}\\data\\{modid}\\loot_tables\\blocks";
             _blockstatesPath = $"{_basePath}\\assets\\{modid}\\blockstates";
+            _langPath = $"{_basePath}\\assets\\{modid}\\lang";
             _modelsPath = $"{_basePath}\\assets\\{modid}\\models";
             _modelsBlockPath = _modelsPath + "\\block";
             _modelsItemPath = _modelsPath + "\\item";
@@ -54,12 +73,13 @@ namespace SkysJSONGenerator
             _itemModelTemplateFolder = _baseTemplateFolder + "\\itemmodels";
             _blockstateTemplateFolder = _baseTemplateFolder + "\\blockstates";
             _lootTableTemplateFolder = _baseTemplateFolder + "\\loot_table";
+            _langTemplateFolder = _baseTemplateFolder + "\\lang";
             _tagTemplateFolder = _baseTemplateFolder + "\\tags";
         }
 
-        private string LoadTemplate(string path, string name, string blockname, string materialname, string topsuffix, string sidesuffix, string walllist)
+        private string LoadTemplate(string path, string name, string blockname, string materialname, string topsuffix, string sidesuffix, string walllist, string langname)
         {
-            var overridePath = path + "\\" + modid + "_"+ name + ".template";
+            var overridePath = path + "\\" + modid + "_" + name + ".template";
             var fullPath = path + "\\" + name + ".template";
 
             if (File.Exists(overridePath))
@@ -67,15 +87,28 @@ namespace SkysJSONGenerator
 
             if (File.Exists(fullPath))
             {
-                var template = File.ReadAllText(fullPath).Replace("{modid}", "{0}").Replace("{blockname}", "{1}").Replace("{materialname}", "{2}").Replace("{topsuffix}", "{3}").Replace("{sidesuffix}", "{4}").Replace("{blocktexturefolder}", "{5}").Replace("{walllist}", "{6}");
+                var template = File.ReadAllText(fullPath).Replace("{modid}", "{0}").Replace("{blockname}", "{1}").Replace("{materialname}", "{2}").Replace("{topsuffix}", "{3}").Replace("{sidesuffix}", "{4}").Replace("{blocktexturefolder}", "{5}").Replace("{walllist}", "{6}").Replace("{langname}", "{7}");
 
-                return string.Format(@template, modid, blockname, materialname, topsuffix, sidesuffix, blocktexturefolder, walllist);
+                try
+                {
+                    return string.Format(@template, modid, blockname, materialname, topsuffix, sidesuffix, blocktexturefolder, walllist, langname);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Whoops, there appears to be an error in template file:" + fullPath);
+                    throw;
+                }
             }
             else
             {
                 Debug.Print("Template not found: " + fullPath);
                 return string.Empty;
             }
+        }
+
+        private string LoadTemplate(string path, string name, string blockname, string materialname, string topsuffix, string sidesuffix, string walllist)
+        {
+            return LoadTemplate(path, name, blockname, materialname, topsuffix, sidesuffix, walllist, "");
         }
 
         private void RenderStairJSON(bool smooth, bool brick)
@@ -154,7 +187,7 @@ namespace SkysJSONGenerator
             }
         }
 
-        private void RenderReleifJSON()
+        private void RenderReleifJSON(bool langs)
         {
             foreach (var item in _profile.Materials)
             {
@@ -191,6 +224,9 @@ namespace SkysJSONGenerator
                         {
                             WriteFile(_blockstatesPath + blockModelFilename, @LoadTemplate(path: _blockstateTemplateFolder, name: "relief", blockname: blockname + $"_{ reliefName[0]}", materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
                             WriteFile(_modelsItemPath + blockModelFilename, @LoadTemplate(path: _itemModelTemplateFolder, name: "relief", blockname: blockname + $"_{ reliefName[0]}", materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
+
+                            if (langs)
+                                appendFile(_langPath + "\\en_EN.lang", @LoadTemplate(path: _langTemplateFolder, name: "lang", blockname: blockname + $"_{ reliefName[0]}", materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: "",langname: materialname.FirstCharToUpper() + " " + reliefName[0].FirstCharToUpper() + " Relief"));
                         }
                     }
                 }
@@ -297,7 +333,7 @@ namespace SkysJSONGenerator
                 WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "block", blockname: blockname, materialname: blockname, topsuffix: "", sidesuffix: "", walllist: ""));
             }
         }
-
+        
         private void RenderBrickBlockJSON(bool smooth)
         {
             foreach (var item in _profile.Materials)
@@ -346,7 +382,15 @@ namespace SkysJSONGenerator
             }
         }
 
-        public int RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, bool furnace, bool releifs)
+        private void appendFile(string path, string content)
+        {
+            using (StreamWriter w = File.AppendText(path))
+            {
+                w.WriteLine(content);
+            }
+        }
+
+        public int RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, bool furnace, bool releifs, bool langs)
         {
             _filesGenerated = 0;
 
@@ -388,6 +432,9 @@ namespace SkysJSONGenerator
 
             if (!Directory.Exists(_basePath + "\\assets\\" + modid))
                 Directory.CreateDirectory(_basePath + "\\assets\\" + modid);
+
+            if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\lang"))
+                Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\lang");
 
             if (!Directory.Exists(_blockstatesPath))
                 Directory.CreateDirectory(_blockstatesPath);
@@ -487,7 +534,7 @@ namespace SkysJSONGenerator
 
             if (releifs)
             {
-                RenderReleifJSON();
+                RenderReleifJSON(langs);
             }
 
             return _filesGenerated;
