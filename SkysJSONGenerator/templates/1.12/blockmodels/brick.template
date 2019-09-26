@@ -1,0 +1,8 @@
+﻿{{
+    "parent": "{modid}:block/brick",
+    "textures": {{
+      "top": "{modid}:{blocktexturefolder}/{blockname}{topsuffix}",
+      "bottom": "{modid}:{blocktexturefolder}/{blockname}{topsuffix}",
+        "side": "{modid}:{blocktexturefolder}/{blockname}{sidesuffix}"
+    }}
+}}

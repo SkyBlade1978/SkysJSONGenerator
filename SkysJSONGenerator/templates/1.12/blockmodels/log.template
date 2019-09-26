@@ -1,0 +1,9 @@
+﻿{{
+    "parent": "block/cube_column",
+    "textures":
+      {{
+        "end": "{modid}:{blocktexturefolder}/{blockname}{topsuffix}",
+        "side": "{modid}:{blocktexturefolder}/{blockname}"
+      }}
+
+}}

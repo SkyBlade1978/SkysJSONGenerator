@@ -1,0 +1,8 @@
+﻿{{
+    "parent": "block/upper_slab",
+    "textures": {{
+        "bottom": "{modid}:{blocktexturefolder}/{materialname}{topsuffix}",
+        "top": "{modid}:{blocktexturefolder}/{materialname}{topsuffix}",
+        "side": "{modid}:{blocktexturefolder}/{materialname}{sidesuffix}"
+    }}
+}}

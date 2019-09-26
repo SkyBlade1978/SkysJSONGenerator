@@ -1,0 +1,10 @@
+﻿{{
+  "variants": {{
+    "facing=down":  {{ "model": "{modid}:{blockname}", "x": 180           }},
+    "facing=up":    {{ "model": "{modid}:{blockname}"                     }},
+    "facing=north": {{ "model": "{modid}:{blockname}", "x": 90            }},
+    "facing=south": {{ "model": "{modid}:{blockname}", "x": 90 , "y": 180 }},
+    "facing=west":  {{ "model": "{modid}:{blockname}", "x": 90 , "y": 270 }},
+    "facing=east":  {{ "model": "{modid}:{blockname}", "x": 90 , "y": 90  }}
+  }}
+}}

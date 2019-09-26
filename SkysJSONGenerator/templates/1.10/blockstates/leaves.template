@@ -1,0 +1,19 @@
+﻿{{
+  "variants": {{
+    "normal": {{
+      "model": "{modid}:{blockname}"
+    }},
+    "check_decay=true,decayable=false": {{
+      "model": "{modid}:{blockname}"
+    }},
+    "check_decay=true,decayable=true": {{
+      "model": "{modid}:{blockname}"
+    }},
+    "check_decay=false,decayable=false": {{
+      "model": "{modid}:{blockname}"
+    }},
+    "check_decay=false,decayable=true": {{
+      "model": "{modid}:{blockname}"
+    }}
+  }}
+}}

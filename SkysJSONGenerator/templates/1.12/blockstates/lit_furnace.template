@@ -1,0 +1,8 @@
+﻿{{
+    "variants": {{
+        "facing=north": {{ "model": "{modid}:lit_{blockname}" }},
+        "facing=south": {{ "model": "{modid}:lit_{blockname}", "y": 180 }},
+        "facing=west":  {{ "model": "{modid}:lit_{blockname}", "y": 270 }},
+        "facing=east":  {{ "model": "{modid}:lit_{blockname}", "y": 90 }}
+    }}
+}}

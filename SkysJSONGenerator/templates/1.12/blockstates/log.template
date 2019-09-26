@@ -1,0 +1,19 @@
+﻿{{
+  "variants": {{
+    "axis=y": {{
+      "model": "{modid}:{materialname}_log"
+    }},
+    "axis=z": {{
+      "model": "{modid}:{materialname}_log",
+      "x": 90
+    }},
+    "axis=x": {{
+      "model": "{modid}:{materialname}_log",
+      "x": 90,
+      "y": 90
+    }},
+    "axis=none": {{
+      "model": "{modid}:{materialname}_bark"
+    }}
+  }}
+}}

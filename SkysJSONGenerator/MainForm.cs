@@ -143,9 +143,52 @@ namespace SkysJSONGenerator
                         new Block { Name = "Blocks", Side = false, Top = false }
                     }, "Mineralogy 1.10 - Irregular Blocks");
 
+                var iafProfile110 = new Profile("1.10", "ironagefurniture", new List<string>
+                    {  "minecraft:oak:planks_{materialname}:log_{materialname}"
+                     , "minecraft:acacia:planks_{materialname}:log_{materialname}"
+                     , "minecraft:big_oak:planks_{materialname}:log_{materialname}"
+                     , "minecraft:birch:planks_{materialname}:log_{materialname}"
+                     , "minecraft:jungle:planks_{materialname}:log_{materialname}"
+                     , "minecraft:spruce:planks_{materialname}:log_{materialname}"
+                     , "biomesoplenty:umbran:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:willow:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:magic:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:mahogany:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:mangrove:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:palm:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:pine:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:redwood:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:sacred_oak:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:ebony:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:ethereal:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:eucalyptus:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:fir:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:hellbark:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:jacaranda:{materialname}_planks:{materialname}_log"
+                     , "biomesoplenty:cherry:{materialname}_planks:{materialname}_log"
+                    },
+                    "blocks", "items", 3, new List<Block>
+                    {
+                        new Block { Name = "WoodChairs", Side = false, Top = false },
+                        new Block { Name = "Lang", Side = true, Top = true }
+                    }, "Iron Age Furniture 1.10 ");
+
+                var spookyBiomes112 = new Profile("1.12", "spookybiomes", new List<string>
+                    {  "blood"
+                     , "example1"
+                     , "example2"
+                    },
+                    "blocks", "items", 3, new List<Block>
+                    {
+                        new Block { Name = "Leaves", Side = false, Top = false },
+                        new Block { Name = "Log", Side = false, Top = true}
+                    }, "Spooky Biomes 1.12 - Wood");
+
                 _profiles.Add(mineralogyProfile);
                 _profiles.Add(mineralogyProfile110);
                 _profiles.Add(mineralogyProfileSedimentary);
+                _profiles.Add(iafProfile110);
+                _profiles.Add(spookyBiomes112);
 
                 WriteFile(@"profiles.cfg", JsonConvert.SerializeObject(_profiles));
             }
@@ -197,7 +240,10 @@ namespace SkysJSONGenerator
                 var renderFurnace = false;
                 var renderReliefs = false;
                 var renderLangs = false;
-                
+                var renderChairs = false;
+                var renderLeaves = false;
+                var renderLog = false;
+
                 var selectedProfile = (Profile)comboBoxMod.SelectedItem;
                 var basePath = "out\\" + selectedProfile.Modid + "\\" + selectedProfile.Version;
                 var generator = new JSonGenerator(selectedProfile, basePath);
@@ -254,13 +300,25 @@ namespace SkysJSONGenerator
                                 renderLangs = true;
                                 break;
 
+                            case "WoodChairs":
+                                renderChairs = true;
+                                break;
+
+                            case "Leaves":
+                                renderLeaves = true;
+                                break;
+
+                            case "Log":
+                                renderLog = true;
+                                break;
+
                             default:
                                 break;
                         }
                     }
                 }
 
-                var generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs, renderLangs);
+                var generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs, renderLangs, renderChairs, renderLeaves, renderLog);
 
                 if (generated == 0)
                     MessageBox.Show("No files generated", "Result", MessageBoxButtons.OK);
