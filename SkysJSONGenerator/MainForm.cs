@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace SkysJSONGenerator
@@ -24,43 +25,45 @@ namespace SkysJSONGenerator
             _profiles = new List<Profile>();
             _versions = new List<string>();
 
-            JsonSerializer serializer = new JsonSerializer();
+            var serializer = new JsonSerializer();
 
-            if (File.Exists(@"profiles.cfg"))
+            if (Directory.Exists(@"profiles"))
             {
-                var dirty = false;
-
-                using (StreamReader file = File.OpenText(@"profiles.cfg"))
+                foreach (var enumerateFile in Directory.EnumerateFiles("profiles", "*.cfg"))
                 {
-                    _profiles = (List<Profile>)serializer.Deserialize(file, typeof(List<Profile>));
+                    //var fileNameArray = enumerateFile.Split('\\');
+                    //var fileName = fileNameArray[fileNameArray.Length - 1];
 
-                    foreach (var item in _profiles)
-                        if(item.ProfileVersion < 3)
-                        {
-                            dirty = true;
-                            item.ProfileVersion = 3;
-                        }       
-                }
-
-                if (dirty)
-                {
-                    int fileCount = 2;
-
-                    while (File.Exists(@"profiles" + fileCount + ".old"))
+                    using (var file = File.OpenText(enumerateFile))
                     {
-                        fileCount++;
+                        var profile =(Profile)serializer.Deserialize(file, typeof(Profile));
 
-                        if (fileCount > 100)
+                        if (profile.ProfileVersion < 3)
                         {
-                            MessageBox.Show("Please delete some old cfg files");
-                            throw new Exception("Too many old config files");
-                        }
-                    }
-                    
-                    File.Copy(@"profiles.cfg", @"profiles" + fileCount + ".old");
-                    File.Delete(@"profiles.cfg");
+                            profile.ProfileVersion = 3;
 
-                    WriteFile(@"profiles.cfg", JsonConvert.SerializeObject(_profiles));
+                            var fileCount = 2;
+
+                            while (File.Exists(profile.Name + fileCount + ".old"))
+                            {
+                                fileCount++;
+
+                                if (fileCount <= 100)
+                                    continue;
+
+                                MessageBox.Show(@"Please delete some old cfg files");
+                                throw new Exception("Too many old config files");
+                            }
+
+                            File.Copy(enumerateFile, "profiles\\" + profile.Name + fileCount + ".old");
+                            File.Delete(enumerateFile);
+
+                            WriteFile($@"{profile.Name}.cfg", JsonConvert.SerializeObject(profile));
+                        }
+
+                        _profiles.Add(profile);
+                    }
+
                 }
             }
             else
@@ -166,6 +169,19 @@ namespace SkysJSONGenerator
                      , "biomesoplenty:hellbark:{materialname}_planks:{materialname}_log"
                      , "biomesoplenty:jacaranda:{materialname}_planks:{materialname}_log"
                      , "biomesoplenty:cherry:{materialname}_planks:{materialname}_log"
+                     , "natura:amaranth:{materialname}_planks:{materialname}_log"
+                    , "natura:eucalyptus:{materialname}_planks:{materialname}_log"
+                    , "natura:hopseed:{materialname}_planks:{materialname}_log"
+                    , "natura:maple:{materialname}_planks:{materialname}_log"
+                    , "natura:redwood:{materialname}_planks:{materialname}_bark"
+                    , "natura:sakura:{materialname}_planks:{materialname}_log"
+                    , "natura:silverbell:{materialname}_planks:{materialname}_log"
+                    , "natura:tiger:{materialname}_planks:{materialname}_log"
+                    , "natura:willow:{materialname}_planks:{materialname}_log"
+                    , "natura:bloodwood:{materialname}_planks:{materialname}_bark"
+                    , "natura:darkwood:{materialname}_planks:{materialname}_log"
+                    , "natura:fusewood:{materialname}_planks:{materialname}_log"
+                    , "natura:ghostwood:{materialname}_planks:{materialname}_log"
                     },
                     "blocks", "items", 3, new List<Block>
                     {
@@ -174,14 +190,20 @@ namespace SkysJSONGenerator
                     }, "Iron Age Furniture 1.10 ");
 
                 var spookyBiomes112 = new Profile("1.12", "spookybiomes", new List<string>
-                    {  "blood"
-                     , "example1"
-                     , "example2"
+                    {  "bloodwood"
+                     , "ghostly"
+                     , "oozing"
+                     , "witchwood"
                     },
                     "blocks", "items", 3, new List<Block>
                     {
                         new Block { Name = "Leaves", Side = false, Top = false },
-                        new Block { Name = "Log", Side = false, Top = true}
+                        new Block { Name = "Log", Side = false, Top = true},
+                        new Block { Name = "WoodStairs", Side = false, Top = false },
+                        new Block { Name = "Planks", Side = false, Top = false },
+                        new Block { Name = "Door", Side = false, Top = false },
+                        new Block { Name = "DoubleSlab", Side = false, Top = false }
+
                     }, "Spooky Biomes 1.12 - Wood");
 
                 _profiles.Add(mineralogyProfile);
@@ -190,7 +212,11 @@ namespace SkysJSONGenerator
                 _profiles.Add(iafProfile110);
                 _profiles.Add(spookyBiomes112);
 
-                WriteFile(@"profiles.cfg", JsonConvert.SerializeObject(_profiles));
+                if (!Directory.Exists("profiles"))
+                    Directory.CreateDirectory("profiles");
+
+                foreach (var profile in _profiles)
+                    WriteFile($@"profiles\\{profile.Name}.cfg", JsonConvert.SerializeObject(profile));
             }
 
             foreach (var item in _profiles)
@@ -202,16 +228,16 @@ namespace SkysJSONGenerator
             checkedListBoxOutput.Items.Clear();
         }
 
-        private void WriteFile(string path, string content)
+        private static void WriteFile(string path, string content)
         {
             if (File.Exists(path))
                 File.Delete(path);
 
-            JToken parsedJson = JToken.Parse(content);
+            var parsedJson = JToken.Parse(content);
 
             var beautified = parsedJson.ToString(Formatting.Indented);
 
-            File.WriteAllLines(path, new string[] { beautified });
+            File.WriteAllLines(path, new[] { beautified });
         }
 
         private void LoadProfiles(string version)
@@ -221,10 +247,8 @@ namespace SkysJSONGenerator
             comboBoxMod.Items.Clear();
 
             foreach (var item in _profiles)
-            {
                 if (version == "All" || version == item.Version)
                     comboBoxMod.Items.Add(item);
-            }          
         }
    
         private void buttonGenerate_Click(object sender, EventArgs e)
@@ -243,6 +267,10 @@ namespace SkysJSONGenerator
                 var renderChairs = false;
                 var renderLeaves = false;
                 var renderLog = false;
+                var renderPlanks = false;
+                var renderWoodStairs = false;
+                var renderDoor = false;
+                var renderDoubleSlab = false;
 
                 var selectedProfile = (Profile)comboBoxMod.SelectedItem;
                 var basePath = "out\\" + selectedProfile.Modid + "\\" + selectedProfile.Version;
@@ -250,81 +278,79 @@ namespace SkysJSONGenerator
                 
                 if (!Directory.Exists("templates\\" + selectedProfile.Version))
                 {
-                    MessageBox.Show("Whoops, there doesn't appear to be a templates folder for version " + selectedProfile.Version);
+                    MessageBox.Show(@"Whoops, there doesn't appear to be a templates folder for version " + selectedProfile.Version);
                     return;
                 }
 
                 buttonGenerate.Enabled = false;
 
-                for (int i = 0; i < checkedListBoxOutput.Items.Count; i++)
+                for (var i = 0; i < checkedListBoxOutput.Items.Count; i++)
                 {
-                    if (checkedListBoxOutput.GetItemChecked(i))
+                    if (!checkedListBoxOutput.GetItemChecked(i))
+                        continue;
+
+                    var blockItem = (Block)checkedListBoxOutput.Items[i];
+
+                    switch (blockItem.Name)
                     {
-                        var blockItem = (Block)checkedListBoxOutput.Items[i];
-
-                        switch (blockItem.Name)
-                        {
-                            case "Blocks":
-                                renderBlocks = true;
-                                break;
-
-                            case "Stairs":
-                                renderStairs = true;
-                                break;
-
-                            case "Walls":
-                                renderWalls = true;
-                                break;
-
-                            case "Slabs":
-                                renderSlabs = true;
-                                break;
-
-                            case "Smooth":
-                                renderSmooth = true;
-                                break;
-
-                            case "Brick":
-                                renderBrick = true;
-                                break;
-
-                            case "Furnace":
-                                renderFurnace = true;
-                                break;
-
-                            case "Relief":
-                                renderReliefs = true;
-                                break;
-
-                            case "Lang":
-                                renderLangs = true;
-                                break;
-
-                            case "WoodChairs":
-                                renderChairs = true;
-                                break;
-
-                            case "Leaves":
-                                renderLeaves = true;
-                                break;
-
-                            case "Log":
-                                renderLog = true;
-                                break;
-
-                            default:
-                                break;
-                        }
+                        case "Blocks":
+                            renderBlocks = true;
+                            break;
+                        case "Stairs":
+                            renderStairs = true;
+                            break;
+                        case "Walls":
+                            renderWalls = true;
+                            break;
+                        case "Slabs":
+                            renderSlabs = true;
+                            break;
+                        case "Smooth":
+                            renderSmooth = true;
+                            break;
+                        case "Brick":
+                            renderBrick = true;
+                            break;
+                        case "Furnace":
+                            renderFurnace = true;
+                            break;
+                        case "Relief":
+                            renderReliefs = true;
+                            break;
+                        case "Lang":
+                            renderLangs = true;
+                            break;
+                        case "WoodChairs":
+                            renderChairs = true;
+                            break;
+                        case "Leaves":
+                            renderLeaves = true;
+                            break;
+                        case "Log":
+                            renderLog = true;
+                            break;
+                        case "Planks":
+                            renderPlanks = true;
+                            break;
+                        case "WoodStairs":
+                            renderWoodStairs = true;
+                            break;
+                        case "Door":
+                            renderDoor = true;
+                            break;
+                        case "DoubleSlab":
+                            renderDoubleSlab = true;
+                            break;
                     }
                 }
 
-                var generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs, renderLangs, renderChairs, renderLeaves, renderLog);
+                var generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs, renderLangs, renderChairs, renderLeaves, renderLog, renderPlanks, renderWoodStairs, renderDoor, renderDoubleSlab);
 
                 if (generated == 0)
-                    MessageBox.Show("No files generated", "Result", MessageBoxButtons.OK);
+                    MessageBox.Show(@"No files generated", @"Result", MessageBoxButtons.OK);
                 else
                 {
-                    MessageBox.Show(generated + " files generated", "Result", MessageBoxButtons.OK);
+                    MessageBox.Show(generated + @" files generated", @"Result", MessageBoxButtons.OK);
 
                     System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
                     {
@@ -335,7 +361,7 @@ namespace SkysJSONGenerator
                 }
             }
             else
-                MessageBox.Show("Please select a mod profile above", "Which mod?", MessageBoxButtons.OK);
+                MessageBox.Show(@"Please select a mod profile above", @"Which mod?", MessageBoxButtons.OK);
 
             buttonGenerate.Enabled = true;
         }
@@ -349,18 +375,18 @@ namespace SkysJSONGenerator
 
         private void comboBoxMod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxMod.SelectedIndex >= 0)
+            if (comboBoxMod.SelectedIndex < 0)
+                return;
+
+            var profile = (Profile)comboBoxMod.SelectedItem;
+            listBoxMaterials.DataSource = profile.Materials;
+
+            checkedListBoxOutput.Items.Clear();
+
+            foreach (var item in profile.Blocks)
             {
-                var profile = (Profile)comboBoxMod.SelectedItem;
-                listBoxMaterials.DataSource = profile.Materials;
-
-                checkedListBoxOutput.Items.Clear();
-
-                foreach (var item in profile.Blocks)
-                {
-                    checkedListBoxOutput.Items.Add(item);
-                    checkedListBoxOutput.SetItemChecked(checkedListBoxOutput.Items.Count - 1, true);
-                }
+                checkedListBoxOutput.Items.Add(item);
+                checkedListBoxOutput.SetItemChecked(checkedListBoxOutput.Items.Count - 1, true);
             }
         }
     }

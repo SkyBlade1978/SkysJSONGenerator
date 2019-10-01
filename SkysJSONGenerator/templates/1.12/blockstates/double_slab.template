@@ -1,0 +1,10 @@
+﻿{{
+  "variants": {{
+    "normal": {{
+      "model": "{modid}:{materialname}_planks"
+    }},
+    "variant=default": {{
+      "model": "{modid}:{materialname}_planks"
+    }}
+  }}
+}}
