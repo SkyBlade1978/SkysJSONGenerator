@@ -1,10 +1,10 @@
 {{
 	"credit": "Made with Blockbench",
-		"textures": {{
-		"0": "{modid}:{blocktexturefolder}/{materialname}_smooth",
-		"2": "{modid}:{blocktexturefolder}/{materialname}",
-		"particle": "{modid}:{blocktexturefolder}/{materialname}"
-	}},
+  "textures": {{
+    "0": "{texture2}",
+    "2": "{texture1}",
+    "particle": "{texture2}"
+  }},
 	"elements": [
 		{{
 			"from": [0, 0, 0],

@@ -601,7 +601,7 @@ namespace SkysJSONGenerator
                 if (smooth)
                     blockname += "_smooth";
 
-                if (template != string.Empty)
+                if (template != string.Empty && template != "block")
                     blockname += "_" + template;
                 else
                     template = "block";
@@ -817,40 +817,19 @@ namespace SkysJSONGenerator
                     RenderSlabJSON(true, true);
             }
 
-            if (releifs)
-            {
-                RenderReleifJSON(langs);
-            }
+            if (releifs) RenderReleifJSON(langs);
 
-            if (chairs)
-            {
-                RenderChairJSON(langs);
-            }
+            if (chairs) RenderChairJSON(langs);
 
-            if (leaves)
-            {
-                RenderBlockJSON("leaves");
-            }
+            if (leaves) RenderBlockJSON("leaves");
 
-            if (log)
-            {
-                RenderLogJSON();
-            }
+            if (log) RenderLogJSON();
 
-            if (planks)
-            {
-                RenderBlockJSON("planks");
-            }
+            if (planks) RenderBlockJSON("planks");
 
-            if (woodStairs)
-            {
-                RenderStairJSON(false, false, true);
-            }
+            if (woodStairs) RenderStairJSON(false, false, true);
 
-            if (renderDoor)
-            {
-                RenderDoorJSON();
-            }
+            if (renderDoor) RenderDoorJSON();
 
             if (renderDoubleSlab)
                 RenderBlockJSON("double_slab");

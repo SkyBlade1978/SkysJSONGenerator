@@ -1,9 +1,9 @@
 {{
 	"credit": "Made with Blockbench",
 	"textures": {{
-		"0": "{modid}:{blocktexturefolder}/{materialname}_smooth",
-		"2": "minecraft:blocks/stone",
-		"particle": "{modid}:{blocktexturefolder}/{materialname}"
+		"0": "{texture2}",
+		"2": "{texture1}",
+		"particle": "{texture2}"
 	}},
 	"elements": [
 		{{
