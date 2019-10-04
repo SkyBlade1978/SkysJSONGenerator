@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {{
 		"0": "{modid}:{blocktexturefolder}/{materialname}_smooth",
-		"particle": "{modid}:{blocktexturefolder}/{materialname}"
+		"particle": "{modid}:{blocktexturefolder}/{materialname}_smooth"
 	}},
 	"elements": [
 		{{

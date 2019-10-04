@@ -58,6 +58,8 @@ namespace SkysJSONGenerator
 
         string _wallTags = "";
 
+        private bool _renderAdvancement;
+
         public JSonGenerator(Profile profile, string basePath)
         {
             modid = profile.Modid;
@@ -139,6 +141,8 @@ namespace SkysJSONGenerator
 
         private async Task RenderStairJSON(bool smooth, bool brick, bool wood)
         {
+            var tasks = new List<Task>();
+
             foreach (var item in _profile.Materials)
             {
                 string materialname;
@@ -181,22 +185,21 @@ namespace SkysJSONGenerator
                     MaterialName = materialname, TopSuffix = topSuffix, SideSuffix = sideSuffix, Textures = textures,
                     SmoothSuffix = smoothSuffix, BrickSuffix = brickSuffix
                 };
-
-                var tasks = new List<Task>
-                {
-                    WriteFile(_blockstatesPath + fileName, @LoadTemplate(data)),
-                    WriteFile(_modelsBlockPath + fileName, @LoadTemplate(data.WithPath(_blockModelTemplateFolder))),
-                    WriteFile($"{_modelsBlockPath}\\{blockname}_inner.json",
-                        @LoadTemplate(data.WithPath(_blockModelTemplateFolder).WithName("inner_stairs"))),
-                    WriteFile($"{_modelsBlockPath}\\{blockname}_outer.json",
-                        @LoadTemplate(data.WithPath(_blockModelTemplateFolder).WithName("outer_stairs"))),
-                    WriteFile(_modelsItemPath + fileName, @LoadTemplate(data.WithPath(_itemModelTemplateFolder))),
-                    WriteFile(_lootTablePath + fileName, @LoadTemplate(data.WithPath(_lootTableTemplateFolder))),
-                    WriteFile(_recipeAdvancementsPath + fileName, @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe")))
-                };
                 
-                await Task.WhenAll(tasks.ToArray());
+                tasks.Add(WriteFile(_blockstatesPath + fileName, @LoadTemplate(data)));
+                    tasks.Add(WriteFile(_modelsBlockPath + fileName, @LoadTemplate(data.WithPath(_blockModelTemplateFolder))));
+                tasks.Add(WriteFile($"{_modelsBlockPath}\\{blockname}_inner.json",
+                        @LoadTemplate(data.WithPath(_blockModelTemplateFolder).WithName("inner_stairs"))));
+                tasks.Add(WriteFile($"{_modelsBlockPath}\\{blockname}_outer.json",
+                        @LoadTemplate(data.WithPath(_blockModelTemplateFolder).WithName("outer_stairs"))));
+                tasks.Add(WriteFile(_modelsItemPath + fileName, @LoadTemplate(data.WithPath(_itemModelTemplateFolder))));
+                tasks.Add(WriteFile(_lootTablePath + fileName, @LoadTemplate(data.WithPath(_lootTableTemplateFolder))));
+                
+                if (_renderAdvancement)
+                    tasks.Add(WriteFile(_recipeAdvancementsPath + fileName, @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe"))));
             }
+
+            await Task.WhenAll(tasks.ToArray());
         }
 
         private async Task RenderDoorJSON()
@@ -360,7 +363,8 @@ namespace SkysJSONGenerator
                         TopSuffix = topSuffix,
                         SideSuffix = sideSuffix,
                         Textures = textures,
-                        LangName = materialname.FirstCharToUpper() + " " + reliefName[0].FirstCharToUpper() + " Relief"
+                        LangName = materialname.FirstCharToUpper() + " " + reliefName[0].FirstCharToUpper() + " Relief",
+                        SmoothSuffix = "_smooth"
                     };
 
                     await WriteFile(_modelsBlockPath + blockModelFilename, @LoadTemplate(data));
@@ -379,7 +383,7 @@ namespace SkysJSONGenerator
                         AppendFile(_langPath + "\\en_EN.lang", @LoadTemplate(data.WithPath(_langTemplateFolder).WithName("lang").WithBlockName(blockname + $"_{ reliefName[0]}")));
 
                     tasks.Add(WriteFile(_recipeAdvancementsPath + blockModelFilename,
-                        @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe"))));
+                        @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe").WithBlockName($"{blockname}_{reliefName[0]}"))));
                 }
                 
                 //WriteFile(_lootTablePath + fileName, @LoadTemplate(path: _lootTableTemplateFolder, name: "relief", blockname: blockname, materialname: materialname, topsuffix: topSuffix, sidesuffix: sideSuffix, walllist: ""));
@@ -616,7 +620,7 @@ namespace SkysJSONGenerator
                 {
                     var materialname = item;
 
-                    if (!file.Contains("\\chair_wood_"))
+                    if (!file.Contains("\\chair_wood_") || file.Contains("_inventory"))
                         continue;
 
                     var filePathArray = file.Split('\\');
@@ -637,6 +641,7 @@ namespace SkysJSONGenerator
                     //var inventoryTemplateName = $"{fileNameArray[0]}_inventory";
 
                     var blockModelFilename = $"\\{chairName}.json";
+                    var blockModelInventoryFilename = $"\\{chairName}_inventory.json";
 
                     var data = new TemplateData
                     {
@@ -650,6 +655,7 @@ namespace SkysJSONGenerator
                     };
 
                     tasks.Add(WriteFile(_modelsBlockPath + blockModelFilename, @LoadTemplate(data)));
+                    tasks.Add(WriteFile(_modelsBlockPath + blockModelInventoryFilename, @LoadTemplate(data.WithName(fileNameArray[0] + "_inventory"))));
                     tasks.Add(WriteFile(_blockstatesPath + blockModelFilename, @LoadTemplate(data.WithPath(_blockstateTemplateFolder))));
                     tasks.Add(WriteFile(_modelsItemPath + blockModelFilename, @LoadTemplate(data.WithPath(_itemModelTemplateFolder))));
 
@@ -771,7 +777,7 @@ namespace SkysJSONGenerator
                 tasks.Add(WriteFile(_modelsItemPath + fileName, @LoadTemplate(data.WithPath(_itemModelTemplateFolder))));
                 tasks.Add(WriteFile(_lootTablePath + fileName, @LoadTemplate(data.WithPath(_lootTableTemplateFolder))));
 
-                if (smooth || template != "block")
+                if ((smooth || template != "block") && _renderAdvancement)
                     tasks.Add(WriteFile(_recipeAdvancementsPath + fileName,
                         @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe"))));
                 
@@ -868,9 +874,10 @@ namespace SkysJSONGenerator
             }
         }
 
-        public async Task<int> RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, bool furnace, bool releifs, bool langs, bool chairs, bool leaves, bool log, bool planks, bool woodStairs, bool renderDoor, bool renderDoubleSlab)
+        public async Task<int> RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, bool furnace, bool releifs, bool langs, bool chairs, bool leaves, bool log, bool planks, bool woodStairs, bool renderDoor, bool renderDoubleSlab, bool renderAdvancement)
         {
             _filesGenerated = 0;
+            _renderAdvancement = renderAdvancement;
 
             if (!Directory.Exists("out"))
                 Directory.CreateDirectory("out");

@@ -29,6 +29,7 @@ namespace SkysJSONGenerator
         bool renderWoodStairs;
         bool renderDoor;
         bool renderDoubleSlab;
+        bool renderAdvancement;
         Profile selectedProfile;
         string basePath;
         private int generated;
@@ -155,7 +156,8 @@ namespace SkysJSONGenerator
                         new Block { Name = "Brick", Side = true, Top = true },
                         new Block { Name = "Furnace", Side = true, Top = true },
                         new Block { Name = "Relief", Side = true, Top = true },
-                        new Block { Name = "Lang", Side = true, Top = true }
+                        new Block { Name = "Lang", Side = true, Top = true },
+                        new Block { Name = "Advancement", Side = false, Top = false }
                     }, "Mineralogy 1.10 - Regular Stone");
 
                 var mineralogyProfileSedimentary = new Profile("1.10", "mineralogy", new List<string>
@@ -301,6 +303,7 @@ namespace SkysJSONGenerator
                 renderWoodStairs = false;
                 renderDoor = false;
                 renderDoubleSlab = false;
+                renderAdvancement = false;
 
                 selectedProfile = (Profile)comboBoxMod.SelectedItem;
                 basePath = "out\\" + selectedProfile.Modid + "\\" + selectedProfile.Version;
@@ -370,6 +373,9 @@ namespace SkysJSONGenerator
                         case "DoubleSlab":
                             renderDoubleSlab = true;
                             break;
+                        case "Advancement":
+                            renderAdvancement = true;
+                            break;
                     }
                 }
 
@@ -410,7 +416,7 @@ namespace SkysJSONGenerator
 
             generator.FileProcessedEvent += counter => worker?.ReportProgress(counter);
             
-            generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs, renderLangs, renderChairs, renderLeaves, renderLog, renderPlanks, renderWoodStairs, renderDoor, renderDoubleSlab).GetAwaiter().GetResult();
+            generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs, renderLangs, renderChairs, renderLeaves, renderLog, renderPlanks, renderWoodStairs, renderDoor, renderDoubleSlab, renderAdvancement).GetAwaiter().GetResult();
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
