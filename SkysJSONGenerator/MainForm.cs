@@ -2,8 +2,8 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace SkysJSONGenerator
@@ -12,6 +12,26 @@ namespace SkysJSONGenerator
     {
         private List<Profile> _profiles;
         private List<string> _versions;
+
+        bool renderBlocks;
+        bool renderStairs;
+        bool renderWalls;
+        bool renderSlabs;
+        bool renderSmooth;
+        bool renderBrick;
+        bool renderFurnace;
+        bool renderReliefs;
+        bool renderLangs;
+        bool renderChairs;
+        bool renderLeaves;
+        bool renderLog;
+        bool renderPlanks;
+        bool renderWoodStairs;
+        bool renderDoor;
+        bool renderDoubleSlab;
+        Profile selectedProfile;
+        string basePath;
+        private int generated;
 
         public MainForm()
         {
@@ -250,31 +270,40 @@ namespace SkysJSONGenerator
                 if (version == "All" || version == item.Version)
                     comboBoxMod.Items.Add(item);
         }
-   
+
+        private void CounterIncrement(int counter)
+        {
+            labelCounter.Text = counter.ToString();
+            labelCounter.Refresh();
+        }
+
         private void buttonGenerate_Click(object sender, EventArgs e)
         {
+            if (backgroundWorker1.IsBusy)
+                return;
+
             if (comboBoxMod.SelectedIndex >= 0)
             {
-                var renderBlocks = false;
-                var renderStairs = false;
-                var renderWalls = false;
-                var renderSlabs = false;
-                var renderSmooth = false;
-                var renderBrick = false;
-                var renderFurnace = false;
-                var renderReliefs = false;
-                var renderLangs = false;
-                var renderChairs = false;
-                var renderLeaves = false;
-                var renderLog = false;
-                var renderPlanks = false;
-                var renderWoodStairs = false;
-                var renderDoor = false;
-                var renderDoubleSlab = false;
 
-                var selectedProfile = (Profile)comboBoxMod.SelectedItem;
-                var basePath = "out\\" + selectedProfile.Modid + "\\" + selectedProfile.Version;
-                var generator = new JSonGenerator(selectedProfile, basePath);
+                renderBlocks = false;
+                renderStairs = false;
+                renderWalls = false;
+                renderSlabs = false;
+                renderSmooth = false;
+                renderBrick = false;
+                renderFurnace = false;
+                renderReliefs = false;
+                renderLangs = false;
+                renderChairs = false;
+                renderLeaves = false;
+                renderLog = false;
+                renderPlanks = false;
+                renderWoodStairs = false;
+                renderDoor = false;
+                renderDoubleSlab = false;
+
+                selectedProfile = (Profile)comboBoxMod.SelectedItem;
+                basePath = "out\\" + selectedProfile.Modid + "\\" + selectedProfile.Version;
                 
                 if (!Directory.Exists("templates\\" + selectedProfile.Version))
                 {
@@ -344,26 +373,10 @@ namespace SkysJSONGenerator
                     }
                 }
 
-                var generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs, renderLangs, renderChairs, renderLeaves, renderLog, renderPlanks, renderWoodStairs, renderDoor, renderDoubleSlab);
-
-                if (generated == 0)
-                    MessageBox.Show(@"No files generated", @"Result", MessageBoxButtons.OK);
-                else
-                {
-                    MessageBox.Show(generated + @" files generated", @"Result", MessageBoxButtons.OK);
-
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
-                    {
-                        FileName = basePath,
-                        UseShellExecute = true,
-                        Verb = "open"
-                    });
-                }
+                backgroundWorker1.RunWorkerAsync();
             }
             else
                 MessageBox.Show(@"Please select a mod profile above", @"Which mod?", MessageBoxButtons.OK);
-
-            buttonGenerate.Enabled = true;
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -388,6 +401,40 @@ namespace SkysJSONGenerator
                 checkedListBoxOutput.Items.Add(item);
                 checkedListBoxOutput.SetItemChecked(checkedListBoxOutput.Items.Count - 1, true);
             }
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var worker = sender as BackgroundWorker;
+            var generator = new JSonGenerator(selectedProfile, basePath);
+
+            generator.FileProcessedEvent += counter => worker?.ReportProgress(counter);
+            
+            generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs, renderLangs, renderChairs, renderLeaves, renderLog, renderPlanks, renderWoodStairs, renderDoor, renderDoubleSlab).GetAwaiter().GetResult();
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (generated == 0)
+                MessageBox.Show(@"No files generated", @"Result", MessageBoxButtons.OK);
+            else
+            {
+                MessageBox.Show(generated + @" files generated", @"Result", MessageBoxButtons.OK);
+
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
+                {
+                    FileName = basePath,
+                    UseShellExecute = true,
+                    Verb = "open"
+                });
+            }
+
+            buttonGenerate.Enabled = true;
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            labelCounter.Text = e.ProgressPercentage.ToString();
         }
     }
 }

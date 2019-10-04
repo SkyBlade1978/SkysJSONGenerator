@@ -93,6 +93,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="templates\1.10\advancement\recipe.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="templates\1.10\blockmodels\block.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -345,6 +348,7 @@
     <None Include="templates\1.10\lang\lang.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="templates\1.12\advancement\recipe.template" />
     <None Include="templates\1.12\blockmodels\bark.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

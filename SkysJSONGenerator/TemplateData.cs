@@ -10,6 +10,40 @@
          public string SideSuffix { get; set; }
          public string WallList { get; set; }
          public string LangName { get; set; }
-         public string Textures { get; set; }
+         public string[] Textures { get; set; }
+         public string SmoothSuffix { get; set; }
+         public string BrickSuffix { get; set; }
+
+         private TemplateData Clone()
+         {
+             return new TemplateData
+             {
+                 Path = this.Path, Name = this.Name, BlockName = this.BlockName, MaterialName = this.MaterialName,
+                 TopSuffix = this.TopSuffix, SideSuffix = this.SideSuffix, WallList = this.WallList,
+                 LangName = this.LangName, Textures = this.Textures, SmoothSuffix = this.SmoothSuffix,
+                 BrickSuffix = this.BrickSuffix
+             };
+         }
+
+         public TemplateData WithPath(string path)
+         {
+             var data = this.Clone();
+             data.Path = path;
+             return data;
+         }
+
+         public TemplateData WithName(string name)
+         {
+             var data = this.Clone();
+             data.Name = name;
+             return data;
+         }
+
+         public TemplateData WithBlockName(string blockName)
+         {
+             var data = this.Clone();
+             data.BlockName = blockName;
+             return data;
+        }
     }
 }
