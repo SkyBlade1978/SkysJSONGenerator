@@ -740,6 +740,66 @@ namespace SkysJSONGenerator
             await RenderBlockJSON(smooth, string.Empty);
         }
 
+        private async Task RenderDoubleSlabJSON(bool smooth, bool brick)
+        {
+            var tasks = new List<Task>();
+
+            foreach (var item in _profile.Materials)
+            {
+                string materialname;
+                string domain;
+
+                var textures = GetTextureOverrides(item, out materialname, out domain);
+
+                var topSuffix = string.Empty;
+                var sideSuffix = string.Empty;
+
+                if (smooth)
+                    materialname += "_smooth";
+
+                if (brick)
+                    materialname += "_brick";
+
+                var block = _profile.Blocks.Find(b => b.Name == "DoubleSlab");
+
+                if (brick)
+                {
+                    if (block.Side)
+                        sideSuffix = "_side";
+
+                    if (block.Side)
+                        topSuffix = "_top";
+                }
+
+                var blockname = materialname + "_double_slab";
+
+                var fileName = $"\\{blockname}.json";
+
+                var data = new TemplateData
+                {
+                    Path = _blockstateTemplateFolder,
+                    Name = "double_slab",
+                    BlockName = blockname,
+                    MaterialName = materialname,
+                    TopSuffix = topSuffix,
+                    SideSuffix = sideSuffix,
+                    Textures = textures
+                };
+
+                tasks.Add(WriteFile(_blockstatesPath + fileName, @LoadTemplate(data)));
+
+                tasks.Add(WriteFile(_modelsBlockPath + fileName,
+                    @LoadTemplate(data.WithPath(_blockModelTemplateFolder))));
+
+                tasks.Add(WriteFile(_modelsItemPath + fileName,
+                    @LoadTemplate(data.WithPath(_itemModelTemplateFolder))));
+
+                //tasks.Add(WriteFile(_lootTablePath + fileName, @LoadTemplate(data.WithPath(_lootTableTemplateFolder))));
+            }
+
+            await Task.WhenAll(tasks.ToArray());
+        }
+
         private async Task RenderBlockJSON(bool smooth, string template)
         {
             var tasks = new List<Task>();
@@ -1027,7 +1087,18 @@ namespace SkysJSONGenerator
             if (renderDoor) await RenderDoorJSON();
 
             if (renderDoubleSlab)
-                await RenderBlockJSON("double_slab");
+            {
+                await RenderDoubleSlabJSON(false, false);
+
+                if (smooth)
+                    await RenderDoubleSlabJSON(true, false);
+
+                if (brick)
+                    await RenderDoubleSlabJSON(false, true);
+
+                if (brick && smooth)
+                    await RenderDoubleSlabJSON(true, true);
+            }
 
             return _filesGenerated;
         }

@@ -152,6 +152,7 @@ namespace SkysJSONGenerator
                         new Block { Name = "Stairs", Side = false, Top = false },
                         new Block { Name = "Walls", Side = true, Top = true},
                         new Block { Name = "Slabs", Side = true, Top = true },
+                        new Block { Name = "DoubleSlab", Side = true, Top = true },
                         new Block { Name = "Smooth", Side = false, Top = false },
                         new Block { Name = "Brick", Side = true, Top = true },
                         new Block { Name = "Furnace", Side = true, Top = true },
