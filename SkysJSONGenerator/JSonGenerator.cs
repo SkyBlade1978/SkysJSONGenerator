@@ -413,13 +413,16 @@ namespace SkysJSONGenerator
                     materialname += "_brick";
 
                 var block = _profile.Blocks.Find(b => b.Name == "Furnace");
-                
-                if (block.Side)
-                    sideSuffix = "_side";
 
-                if (block.Side)
-                    topSuffix = "_top";
-                
+                if (brick)
+                {
+                    if (block.Side)
+                        sideSuffix = "_side";
+
+                    if (block.Side)
+                        topSuffix = "_top";
+                }
+
                 var blockname = materialname + "_furnace";
 
                 var fileName = $"\\{blockname}.json";
