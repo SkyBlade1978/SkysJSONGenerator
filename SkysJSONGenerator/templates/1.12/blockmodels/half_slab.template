@@ -1,8 +1,8 @@
 ﻿{{
-    "parent": "{modid}:block/half_slab",
-    "textures": {{
-        "bottom": "{modid}:{blocktexturefolder}/{materialname}{topsuffix}",
-        "top": "{modid}:{blocktexturefolder}/{materialname}{topsuffix}",
-        "side": "{modid}:{blocktexturefolder}/{materialname}{sidesuffix}"
-    }}
+  "parent": "block/half_slab",
+  "textures": {{
+    "bottom": "{modid}:blocks/{materialname}_planks",
+    "top": "{modid}:blocks/{materialname}_planks",
+    "side": "{modid}:blocks/{materialname}_planks"
+  }}
 }}

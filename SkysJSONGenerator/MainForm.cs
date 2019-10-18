@@ -17,6 +17,7 @@ namespace SkysJSONGenerator
         bool renderStairs;
         bool renderWalls;
         bool renderSlabs;
+        bool renderWoodSlabs;
         bool renderSmooth;
         bool renderBrick;
         bool renderFurnace;
@@ -226,7 +227,8 @@ namespace SkysJSONGenerator
                         new Block { Name = "WoodStairs", Side = false, Top = false },
                         new Block { Name = "Planks", Side = false, Top = false },
                         new Block { Name = "Door", Side = false, Top = false },
-                        new Block { Name = "DoubleSlab", Side = false, Top = false }
+                        new Block { Name = "DoubleSlab", Side = false, Top = false },
+                        new Block { Name = "WoodSlab", Side = false, Top = false }
 
                     }, "Spooky Biomes 1.12 - Wood");
 
@@ -303,6 +305,7 @@ namespace SkysJSONGenerator
                 renderLog = false;
                 renderPlanks = false;
                 renderWoodStairs = false;
+                renderWoodSlabs = false;
                 renderDoor = false;
                 renderDoubleSlab = false;
                 renderAdvancement = false;
@@ -378,6 +381,9 @@ namespace SkysJSONGenerator
                         case "Advancement":
                             renderAdvancement = true;
                             break;
+                        case "WoodSlab":
+                            renderWoodSlabs = true;
+                            break;
                     }
                 }
 
@@ -418,7 +424,7 @@ namespace SkysJSONGenerator
 
             generator.FileProcessedEvent += counter => worker?.ReportProgress(counter);
             
-            generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs, renderLangs, renderChairs, renderLeaves, renderLog, renderPlanks, renderWoodStairs, renderDoor, renderDoubleSlab, renderAdvancement).GetAwaiter().GetResult();
+            generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs, renderLangs, renderChairs, renderLeaves, renderLog, renderPlanks, renderWoodStairs, renderDoor, renderDoubleSlab, renderAdvancement, renderWoodSlabs).GetAwaiter().GetResult();
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

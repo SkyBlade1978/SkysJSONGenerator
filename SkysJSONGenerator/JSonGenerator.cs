@@ -250,7 +250,7 @@ namespace SkysJSONGenerator
             }
         }
 
-        private async Task RenderSlabJSON(bool smooth, bool brick)
+        private async Task RenderSlabJSON(bool smooth, bool brick, bool wood)
         {
             var tasks = new List<Task>();
 
@@ -279,6 +279,12 @@ namespace SkysJSONGenerator
 
                     if (block.Side)
                         topSuffix = "_top";
+                }
+
+                if (wood)
+                {
+                    topSuffix = "_planks";
+                    sideSuffix = "_planks";
                 }
 
                 var blockname = materialname + "_slab";
@@ -937,7 +943,7 @@ namespace SkysJSONGenerator
             }
         }
 
-        public async Task<int> RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, bool furnace, bool releifs, bool langs, bool chairs, bool leaves, bool log, bool planks, bool woodStairs, bool renderDoor, bool renderDoubleSlab, bool renderAdvancement)
+        public async Task<int> RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, bool furnace, bool releifs, bool langs, bool chairs, bool leaves, bool log, bool planks, bool woodStairs, bool renderDoor, bool renderDoubleSlab, bool renderAdvancement, bool renderWoodSlabs)
         {
             _filesGenerated = 0;
             _renderAdvancement = renderAdvancement;
@@ -1063,16 +1069,16 @@ namespace SkysJSONGenerator
 
             if (slabs)
             {
-                await RenderSlabJSON(false, false);
+                await RenderSlabJSON(false, false, false);
 
                 if (smooth)
-                    await RenderSlabJSON(true, false);
+                    await RenderSlabJSON(true, false, false);
 
                 if (brick)
-                    await RenderSlabJSON(false, true);
+                    await RenderSlabJSON(false, true, false);
 
                 if (brick && smooth)
-                    await RenderSlabJSON(true, true);
+                    await RenderSlabJSON(true, true, false);
             }
 
             if (releifs) await RenderReleifJSON(langs);
@@ -1086,6 +1092,8 @@ namespace SkysJSONGenerator
             if (planks) await RenderBlockJSON("planks");
 
             if (woodStairs) await RenderStairJSON(false, false, true);
+
+            if (renderWoodSlabs) await RenderSlabJSON(false, false, true);
 
             if (renderDoor) await RenderDoorJSON();
 
