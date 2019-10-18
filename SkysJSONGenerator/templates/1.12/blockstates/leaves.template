@@ -1,5 +1,19 @@
 ﻿{{
   "variants": {{
-    "normal": {{ "model": "{modid}:{blockname}" }}
+    "normal": {{
+      "model": "{modid}:{materialname}_leaves"
+    }},
+    "check_decay=true,decayable=false": {{
+      "model": "{modid}:{materialname}_leaves"
+    }},
+    "check_decay=true,decayable=true": {{
+      "model": "{modid}:{materialname}_leaves"
+    }},
+    "check_decay=false,decayable=false": {{
+      "model": "{modid}:{materialname}_leaves"
+    }},
+    "check_decay=false,decayable=true": {{
+      "model": "{modid}:{materialname}_leaves"
+    }}
   }}
 }}
