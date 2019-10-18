@@ -205,6 +205,7 @@ namespace SkysJSONGenerator
                     , "natura:darkwood:{materialname}_planks:{materialname}_log"
                     , "natura:fusewood:{materialname}_planks:{materialname}_log"
                     , "natura:ghostwood:{materialname}_planks:{materialname}_log"
+                    , "immersiveengineering:treatedWood:{materialname}_vertical:{materialname}_packaged"
                     },
                     "blocks", "items", 3, new List<Block>
                     {
@@ -215,8 +216,8 @@ namespace SkysJSONGenerator
                 var spookyBiomes112 = new Profile("1.12", "spookybiomes", new List<string>
                     {  "bloodwood"
                      , "ghostly"
-                     , "oozing"
-                     , "witchwood"
+                     , "seeping"
+                     , "sorbus"
                     },
                     "blocks", "items", 3, new List<Block>
                     {

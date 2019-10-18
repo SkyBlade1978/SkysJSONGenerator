@@ -1,7 +1,0 @@
-﻿{{
-                                "parent": "block/stairs_inner",
-                                "textures": {{           
-                                    "face": "{modid}:{blocktexturefolder}/{materialname}{topsuffix}",
-                                    "side": "{modid}:{blocktexturefolder}/{materialname}{sidesuffix}"
-                                }}
-                            }}

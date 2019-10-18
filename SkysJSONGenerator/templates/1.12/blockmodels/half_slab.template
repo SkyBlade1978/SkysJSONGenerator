@@ -1,5 +1,5 @@
 ﻿{{
-    "parent": "block/half_slab",
+    "parent": "{modid}:block/half_slab",
     "textures": {{
         "bottom": "{modid}:{blocktexturefolder}/{materialname}{topsuffix}",
         "top": "{modid}:{blocktexturefolder}/{materialname}{topsuffix}",
