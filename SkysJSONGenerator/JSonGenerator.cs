@@ -532,6 +532,65 @@ namespace SkysJSONGenerator
             await Task.WhenAll(tasks.ToArray());
         }
 
+        private async Task RenderGateJSON()
+        {
+            TemplateData data;
+            var tasks = new List<Task>();
+
+            foreach (var item in _profile.Materials)
+            {
+                string materialname;
+                string domain;
+
+                var textures = GetTextureOverrides(item, out materialname, out domain);
+
+                var blockname = materialname + "_fence_gate";
+                var fileName = $"\\{blockname}.json";
+
+                var alternateBlockname = materialname + "_fence_gate";
+                var alternateFileName = $"\\{blockname}.json";
+
+                if (_wallTags != "")
+                    _wallTags += ", ";
+
+                _wallTags += "\"" + modid + ":" + blockname + "\"";
+
+                data = new TemplateData
+                {
+                    Path = _blockstateTemplateFolder,
+                    Name = "fence_gate",
+                    BlockName = blockname,
+                    MaterialName = materialname,
+                    Textures = textures,
+                    WallList = _wallTags
+                };
+
+
+                tasks.Add(WriteFile(_blockstatesPath + fileName, @LoadTemplate(data)));
+                
+                tasks.Add(WriteFile($"{_modelsBlockPath}\\{blockname}_closed.json", @LoadTemplate(data.WithPath(_blockModelTemplateFolder).WithName("fence_gate_closed"))));
+                tasks.Add(WriteFile($"{_modelsBlockPath}\\{blockname}_open.json", @LoadTemplate(data.WithPath(_blockModelTemplateFolder).WithName("fence_gate_open"))));
+                tasks.Add(WriteFile($"{_modelsBlockPath}\\{alternateBlockname}_closed.json", @LoadTemplate(data.WithPath(_blockModelTemplateFolder).WithName("wall_gate_closed"))));
+                tasks.Add(WriteFile($"{_modelsBlockPath}\\{alternateBlockname}_open.json", @LoadTemplate(data.WithPath(_blockModelTemplateFolder).WithName("wall_gate_open"))));
+                tasks.Add(WriteFile(_modelsItemPath + fileName, @LoadTemplate(data.WithPath(_itemModelTemplateFolder))));
+                tasks.Add(WriteFile(_lootTablePath + fileName, @LoadTemplate(data.WithPath(_lootTableTemplateFolder))));
+                tasks.Add(WriteFile(_recipeAdvancementsPath + fileName,
+                        @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe"))));
+            }
+
+            data = new TemplateData
+            {
+                Path = _blockstateTemplateFolder,
+                Name = "wall",
+                WallList = _wallTags
+            };
+
+            tasks.Add(WriteFile(_wallTagPath + "\\walls.json", @LoadTemplate(data.WithPath(_tagTemplateFolder))));
+            tasks.Add(WriteFile(_wallItemTagPath + "\\walls.json", @LoadTemplate(data.WithPath(_tagTemplateFolder))));
+
+            await Task.WhenAll(tasks.ToArray());
+        }
+
         private static string GetNaturaBlockFolder(string input, string materialname)
         { 
             var overUnder = "overworld";
@@ -943,7 +1002,7 @@ namespace SkysJSONGenerator
             }
         }
 
-        public async Task<int> RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, bool furnace, bool releifs, bool langs, bool chairs, bool leaves, bool log, bool planks, bool woodStairs, bool renderDoor, bool renderDoubleSlab, bool renderAdvancement, bool renderWoodSlabs)
+        public async Task<int> RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, bool furnace, bool releifs, bool langs, bool chairs, bool leaves, bool log, bool planks, bool woodStairs, bool renderDoor, bool renderDoubleSlab, bool renderAdvancement, bool renderWoodSlabs, bool renderGate)
         {
             _filesGenerated = 0;
             _renderAdvancement = renderAdvancement;
@@ -1095,6 +1154,8 @@ namespace SkysJSONGenerator
 
             if (renderWoodSlabs) await RenderSlabJSON(false, false, true);
 
+            if (renderGate) await RenderGateJSON();
+
             if (renderDoor) await RenderDoorJSON();
 
             if (renderDoubleSlab)
@@ -1110,7 +1171,7 @@ namespace SkysJSONGenerator
                 if (brick && smooth)
                     await RenderDoubleSlabJSON(true, true);
             }
-
+            //renderGate
             return _filesGenerated;
         }
     }
