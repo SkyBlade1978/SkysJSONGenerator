@@ -123,7 +123,7 @@ namespace SkysJSONGenerator
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show(@"Whoops, ther e appears to be an error in template file:" + fullPath);
+                    MessageBox.Show(@"Whoops, there appears to be an error in template file:" + fullPath);
                     throw;
                 }
             }
@@ -602,7 +602,6 @@ namespace SkysJSONGenerator
                 var fileName = $"\\{blockname}.json";
 
                 var alternateBlockname = materialname + "_fence_gate";
-                var alternateFileName = $"\\{blockname}.json";
 
                 if (_wallTags != "")
                     _wallTags += ", ";
@@ -702,21 +701,27 @@ namespace SkysJSONGenerator
                                    materialNameArray[4].Replace("{materialname}", materialname);
                     else
                         texture3 = string.Empty;
-                }
-                else
+                } else
                 {
+                    var workingBlocktexturefolder = blocktexturefolder;
+
+                    if (domain == "forestry")
+                    {
+                        workingBlocktexturefolder = blocktexturefolder + "/wood";
+                    }
+
                     if (materialNameArray.Length > 2)
-                        texture1 = domain + ":" + blocktexturefolder + "/" + materialNameArray[2].Replace("{materialname}", materialname);
+                        texture1 = domain + ":" + workingBlocktexturefolder + "/" + materialNameArray[2].Replace("{materialname}", materialname);
                     else
                         texture1 = string.Empty;
 
                     if (materialNameArray.Length > 3)
-                        texture2 = domain + ":" + blocktexturefolder + "/" + materialNameArray[3].Replace("{materialname}", materialname);
+                        texture2 = domain + ":" + workingBlocktexturefolder + "/" + materialNameArray[3].Replace("{materialname}", materialname);
                     else
                         texture2 = string.Empty;
 
                     if (materialNameArray.Length > 4)
-                        texture3 = domain + ":" + blocktexturefolder + "/" + materialNameArray[4].Replace("{materialname}", materialname);
+                        texture3 = domain + ":" + workingBlocktexturefolder + "/" + materialNameArray[4].Replace("{materialname}", materialname);
                     else
                         texture3 = string.Empty;
 
