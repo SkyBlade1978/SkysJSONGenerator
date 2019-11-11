@@ -1,4 +1,6 @@
-﻿namespace SkysJSONGenerator
+﻿using System.Collections.Generic;
+
+namespace SkysJSONGenerator
 {
     public class TemplateData
     {
@@ -13,15 +15,19 @@
          public string[] Textures { get; set; }
          public string SmoothSuffix { get; set; }
          public string BrickSuffix { get; set; }
+         public List<KeyValuePair<string, int>> Ingredients;
+         public string Conditions { get; set; }
+         public string IngredientDomain { get; set; }
 
-         private TemplateData Clone()
+        private TemplateData Clone()
          {
              return new TemplateData
              {
                  Path = this.Path, Name = this.Name, BlockName = this.BlockName, MaterialName = this.MaterialName,
                  TopSuffix = this.TopSuffix, SideSuffix = this.SideSuffix, WallList = this.WallList,
                  LangName = this.LangName, Textures = this.Textures, SmoothSuffix = this.SmoothSuffix,
-                 BrickSuffix = this.BrickSuffix
+                 BrickSuffix = this.BrickSuffix, Ingredients = this.Ingredients, Conditions = this.Conditions,
+                 IngredientDomain = this.IngredientDomain
              };
          }
 

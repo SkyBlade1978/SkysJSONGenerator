@@ -33,6 +33,7 @@ namespace SkysJSONGenerator
         bool renderAdvancement;
         bool renderGate;
         bool renderFence;
+        bool renderRecipe;
 
         Profile selectedProfile;
         string basePath;
@@ -175,11 +176,11 @@ namespace SkysJSONGenerator
 
                 var iafProfile110 = new Profile("1.10", "ironagefurniture", new List<string>
                     {  "minecraft:oak:planks_{materialname}:log_{materialname}"
-                     , "minecraft:acacia:planks_{materialname}:log_{materialname}"
-                     , "minecraft:big_oak:planks_{materialname}:log_{materialname}"
-                     , "minecraft:birch:planks_{materialname}:log_{materialname}"
-                     , "minecraft:jungle:planks_{materialname}:log_{materialname}"
-                     , "minecraft:spruce:planks_{materialname}:log_{materialname}"
+                        , "minecraft:spruce:planks_{materialname}:log_{materialname}"
+                        , "minecraft:birch:planks_{materialname}:log_{materialname}"
+                        , "minecraft:jungle:planks_{materialname}:log_{materialname}"
+                        , "minecraft:acacia:planks_{materialname}:log_{materialname}"
+                        , "minecraft:big_oak:planks_{materialname}:log_{materialname}"
                      , "biomesoplenty:umbran:{materialname}_planks:{materialname}_log"
                      , "biomesoplenty:willow:{materialname}_planks:{materialname}_log"
                      , "biomesoplenty:magic:{materialname}_planks:{materialname}_log"
@@ -247,6 +248,82 @@ namespace SkysJSONGenerator
                         new Block { Name = "Lang", Side = true, Top = true }
                     }, "Iron Age Furniture 1.10 ");
 
+
+                var iafProfile112 = new Profile("1.12", "ironagefurniture", new List<string>
+                    {  "minecraft:oak:planks_{materialname}:log_{materialname}:ingredients:minecraft:planks:0"
+                        , "minecraft:spruce:planks_{materialname}:log_{materialname}:ingredients:minecraft:planks:1"
+                        , "minecraft:birch:planks_{materialname}:log_{materialname}:ingredients:minecraft:planks:2"
+                        , "minecraft:jungle:planks_{materialname}:log_{materialname}:ingredients:minecraft:planks:3"
+                        , "minecraft:acacia:planks_{materialname}:log_{materialname}:ingredients:minecraft:planks:4"
+                        , "minecraft:big_oak:planks_{materialname}:log_{materialname}:ingredients:minecraft:planks:5"
+                        , "biomesoplenty:sacred_oak:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:0"
+                        , "biomesoplenty:cherry:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:1"
+                        , "biomesoplenty:umbran:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:2"
+                        , "biomesoplenty:fir:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:3"
+                        , "biomesoplenty:ethereal:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:4"
+                        , "biomesoplenty:magic:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:5"
+                        , "biomesoplenty:mangrove:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:6"
+                        , "biomesoplenty:palm:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:7"
+                        , "biomesoplenty:redwood:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:8"
+                        , "biomesoplenty:willow:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:9"
+                        , "biomesoplenty:pine:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:10"
+                        , "biomesoplenty:hellbark:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:11"
+                        , "biomesoplenty:jacaranda:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:12"
+                        , "biomesoplenty:mahogany:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:13"
+                        , "biomesoplenty:ebony:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:14"
+                        , "biomesoplenty:eucalyptus:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:15"
+                        , "natura:maple:{materialname}_planks:{materialname}_log:ingredients:natura:overworld_planks:0"
+                        , "natura:silverbell:{materialname}_planks:{materialname}_log:ingredients:natura:overworld_planks:1"
+                        , "natura:amaranth:{materialname}_planks:{materialname}_log:ingredients:natura:overworld_planks:2"
+                        , "natura:tiger:{materialname}_planks:{materialname}_log:ingredients:natura:overworld_planks:3"
+                        , "natura:willow:{materialname}_planks:{materialname}_log:ingredients:natura:overworld_planks:4"
+                        , "natura:eucalyptus:{materialname}_planks:{materialname}_log:ingredients:natura:overworld_planks:5"
+                        , "natura:hopseed:{materialname}_planks:{materialname}_log:ingredients:natura:overworld_planks:6"
+                        , "natura:sakura:{materialname}_planks:{materialname}_log:ingredients:natura:overworld_planks:7"
+                        , "natura:redwood:{materialname}_planks:{materialname}_bark:ingredients:natura:overworld_planks:8"
+                        , "natura:ghostwood:{materialname}_planks:{materialname}_log:ingredients:natura:nether_planks:0"
+                        , "natura:bloodwood:{materialname}_planks:{materialname}_bark:ingredients:natura:nether_planks:1"
+                        , "natura:fusewood:{materialname}_planks:{materialname}_log:ingredients:natura:nether_planks:3"
+                        , "natura:darkwood:{materialname}_planks:{materialname}_log:ingredients:natura:nether_planks:2"
+                        , "immersiveengineering:treatedWood:{materialname}_vertical:{materialname}_packaged:ingredients:immersiveengineering:treatedWood_packaged:0"
+                        , "forestry:larch:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:0"
+                        , "forestry:teak:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:1"
+                        , "forestry:acacia:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:2"
+                        , "forestry:lime:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:3"
+                        , "forestry:chestnut:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:4"
+                        , "forestry:wenge:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:5"
+                        , "forestry:baobab:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:6"
+                        , "forestry:sequoia:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:7"
+                        , "forestry:kapok:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:8"
+                        , "forestry:ebony:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:9"
+                        , "forestry:mahogany:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:10"
+                        , "forestry:balsa:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:11"
+                        , "forestry:willow:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:12"
+                        , "forestry:walnut:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:13"
+                        , "forestry:greenheart:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:14"
+                        , "forestry:cherry:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.0:15"
+                        , "forestry:mahoe:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:0"
+                        , "forestry:poplar:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:1"
+                        , "forestry:palm:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:2"
+                        , "forestry:papaya:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:3"
+                        , "forestry:pine:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:4"
+                        , "forestry:plum:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:5"
+                        , "forestry:maple:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:6"
+                        , "forestry:citrus:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:7"
+                        , "forestry:giganteum:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:8"
+                        , "forestry:ipe:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:9"
+                        , "forestry:padauk:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:10"
+                        , "forestry:cocobolo:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:11"
+                        , "forestry:zebrawood:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:12"
+                    },
+                    "blocks", "items", 3, new List<Block>
+                    {
+                        new Block { Name = "WoodChairs", Side = false, Top = false },
+                        new Block { Name = "Lang", Side = true, Top = true },
+                        new Block { Name = "Advancement", Side = false, Top = false },
+                        new Block { Name = "Recipe", Side = false, Top = false }
+                    }, "Iron Age Furniture 1.12 ");
+
                 var spookyBiomes112 = new Profile("1.12", "spookybiomes", new List<string>
                     {  "bloodwood"
                      , "ghostly"
@@ -271,6 +348,7 @@ namespace SkysJSONGenerator
                 _profiles.Add(mineralogyProfile110);
                 _profiles.Add(mineralogyProfileSedimentary);
                 _profiles.Add(iafProfile110);
+                _profiles.Add(iafProfile112);
                 _profiles.Add(spookyBiomes112);
 
                 if (!Directory.Exists("profiles"))
@@ -346,6 +424,7 @@ namespace SkysJSONGenerator
                 renderAdvancement = false;
                 renderGate = false;
                 renderFence = false;
+                renderRecipe = false;
 
                 selectedProfile = (Profile)comboBoxMod.SelectedItem;
                 basePath = "out\\" + selectedProfile.Modid + "\\" + selectedProfile.Version;
@@ -427,6 +506,9 @@ namespace SkysJSONGenerator
                         case "Fence":
                             renderFence = true;
                             break;
+                        case "Recipe":
+                            renderRecipe = true;
+                            break;
                     }
                 }
 
@@ -467,7 +549,7 @@ namespace SkysJSONGenerator
 
             generator.FileProcessedEvent += counter => worker?.ReportProgress(counter);
             
-            generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs, renderLangs, renderChairs, renderLeaves, renderLog, renderPlanks, renderWoodStairs, renderDoor, renderDoubleSlab, renderAdvancement, renderWoodSlabs, renderGate, renderFence).GetAwaiter().GetResult();
+            generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs, renderLangs, renderChairs, renderLeaves, renderLog, renderPlanks, renderWoodStairs, renderDoor, renderDoubleSlab, renderAdvancement, renderWoodSlabs, renderGate, renderFence, renderRecipe).GetAwaiter().GetResult();
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

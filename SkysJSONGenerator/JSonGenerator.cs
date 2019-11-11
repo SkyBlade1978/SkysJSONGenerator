@@ -38,6 +38,7 @@ namespace SkysJSONGenerator
         private readonly string _langTemplateFolder;
         private readonly string _tagTemplateFolder;
         private readonly string _advancementTemplateFolder;
+        private readonly string _recipeTemplateFolder;
         private readonly string _wallItemTagPath;
         private readonly string _wallTagPath;
         private readonly string _basePath;
@@ -48,6 +49,7 @@ namespace SkysJSONGenerator
         private readonly string _lootTablePath;
         private readonly string _langPath;
         private readonly string _recipeAdvancementsPath;
+        private readonly string _recipePath;
         private readonly string _advancementsPath;
         private int _filesGenerated;
 
@@ -59,6 +61,7 @@ namespace SkysJSONGenerator
         string _wallTags = "";
 
         private bool _renderAdvancement;
+        private bool _renderRecipe;
 
         public JSonGenerator(Profile profile, string basePath)
         {
@@ -73,6 +76,7 @@ namespace SkysJSONGenerator
             _blockstatesPath = $"{_basePath}\\assets\\{modid}\\blockstates";
             _advancementsPath = $"{_basePath}\\assets\\{modid}\\advancements\\{modid}";
             _recipeAdvancementsPath = $"{_basePath}\\assets\\{modid}\\advancements\\recipes";
+            _recipePath = $"{_basePath}\\assets\\{modid}\\recipes";
             _langPath = $"{_basePath}\\assets\\{modid}\\lang";
             _modelsPath = $"{_basePath}\\assets\\{modid}\\models";
             _modelsBlockPath = _modelsPath + "\\block";
@@ -88,6 +92,7 @@ namespace SkysJSONGenerator
             _langTemplateFolder = _baseTemplateFolder + "\\lang";
             _tagTemplateFolder = _baseTemplateFolder + "\\tags";
             _advancementTemplateFolder = _baseTemplateFolder + "\\advancement";
+            _recipeTemplateFolder = _baseTemplateFolder + "\\recipe";
 
 
         }
@@ -101,12 +106,25 @@ namespace SkysJSONGenerator
             var texture2 = string.Empty;
             var texture3 = string.Empty;
 
+            var ingredient1 = new KeyValuePair<string, int>("", 0);
+            var ingredient2 = new KeyValuePair<string, int>("", 0);
+            var ingredient3 = new KeyValuePair<string, int>("", 0);
+
             if (File.Exists(overridePath))
                 fullPath = overridePath;
 
             if (File.Exists(fullPath))
             {
-                var template = File.ReadAllText(fullPath).Replace("{modid}", "{0}").Replace("{blockname}", "{1}").Replace("{materialname}", "{2}").Replace("{topsuffix}", "{3}").Replace("{sidesuffix}", "{4}").Replace("{blocktexturefolder}", "{5}").Replace("{walllist}", "{6}").Replace("{langname}", "{7}").Replace("{texture1}", "{8}").Replace("{texture2}", "{9}").Replace("{texture3}", "{10}").Replace("{smoothsuffix}", "{11}").Replace("{bricksuffix}", "{12}");
+                var template = File.ReadAllText(fullPath).Replace("{modid}", "{0}").Replace("{blockname}", "{1}")
+                    .Replace("{materialname}", "{2}").Replace("{topsuffix}", "{3}")
+                    .Replace("{sidesuffix}", "{4}").Replace("{blocktexturefolder}", "{5}")
+                    .Replace("{walllist}", "{6}").Replace("{langname}", "{7}")
+                    .Replace("{texture1}", "{8}").Replace("{texture2}", "{9}")
+                    .Replace("{texture3}", "{10}").Replace("{smoothsuffix}", "{11}")
+                    .Replace("{bricksuffix}", "{12}").Replace("{ingredient1}", "{13}").Replace("{meta1}", "{14}")
+                    .Replace("{ingredient2}", "{15}").Replace("{meta2}", "{16}")
+                    .Replace("{ingredient3}", "{17}").Replace("{meta3}", "{18}")
+                    .Replace("{conditions}", "{19}").Replace("{ingredientdomain}", "{20}");
 
                 if (data.Textures.Length > 0)
                     texture1 = data.Textures[0];
@@ -117,9 +135,26 @@ namespace SkysJSONGenerator
                 if (data.Textures.Length > 2)
                     texture3 = data.Textures[2];
 
+                if (data.Ingredients.Count > 0)
+                    ingredient1 = data.Ingredients[0];
+
+                if (data.Ingredients.Count > 1)
+                    ingredient2 = data.Ingredients[1];
+
+                if (data.Ingredients.Count > 2)
+                    ingredient3 = data.Ingredients[2];
+
+                var ingredientDomain = string.Empty;
+
+                if (data.IngredientDomain != "" && data.IngredientDomain != "minecraft")
+                    ingredientDomain = data.IngredientDomain + "_";
+
                 try
                 {
-                    return string.Format(@template, modid, data.BlockName, data.MaterialName, data.TopSuffix, data.SideSuffix, blocktexturefolder, data.WallList, data.LangName, texture1, texture2, texture3, data.SmoothSuffix, data.BrickSuffix);
+                    return string.Format(@template, modid, data.BlockName, data.MaterialName, data.TopSuffix, data.SideSuffix, blocktexturefolder, 
+                        data.WallList, data.LangName, texture1, texture2, texture3, data.SmoothSuffix, data.BrickSuffix, 
+                        ingredient1.Key, ingredient1.Value, ingredient2.Key, ingredient2.Value, ingredient3.Key, ingredient3.Value,
+                        data.Conditions, ingredientDomain);
                 }
                 catch (Exception)
                 {
@@ -147,10 +182,12 @@ namespace SkysJSONGenerator
             {
                 string materialname;
                 string domain;
+                List<KeyValuePair<string, int>> ingredients;
+
                 var smoothSuffix = string.Empty;
                 var brickSuffix = string.Empty;
 
-                var textures = GetTextureOverrides(item, out materialname, out domain);
+                var textures = GetTextureOverrides(item, out materialname, out domain, out ingredients);
                 
                 var topSuffix = string.Empty;
                 var sideSuffix = string.Empty;
@@ -183,7 +220,7 @@ namespace SkysJSONGenerator
                 {
                     Path = _blockstateTemplateFolder, Name = "stairs", BlockName = blockname,
                     MaterialName = materialname, TopSuffix = topSuffix, SideSuffix = sideSuffix, Textures = textures,
-                    SmoothSuffix = smoothSuffix, BrickSuffix = brickSuffix
+                    SmoothSuffix = smoothSuffix, BrickSuffix = brickSuffix, Ingredients = ingredients
                 };
                 
                 tasks.Add(WriteFile(_blockstatesPath + fileName, @LoadTemplate(data)));
@@ -209,8 +246,9 @@ namespace SkysJSONGenerator
 
                 string materialname;
                 string domain;
+                List<KeyValuePair<string, int>> ingredients;
 
-                var textures = GetTextureOverrides(item, out materialname, out domain);
+                var textures = GetTextureOverrides(item, out materialname, out domain, out ingredients);
                 
                 var topSuffix = string.Empty;
                 var sideSuffix = string.Empty;
@@ -227,7 +265,8 @@ namespace SkysJSONGenerator
                     MaterialName = materialname,
                     TopSuffix = topSuffix,
                     SideSuffix = sideSuffix,
-                    Textures = textures
+                    Textures = textures,
+                    Ingredients = ingredients
                 };
 
                 var tasks = new List<Task>
@@ -258,8 +297,9 @@ namespace SkysJSONGenerator
             {
                 string materialname;
                 string domain;
+                List<KeyValuePair<string, int>> ingredients;
 
-                var textures = GetTextureOverrides(item, out materialname, out domain);
+                var textures = GetTextureOverrides(item, out materialname, out domain, out ingredients);
                 
                 var topSuffix = string.Empty;
                 var sideSuffix = string.Empty;
@@ -299,7 +339,8 @@ namespace SkysJSONGenerator
                     MaterialName = materialname,
                     TopSuffix = topSuffix,
                     SideSuffix = sideSuffix,
-                    Textures = textures
+                    Textures = textures,
+                    Ingredients = ingredients
                 };
 
                 tasks.Add(WriteFile(_blockstatesPath + fileName, @LoadTemplate(data)));
@@ -334,8 +375,9 @@ namespace SkysJSONGenerator
             {
                 string materialname;
                 string domain;
+                List<KeyValuePair<string, int>> ingredients;
 
-                var textures = GetTextureOverrides(item, out materialname, out domain);
+                var textures = GetTextureOverrides(item, out materialname, out domain, out ingredients);
                 
                 var topSuffix = string.Empty;
                 var sideSuffix = string.Empty;
@@ -370,7 +412,8 @@ namespace SkysJSONGenerator
                         SideSuffix = sideSuffix,
                         Textures = textures,
                         LangName = materialname.FirstCharToUpper() + " " + reliefName[0].FirstCharToUpper() + " Relief",
-                        SmoothSuffix = "_smooth"
+                        SmoothSuffix = "_smooth",
+                        Ingredients = ingredients
                     };
 
                     await WriteFile(_modelsBlockPath + blockModelFilename, @LoadTemplate(data));
@@ -406,8 +449,9 @@ namespace SkysJSONGenerator
             {
                 string materialname;
                 string domain;
+                List<KeyValuePair<string, int>> ingredients;
 
-                var textures = GetTextureOverrides(item, out materialname, out domain);
+                var textures = GetTextureOverrides(item, out materialname, out domain, out ingredients);
 
                 var topSuffix = string.Empty;
                 var sideSuffix = string.Empty;
@@ -442,7 +486,8 @@ namespace SkysJSONGenerator
                     MaterialName = materialname,
                     TopSuffix = topSuffix,
                     SideSuffix = sideSuffix,
-                    Textures = textures
+                    Textures = textures,
+                    Ingredients = ingredients
                 };
 
                 tasks.Add(WriteFile(_blockstatesPath + fileName, @LoadTemplate(data)));
@@ -468,8 +513,9 @@ namespace SkysJSONGenerator
             {
                 string materialname;
                 string domain;
+                List<KeyValuePair<string, int>> ingredients;
 
-                var textures = GetTextureOverrides(item, out materialname, out domain);
+                var textures = GetTextureOverrides(item, out materialname, out domain, out ingredients);
 
                 var topSuffix = string.Empty;
                 var sideSuffix = string.Empty;
@@ -505,7 +551,8 @@ namespace SkysJSONGenerator
                     TopSuffix = topSuffix,
                     SideSuffix = sideSuffix,
                     Textures = textures,
-                    WallList = _wallTags
+                    WallList = _wallTags,
+                    Ingredients = ingredients
                 };
 
 
@@ -541,8 +588,9 @@ namespace SkysJSONGenerator
             {
                 string materialname;
                 string domain;
+                List<KeyValuePair<string, int>> ingredients;
 
-                var textures = GetTextureOverrides(item, out materialname, out domain);
+                var textures = GetTextureOverrides(item, out materialname, out domain, out ingredients);
                 
                 var blockname = materialname + "_fence";
                 var fileName = $"\\{blockname}.json";
@@ -559,7 +607,8 @@ namespace SkysJSONGenerator
                     BlockName = blockname,
                     MaterialName = materialname,
                     Textures = textures,
-                    WallList = _wallTags
+                    WallList = _wallTags,
+                    Ingredients = ingredients
                 };
 
 
@@ -595,8 +644,9 @@ namespace SkysJSONGenerator
             {
                 string materialname;
                 string domain;
+                List<KeyValuePair<string, int>> ingredients;
 
-                var textures = GetTextureOverrides(item, out materialname, out domain);
+                var textures = GetTextureOverrides(item, out materialname, out domain, out ingredients);
 
                 var blockname = materialname + "_fence_gate";
                 var fileName = $"\\{blockname}.json";
@@ -615,7 +665,8 @@ namespace SkysJSONGenerator
                     BlockName = blockname,
                     MaterialName = materialname,
                     Textures = textures,
-                    WallList = _wallTags
+                    WallList = _wallTags,
+                    Ingredients = ingredients
                 };
 
 
@@ -664,13 +715,29 @@ namespace SkysJSONGenerator
             return  "blocks";
         }
 
-        private string[] GetTextureOverrides(string materialname, out string materialNameOut, out string domainOut)
+        private List<KeyValuePair<string, int>> GetIngredients(string[] arrayIn, int startPos)
+        {
+            var returnList = new List<KeyValuePair<string, int>>();
+
+            for (var i = startPos; i < arrayIn.Length; i++)
+            {
+                returnList.Add(new KeyValuePair<string, int>(arrayIn[i] + ":" + arrayIn[i+1], int.Parse(arrayIn[i+2])));
+
+                i++; i++;
+            }
+
+            return returnList;
+        }
+
+        private string[] GetTextureOverrides(string materialname, out string materialNameOut, out string domainOut, out List<KeyValuePair<string, int>> ingredientsOut)
         {
             var domain = modid;
 
             var texture1 = domain + ":" + blocktexturefolder + "\\" + materialname;
             var texture2 = domain + ":" + blocktexturefolder + "\\" + materialname;
             var texture3 = domain + ":" + blocktexturefolder + "\\" + materialname;
+
+            var ingredients = new List<KeyValuePair<string, int>>();
 
             if (materialname.Contains(":"))
             {
@@ -685,19 +752,30 @@ namespace SkysJSONGenerator
                     Debug.Print("natura");
 
                     if (materialNameArray.Length > 2)
-                        texture1 = domain + ":" + GetNaturaBlockFolder(materialNameArray[2], materialname) + "/" +
+                        if (materialNameArray[2] == "ingredients")
+                            ingredients = GetIngredients(materialNameArray, 3);
+                        else
+                            texture1 = domain + ":" + GetNaturaBlockFolder(materialNameArray[2], materialname) + "/" +
                                    materialNameArray[2].Replace("{materialname}", materialname);
                     else
                         texture1 = string.Empty;
 
                     if (materialNameArray.Length > 3)
-                        texture2 = domain + ":" + GetNaturaBlockFolder(materialNameArray[3], materialname) + "/" +
+                        if (materialNameArray[3] == "ingredients")
+                            ingredients = GetIngredients(materialNameArray, 4);
+                        else
+                        if (ingredients.Count == 0)
+                            texture2 = domain + ":" + GetNaturaBlockFolder(materialNameArray[3], materialname) + "/" +
                                    materialNameArray[3].Replace("{materialname}", materialname);
                     else
                         texture2 = string.Empty;
 
                     if (materialNameArray.Length > 4)
-                        texture3 = domain + ":" + GetNaturaBlockFolder(materialNameArray[4], materialname) + "/" +
+                        if (materialNameArray[4] == "ingredients")
+                            ingredients = GetIngredients(materialNameArray, 5);
+                        else
+                        if (ingredients.Count == 0)
+                            texture3 = domain + ":" + GetNaturaBlockFolder(materialNameArray[4], materialname) + "/" +
                                    materialNameArray[4].Replace("{materialname}", materialname);
                     else
                         texture3 = string.Empty;
@@ -711,17 +789,29 @@ namespace SkysJSONGenerator
                     }
 
                     if (materialNameArray.Length > 2)
-                        texture1 = domain + ":" + workingBlocktexturefolder + "/" + materialNameArray[2].Replace("{materialname}", materialname);
+                        if (materialNameArray[2] == "ingredients")
+                            ingredients = GetIngredients(materialNameArray, 3);
+                        else
+                        if (ingredients.Count == 0)
+                            texture1 = domain + ":" + workingBlocktexturefolder + "/" + materialNameArray[2].Replace("{materialname}", materialname);
                     else
                         texture1 = string.Empty;
 
                     if (materialNameArray.Length > 3)
-                        texture2 = domain + ":" + workingBlocktexturefolder + "/" + materialNameArray[3].Replace("{materialname}", materialname);
+                        if (materialNameArray[3] == "ingredients")
+                            ingredients = GetIngredients(materialNameArray, 4);
+                        else
+                        if (ingredients.Count == 0)
+                            texture2 = domain + ":" + workingBlocktexturefolder + "/" + materialNameArray[3].Replace("{materialname}", materialname);
                     else
                         texture2 = string.Empty;
 
                     if (materialNameArray.Length > 4)
-                        texture3 = domain + ":" + workingBlocktexturefolder + "/" + materialNameArray[4].Replace("{materialname}", materialname);
+                        if (materialNameArray[4] == "ingredients")
+                            ingredients = GetIngredients(materialNameArray, 5);
+                        else
+                        if (ingredients.Count == 0)
+                            texture3 = domain + ":" + workingBlocktexturefolder + "/" + materialNameArray[4].Replace("{materialname}", materialname);
                     else
                         texture3 = string.Empty;
 
@@ -730,6 +820,7 @@ namespace SkysJSONGenerator
 
             domainOut = domain;
             materialNameOut = materialname;
+            ingredientsOut = ingredients;
 
             return new[] {texture1, texture2, texture3};
         }
@@ -742,6 +833,8 @@ namespace SkysJSONGenerator
             {
                 var topSuffix = string.Empty;
                 var sideSuffix = string.Empty;
+                var conditions = string.Empty;
+                var ingredientDomain = string.Empty;
 
                 foreach (var file in Directory.EnumerateFiles(_blockModelTemplateFolder))
                 {
@@ -757,7 +850,16 @@ namespace SkysJSONGenerator
 
                     string domain;
 
-                    var textures = GetTextureOverrides(materialname, out materialname, out domain);
+                    List<KeyValuePair<string, int>> ingredients;
+                    var textures = GetTextureOverrides(materialname, out materialname, out domain, out ingredients);
+
+                    if (ingredients.Any())
+                    {
+                        ingredientDomain = ingredients.First().Key.Split(':')[0];
+
+                        if (ingredientDomain != "minecraft")
+                            conditions = @", ""conditions"":[{ ""type"":""forge:mod_loaded"", ""modid"":""" + ingredientDomain + @"""}]";
+                    }
 
                     if (domain == "minecraft")
                         chairName += "_"  + materialname;
@@ -778,13 +880,22 @@ namespace SkysJSONGenerator
                         MaterialName = materialname,
                         TopSuffix = topSuffix,
                         SideSuffix = sideSuffix,
-                        Textures = textures
+                        Textures = textures,
+                        Ingredients = ingredients,
+                        Conditions = conditions,
+                        IngredientDomain = ingredientDomain
                     };
 
                     tasks.Add(WriteFile(_modelsBlockPath + blockModelFilename, @LoadTemplate(data)));
                     tasks.Add(WriteFile(_modelsBlockPath + blockModelInventoryFilename, @LoadTemplate(data.WithName(fileNameArray[0] + "_inventory"))));
                     tasks.Add(WriteFile(_blockstatesPath + blockModelFilename, @LoadTemplate(data.WithPath(_blockstateTemplateFolder))));
                     tasks.Add(WriteFile(_modelsItemPath + blockModelFilename, @LoadTemplate(data.WithPath(_itemModelTemplateFolder))));
+
+                    if (_renderAdvancement)
+                        tasks.Add(WriteFile(_recipeAdvancementsPath + blockModelFilename, @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe"))));
+
+                    if (_renderRecipe)
+                        tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder))));
 
                     if (!langs)
                         continue;
@@ -815,8 +926,9 @@ namespace SkysJSONGenerator
             {
                 string materialname;
                 string domain;
+                List<KeyValuePair<string, int>> ingredients;
 
-                var textures = GetTextureOverrides(item, out materialname, out domain);
+                var textures = GetTextureOverrides(item, out materialname, out domain, out ingredients);
 
                 var blockname = materialname + "_log";
                 var barkname = materialname + "_bark";
@@ -843,7 +955,8 @@ namespace SkysJSONGenerator
                     MaterialName = materialname,
                     TopSuffix = topSuffix,
                     SideSuffix = sideSuffix,
-                    Textures = textures
+                    Textures = textures,
+                    Ingredients = ingredients
                 };
 
                 tasks.Add(WriteFile(_modelsBlockPath + fileName, @LoadTemplate(data)));
@@ -875,8 +988,9 @@ namespace SkysJSONGenerator
             {
                 string materialname;
                 string domain;
+                List<KeyValuePair<string, int>> ingredients;
 
-                var textures = GetTextureOverrides(item, out materialname, out domain);
+                var textures = GetTextureOverrides(item, out materialname, out domain, out ingredients);
 
                 var topSuffix = string.Empty;
                 var sideSuffix = string.Empty;
@@ -910,7 +1024,8 @@ namespace SkysJSONGenerator
                     MaterialName = materialname,
                     TopSuffix = topSuffix,
                     SideSuffix = sideSuffix,
-                    Textures = textures
+                    Textures = textures,
+                    Ingredients = ingredients
                 };
 
                 tasks.Add(WriteFile(_blockstatesPath + fileName, @LoadTemplate(data)));
@@ -935,8 +1050,9 @@ namespace SkysJSONGenerator
             {
                 string materialname;
                 string domain;
+                List<KeyValuePair<string, int>> ingredients;
 
-                var textures = GetTextureOverrides(item, out materialname, out domain);
+                var textures = GetTextureOverrides(item, out materialname, out domain, out ingredients);
 
                 var blockname = materialname;
 
@@ -956,7 +1072,8 @@ namespace SkysJSONGenerator
                     Name = template,
                     BlockName = blockname,
                     MaterialName = materialname,
-                    Textures = textures
+                    Textures = textures,
+                    Ingredients = ingredients
                 };
 
                 tasks.Add(WriteFile(_modelsBlockPath + fileName, @LoadTemplate(data)));
@@ -981,8 +1098,9 @@ namespace SkysJSONGenerator
             {
                 string materialname;
                 string domain;
+                List<KeyValuePair<string, int>> ingredients;
 
-                var textures = GetTextureOverrides(item, out materialname, out domain);
+                var textures = GetTextureOverrides(item, out materialname, out domain, out ingredients);
 
                 var blockname = materialname;
                 var smoothSuffix = string.Empty;
@@ -1018,7 +1136,8 @@ namespace SkysJSONGenerator
                     TopSuffix = topSuffix,
                     SideSuffix = sideSuffix,
                     Textures = textures,
-                    SmoothSuffix = smoothSuffix
+                    SmoothSuffix = smoothSuffix,
+                    Ingredients = ingredients
                 };
 
                 tasks.Add(WriteFile(_modelsBlockPath + fileName, @LoadTemplate(data)));
@@ -1061,10 +1180,14 @@ namespace SkysJSONGenerator
             }
         }
 
-        public async Task<int> RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, bool furnace, bool releifs, bool langs, bool chairs, bool leaves, bool log, bool planks, bool woodStairs, bool renderDoor, bool renderDoubleSlab, bool renderAdvancement, bool renderWoodSlabs, bool renderGate, bool renderFence)
+        public async Task<int> RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, 
+            bool furnace, bool releifs, bool langs, bool chairs, bool leaves, bool log, bool planks, bool woodStairs, 
+            bool renderDoor, bool renderDoubleSlab, bool renderAdvancement, bool renderWoodSlabs, bool renderGate, 
+            bool renderFence, bool renderRecipe)
         {
             _filesGenerated = 0;
             _renderAdvancement = renderAdvancement;
+            _renderRecipe = renderRecipe;
 
             if (!Directory.Exists("out"))
                 Directory.CreateDirectory("out");
@@ -1107,6 +1230,9 @@ namespace SkysJSONGenerator
 
             if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\advancements"))
                 Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\advancements");
+
+            if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\recipes"))
+                Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\recipes");
 
             if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\advancements\\" + modid))
                 Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\advancements\\" + modid);

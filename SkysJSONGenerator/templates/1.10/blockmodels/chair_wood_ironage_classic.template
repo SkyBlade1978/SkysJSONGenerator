@@ -1,33 +1,33 @@
 ﻿{{
 	"credit": "Made with Blockbench",
-  "textures": {{
-    "0": "{texture2}",
-    "1": "{texture1}",
-    "particle": "{texture2}"
-  }},
+	  "textures": {{
+		"0": "{texture2}",
+		"1": "{texture1}",
+		"particle": "{texture2}"
+	  }},
 	"elements": [
 		{{
 			"from": [14, 0, 3],
-			"to": [15, 12, 4],
+			"to": [15, 10, 4],
 			"rotation": {{"angle": 0, "axis": "y", "origin": [8, 8, 10]}},
 			"faces": {{
-				"north": {{"uv": [0, 0, 1, 12], "texture": "#1"}},
-				"east": {{"uv": [0, 0, 1, 12], "texture": "#1"}},
-				"south": {{"uv": [0, 0, 1, 12], "texture": "#1"}},
-				"west": {{"uv": [0, 0, 1, 12], "texture": "#1"}},
+				"north": {{"uv": [0, 0, 1, 10], "texture": "#1"}},
+				"east": {{"uv": [0, 0, 1, 10], "texture": "#1"}},
+				"south": {{"uv": [0, 0, 1, 10], "texture": "#1"}},
+				"west": {{"uv": [0, 0, 1, 10], "texture": "#1"}},
 				"up": {{"uv": [0, 0, 1, 1], "rotation": 90, "texture": "#1"}},
 				"down": {{"uv": [0, 0, 1, 1], "rotation": 270, "texture": "#1"}}
 			}}
 		}},
 		{{
 			"from": [1, 0, 3],
-			"to": [2, 12, 4],
+			"to": [2, 10, 4],
 			"rotation": {{"angle": 0, "axis": "y", "origin": [-6, 8, 10]}},
 			"faces": {{
-				"north": {{"uv": [0, 0, 1, 12], "texture": "#1"}},
-				"east": {{"uv": [0, 0, 1, 12], "texture": "#1"}},
-				"south": {{"uv": [0, 0, 1, 12], "texture": "#1"}},
-				"west": {{"uv": [0, 0, 1, 12], "texture": "#1"}},
+				"north": {{"uv": [0, 0, 1, 10], "texture": "#1"}},
+				"east": {{"uv": [0, 0, 1, 10], "texture": "#1"}},
+				"south": {{"uv": [0, 0, 1, 10], "texture": "#1"}},
+				"west": {{"uv": [0, 0, 1, 10], "texture": "#1"}},
 				"up": {{"uv": [0, 0, 1, 1], "rotation": 90, "texture": "#1"}},
 				"down": {{"uv": [0, 0, 1, 1], "rotation": 270, "texture": "#1"}}
 			}}
@@ -112,26 +112,14 @@
 		}},
 		{{
 			"from": [0, 7, 2],
-			"to": [16, 8, 14],
+			"to": [16, 8, 16],
 			"faces": {{
 				"north": {{"uv": [0, 0, 16, 1], "texture": "#0"}},
-				"east": {{"uv": [0, 0, 12, 1], "texture": "#0"}},
+				"east": {{"uv": [0, 0, 14, 1], "texture": "#0"}},
 				"south": {{"uv": [0, 0, 16, 1], "texture": "#0"}},
-				"west": {{"uv": [0, 0, 12, 1], "texture": "#0"}},
-				"up": {{"uv": [0, 2, 16, 14], "texture": "#0"}},
-				"down": {{"uv": [0, 0, 16, 12], "texture": "#0"}}
-			}}
-		}},
-		{{
-			"from": [2, 7, 14],
-			"to": [14, 8, 16],
-			"faces": {{
-				"north": {{"uv": [0, 0, 12, 1], "texture": "#0"}},
-				"east": {{"uv": [0, 0, 2, 1], "texture": "#0"}},
-				"south": {{"uv": [0, 0, 12, 1], "texture": "#0"}},
-				"west": {{"uv": [0, 0, 2, 1], "texture": "#0"}},
-				"up": {{"uv": [2, 14, 14, 16], "texture": "#0"}},
-				"down": {{"uv": [0, 0, 12, 2], "texture": "#0"}}
+				"west": {{"uv": [0, 0, 14, 1], "texture": "#0"}},
+				"up": {{"uv": [0, 0, 16, 14], "texture": "#0"}},
+				"down": {{"uv": [0, 0, 16, 14], "texture": "#0"}}
 			}}
 		}},
 		{{
@@ -264,11 +252,11 @@
 		{{
 			"name": "Seat",
 			"origin": [8, 8, 8],
-			"children": [8, 9]
+			"children": [8]
 		}},
 		{{
 			"name": "Back",
 			"origin": [8, 8, 8],
 			"children": []
-		}}, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+		}}, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 }}
