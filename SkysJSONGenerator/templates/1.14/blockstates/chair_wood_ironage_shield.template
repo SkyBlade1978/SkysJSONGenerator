@@ -1,0 +1,34 @@
+﻿{{
+  "variants": {{
+    "facing=north,waterlogged=true": {{
+      "model": "{modid}:block/{blockname}",
+      "y": 180
+    }},
+    "facing=east,waterlogged=true": {{
+      "model": "{modid}:block/{blockname}",
+      "y": 270
+    }},
+    "facing=south,waterlogged=true": {{
+      "model": "{modid}:block/{blockname}"
+    }},
+    "facing=west,waterlogged=true": {{
+      "model": "{modid}:block/{blockname}",
+      "y": 90
+    }},
+	"facing=north,waterlogged=false": {{
+      "model": "{modid}:block/{blockname}",
+      "y": 180
+    }},
+    "facing=east,waterlogged=false": {{
+      "model": "{modid}:block/{blockname}",
+      "y": 270
+    }},
+    "facing=south,waterlogged=false": {{
+      "model": "{modid}:block/{blockname}"
+    }},
+    "facing=west,waterlogged=false": {{
+      "model": "{modid}:block/{blockname}",
+      "y": 90
+    }}
+  }}
+}}

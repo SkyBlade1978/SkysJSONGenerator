@@ -721,8 +721,11 @@ namespace SkysJSONGenerator
 
             for (var i = startPos; i < arrayIn.Length; i++)
             {
-                returnList.Add(new KeyValuePair<string, int>(arrayIn[i] + ":" + arrayIn[i+1], int.Parse(arrayIn[i+2])));
-
+                if (arrayIn.Length > i + 2)
+                    returnList.Add(new KeyValuePair<string, int>(arrayIn[i] + ":" + arrayIn[i+1], int.Parse(arrayIn[i+2])));
+                else
+                    returnList.Add(new KeyValuePair<string, int>(arrayIn[i] + ":" + arrayIn[i + 1], -1));
+                
                 i++; i++;
             }
 
@@ -781,11 +784,20 @@ namespace SkysJSONGenerator
                         texture3 = string.Empty;
                 } else
                 {
-                    var workingBlocktexturefolder = blocktexturefolder;
+                    string workingBlockTextureFolder;
+                    double decVersion;
+
+                    double.TryParse(this.version, out decVersion);
+
+                    if (domain == "minecraft" && decVersion >= 1.14)
+                        workingBlockTextureFolder = "block";
+                    else
+                        workingBlockTextureFolder = blocktexturefolder;
+
 
                     if (domain == "forestry")
                     {
-                        workingBlocktexturefolder = blocktexturefolder + "/wood";
+                        workingBlockTextureFolder = blocktexturefolder + "/wood";
                     }
 
                     if (materialNameArray.Length > 2)
@@ -793,7 +805,7 @@ namespace SkysJSONGenerator
                             ingredients = GetIngredients(materialNameArray, 3);
                         else
                         if (ingredients.Count == 0)
-                            texture1 = domain + ":" + workingBlocktexturefolder + "/" + materialNameArray[2].Replace("{materialname}", materialname);
+                            texture1 = domain + ":" + workingBlockTextureFolder + "/" + materialNameArray[2].Replace("{materialname}", materialname);
                     else
                         texture1 = string.Empty;
 
@@ -802,7 +814,7 @@ namespace SkysJSONGenerator
                             ingredients = GetIngredients(materialNameArray, 4);
                         else
                         if (ingredients.Count == 0)
-                            texture2 = domain + ":" + workingBlocktexturefolder + "/" + materialNameArray[3].Replace("{materialname}", materialname);
+                            texture2 = domain + ":" + workingBlockTextureFolder + "/" + materialNameArray[3].Replace("{materialname}", materialname);
                     else
                         texture2 = string.Empty;
 
@@ -811,7 +823,7 @@ namespace SkysJSONGenerator
                             ingredients = GetIngredients(materialNameArray, 5);
                         else
                         if (ingredients.Count == 0)
-                            texture3 = domain + ":" + workingBlocktexturefolder + "/" + materialNameArray[4].Replace("{materialname}", materialname);
+                            texture3 = domain + ":" + workingBlockTextureFolder + "/" + materialNameArray[4].Replace("{materialname}", materialname);
                     else
                         texture3 = string.Empty;
 
@@ -886,11 +898,13 @@ namespace SkysJSONGenerator
                         IngredientDomain = ingredientDomain
                     };
 
+                    var fileName = "\\" + chairName + ".json";
+
                     tasks.Add(WriteFile(_modelsBlockPath + blockModelFilename, @LoadTemplate(data)));
                     tasks.Add(WriteFile(_modelsBlockPath + blockModelInventoryFilename, @LoadTemplate(data.WithName(fileNameArray[0] + "_inventory"))));
                     tasks.Add(WriteFile(_blockstatesPath + blockModelFilename, @LoadTemplate(data.WithPath(_blockstateTemplateFolder))));
                     tasks.Add(WriteFile(_modelsItemPath + blockModelFilename, @LoadTemplate(data.WithPath(_itemModelTemplateFolder))));
-
+                    tasks.Add(WriteFile(_lootTablePath + fileName, @LoadTemplate(data.WithPath(_lootTableTemplateFolder))));
                     if (_renderAdvancement)
                         tasks.Add(WriteFile(_recipeAdvancementsPath + blockModelFilename, @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe"))));
 
