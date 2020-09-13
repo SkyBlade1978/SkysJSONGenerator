@@ -76,7 +76,18 @@ namespace SkysJSONGenerator
             _blockstatesPath = $"{_basePath}\\assets\\{modid}\\blockstates";
             _advancementsPath = $"{_basePath}\\assets\\{modid}\\advancements\\{modid}";
             _recipeAdvancementsPath = $"{_basePath}\\assets\\{modid}\\advancements\\recipes";
-            _recipePath = $"{_basePath}\\assets\\{modid}\\recipes";
+
+
+            double versionNumber;
+
+            double.TryParse(version, out versionNumber);
+
+            if (versionNumber >= 1.14)
+                _recipePath = $"{_basePath}\\data\\{modid}\\recipes";
+            else
+                _recipePath = $"{_basePath}\\assets\\{modid}\\recipes";
+
+
             _langPath = $"{_basePath}\\assets\\{modid}\\lang";
             _modelsPath = $"{_basePath}\\assets\\{modid}\\models";
             _modelsBlockPath = _modelsPath + "\\block";
@@ -715,16 +726,16 @@ namespace SkysJSONGenerator
             return  "blocks";
         }
 
-        private List<KeyValuePair<string, int>> GetIngredients(string[] arrayIn, int startPos)
+        private List<KeyValuePair<string, int>> GetIngredients(string[] arrayIn, int startPos, string materialname)
         {
             var returnList = new List<KeyValuePair<string, int>>();
 
             for (var i = startPos; i < arrayIn.Length; i++)
             {
                 if (arrayIn.Length > i + 2)
-                    returnList.Add(new KeyValuePair<string, int>(arrayIn[i] + ":" + arrayIn[i+1], int.Parse(arrayIn[i+2])));
+                    returnList.Add(new KeyValuePair<string, int>(arrayIn[i] + ":" + arrayIn[i+1].Replace("{materialname}", materialname), int.Parse(arrayIn[i+2])));
                 else
-                    returnList.Add(new KeyValuePair<string, int>(arrayIn[i] + ":" + arrayIn[i + 1], -1));
+                    returnList.Add(new KeyValuePair<string, int>(arrayIn[i] + ":" + arrayIn[i + 1].Replace("{materialname}", materialname), -1));
                 
                 i++; i++;
             }
@@ -756,7 +767,7 @@ namespace SkysJSONGenerator
 
                     if (materialNameArray.Length > 2)
                         if (materialNameArray[2] == "ingredients")
-                            ingredients = GetIngredients(materialNameArray, 3);
+                            ingredients = GetIngredients(materialNameArray, 3, materialname);
                         else
                             texture1 = domain + ":" + GetNaturaBlockFolder(materialNameArray[2], materialname) + "/" +
                                    materialNameArray[2].Replace("{materialname}", materialname);
@@ -765,7 +776,7 @@ namespace SkysJSONGenerator
 
                     if (materialNameArray.Length > 3)
                         if (materialNameArray[3] == "ingredients")
-                            ingredients = GetIngredients(materialNameArray, 4);
+                            ingredients = GetIngredients(materialNameArray, 4, materialname);
                         else
                         if (ingredients.Count == 0)
                             texture2 = domain + ":" + GetNaturaBlockFolder(materialNameArray[3], materialname) + "/" +
@@ -775,7 +786,7 @@ namespace SkysJSONGenerator
 
                     if (materialNameArray.Length > 4)
                         if (materialNameArray[4] == "ingredients")
-                            ingredients = GetIngredients(materialNameArray, 5);
+                            ingredients = GetIngredients(materialNameArray, 5, materialname);
                         else
                         if (ingredients.Count == 0)
                             texture3 = domain + ":" + GetNaturaBlockFolder(materialNameArray[4], materialname) + "/" +
@@ -802,7 +813,7 @@ namespace SkysJSONGenerator
 
                     if (materialNameArray.Length > 2)
                         if (materialNameArray[2] == "ingredients")
-                            ingredients = GetIngredients(materialNameArray, 3);
+                            ingredients = GetIngredients(materialNameArray, 3, materialname);
                         else
                         if (ingredients.Count == 0)
                             texture1 = domain + ":" + workingBlockTextureFolder + "/" + materialNameArray[2].Replace("{materialname}", materialname);
@@ -811,7 +822,7 @@ namespace SkysJSONGenerator
 
                     if (materialNameArray.Length > 3)
                         if (materialNameArray[3] == "ingredients")
-                            ingredients = GetIngredients(materialNameArray, 4);
+                            ingredients = GetIngredients(materialNameArray, 4, materialname);
                         else
                         if (ingredients.Count == 0)
                             texture2 = domain + ":" + workingBlockTextureFolder + "/" + materialNameArray[3].Replace("{materialname}", materialname);
@@ -820,7 +831,7 @@ namespace SkysJSONGenerator
 
                     if (materialNameArray.Length > 4)
                         if (materialNameArray[4] == "ingredients")
-                            ingredients = GetIngredients(materialNameArray, 5);
+                            ingredients = GetIngredients(materialNameArray, 5, materialname);
                         else
                         if (ingredients.Count == 0)
                             texture3 = domain + ":" + workingBlockTextureFolder + "/" + materialNameArray[4].Replace("{materialname}", materialname);
@@ -1245,8 +1256,16 @@ namespace SkysJSONGenerator
             if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\advancements"))
                 Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\advancements");
 
-            if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\recipes"))
-                Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\recipes");
+            double version;
+
+            double.TryParse(this.version, out version);
+
+            if (version >= 1.14)
+                if (!Directory.Exists(_basePath + "\\data\\" + modid + "\\recipes"))
+                    Directory.CreateDirectory(_basePath + "\\data\\" + modid + "\\recipes");
+            else
+                if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\recipes"))
+                    Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\recipes");
 
             if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\advancements\\" + modid))
                 Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\advancements\\" + modid);
