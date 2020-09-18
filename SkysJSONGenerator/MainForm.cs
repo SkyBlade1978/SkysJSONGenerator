@@ -331,21 +331,18 @@ namespace SkysJSONGenerator
                         , "minecraft:jungle:{materialname}_planks:{materialname}_log:ingredients:minecraft:{materialname}_planks"
                         , "minecraft:acacia:{materialname}_planks:{materialname}_log:ingredients:minecraft:{materialname}_planks"
                         , "minecraft:dark_oak:{materialname}_planks:{materialname}_log:ingredients:minecraft:{materialname}_planks"
-                        //, "biomesoplenty:sacred_oak:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:0"
-                        //, "biomesoplenty:cherry:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:1"
-                        //, "biomesoplenty:umbran:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:2"
-                        //, "biomesoplenty:fir:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:3"
-                        //, "biomesoplenty:ethereal:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:4"
-                        //, "biomesoplenty:magic:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:5"
-                        //, "biomesoplenty:mangrove:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:6"
-                        //, "biomesoplenty:palm:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:7"
-                        //, "biomesoplenty:redwood:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:8"
-                        //, "biomesoplenty:willow:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:9"
-                        //, "biomesoplenty:pine:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:10"
-                        //, "biomesoplenty:hellbark:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:11"
-                        //, "biomesoplenty:jacaranda:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:12"
-                        //, "biomesoplenty:mahogany:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:13"
-                        //, "biomesoplenty:ebony:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:14"
+                        , "biomesoplenty:cherry:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
+                        , "biomesoplenty:ethereal:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
+                        , "biomesoplenty:fir:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
+                        , "biomesoplenty:hellbark:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
+                        , "biomesoplenty:jacaranda:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
+                        , "biomesoplenty:magic:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
+                        , "biomesoplenty:mahogany:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
+                        , "biomesoplenty:palm:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
+                        , "biomesoplenty:redwood:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
+                        , "biomesoplenty:umbran:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
+                        , "biomesoplenty:willow:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
+                        , "biomesoplenty:dead:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
                         //, "biomesoplenty:eucalyptus:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:planks_0:15"
                         //, "natura:maple:{materialname}_planks:{materialname}_log:ingredients:natura:overworld_planks:0"
                         //, "natura:silverbell:{materialname}_planks:{materialname}_log:ingredients:natura:overworld_planks:1"
@@ -391,7 +388,7 @@ namespace SkysJSONGenerator
                         //, "forestry:cocobolo:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:11"
                         //, "forestry:zebrawood:planks.{materialname}:bark.{materialname}:ingredients:forestry:planks.1:12"
                     },
-                   "blocks", "items", 3, new List<Block>
+                   "block", "items", 3, new List<Block>
                    {
                         new Block { Name = "WoodChairs", Side = false, Top = false },
                         new Block { Name = "Lang", Side = true, Top = true },
