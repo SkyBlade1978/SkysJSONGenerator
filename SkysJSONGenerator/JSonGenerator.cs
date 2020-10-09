@@ -887,8 +887,10 @@ namespace SkysJSONGenerator
                     if (domain == "minecraft")
                         chairName += "_"  + materialname;
                     else
+                    {
                         chairName += "_" + domain + "_" + materialname;
-
+                        ingredientDomain = domain;
+                    }
                     //blockModelFilename = $"\\{chairName}_inventory.json";
                     //var inventoryTemplateName = $"{fileNameArray[0]}_inventory";
 

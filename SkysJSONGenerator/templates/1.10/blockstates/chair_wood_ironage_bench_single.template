@@ -1,0 +1,49 @@
+﻿{{
+  "variants": {{
+    "facing=north,type=single": {{
+      "model": "{modid}:chair_wood_ironage_bench_single_{ingredientdomain}{materialname}",
+      "y": 180
+    }},
+    "facing=east,type=single": {{
+      "model": "{modid}:chair_wood_ironage_bench_single_{ingredientdomain}{materialname}",
+      "y": 270
+    }},
+    "facing=south,type=single": {{
+      "model": "{modid}:chair_wood_ironage_bench_single_{ingredientdomain}{materialname}"
+    }},
+    "facing=west,type=single": {{
+      "model": "{modid}:chair_wood_ironage_bench_single_{ingredientdomain}{materialname}",
+      "y": 90
+    }},
+    "facing=north,type=middle": {{
+      "model": "{modid}:chair_wood_ironage_bench_middle_{ingredientdomain}{materialname}",
+      "y": 180
+    }},
+    "facing=east,type=middle": {{
+      "model": "{modid}:chair_wood_ironage_bench_middle_{ingredientdomain}{materialname}",
+      "y": 270
+    }},
+    "facing=south,type=middle": {{
+      "model": "{modid}:chair_wood_ironage_bench_middle_{ingredientdomain}{materialname}"
+    }},
+    "facing=west,type=middle": {{
+      "model": "{modid}:chair_wood_ironage_bench_middle_{ingredientdomain}{materialname}",
+      "y": 90
+    }},
+    "facing=north,type=end": {{
+      "model": "{modid}:chair_wood_ironage_bench_end_{ingredientdomain}{materialname}",
+      "y": 180
+    }},
+    "facing=east,type=end": {{
+      "model": "{modid}:chair_wood_ironage_bench_end_{ingredientdomain}{materialname}",
+      "y": 270
+    }},
+    "facing=south,type=end": {{
+      "model": "{modid}:chair_wood_ironage_bench_end_{ingredientdomain}{materialname}"
+    }},
+    "facing=west,type=end": {{
+      "model": "{modid}:chair_wood_ironage_bench_end_{ingredientdomain}{materialname}",
+      "y": 90
+    }}
+  }}
+}}
