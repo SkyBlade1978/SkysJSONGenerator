@@ -1,20 +1,35 @@
 ﻿{{
-                      "type": "minecraft:block",
-                      "pools": [
-                        {{
-                          "name": "{blockname}",
-                          "rolls": 1,
-                          "entries": [
-                            {{
-                              "type": "minecraft:item",
-                              "name": "{modid}:{blockname}"
-                            }}
-                          ],
-                          "conditions": [
-                            {{
-                              "condition": "minecraft:survives_explosion"
-                            }}
-                          ]
-                        }}
-                      ]
-                    }}
+  "type": "forge:conditional",
+  "recipes": [
+    {{
+      "conditions": [
+        {{
+          "modid": "sewingkit",
+          "type": "forge:mod_loaded"
+        }}
+      ],
+      "recipe": 
+{{
+	  "type": "minecraft:block",
+	  "pools": [
+		{{
+		  "name": "{blockname}",
+		  "rolls": 1,
+		  "entries": [
+			{{
+			  "type": "minecraft:item",
+			  "name": "{modid}:{blockname}"
+			}}
+		  ],
+		  "conditions": [
+			{{
+			  "condition": "minecraft:survives_explosion"
+			}}
+		  ]
+		}}
+	  ]
+	}}
+      
+   }}
+  ]
+}}
