@@ -332,7 +332,6 @@ namespace SkysJSONGenerator
                         , "minecraft:acacia:{materialname}_planks:{materialname}_log:ingredients:minecraft:{materialname}_planks"
                         , "minecraft:dark_oak:{materialname}_planks:{materialname}_log:ingredients:minecraft:{materialname}_planks"
                         , "biomesoplenty:cherry:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
-                        , "biomesoplenty:ethereal:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
                         , "biomesoplenty:fir:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
                         , "biomesoplenty:hellbark:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
                         , "biomesoplenty:jacaranda:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
