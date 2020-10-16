@@ -761,6 +761,10 @@ namespace SkysJSONGenerator
                 domain = materialNameArray[0];
                 materialname = materialNameArray[1];
 
+                double decVersion;
+
+                double.TryParse(this.version, out decVersion);
+
                 // natura has it's own "special" way of structuring it's assets :(
                 if (domain == "natura")
                 {
@@ -797,15 +801,17 @@ namespace SkysJSONGenerator
                 } else
                 {
                     string workingBlockTextureFolder;
-                    double decVersion;
 
-                    double.TryParse(this.version, out decVersion);
 
                     if (domain == "minecraft" && decVersion >= 1.14)
                         workingBlockTextureFolder = "block";
                     else
-                        workingBlockTextureFolder = blocktexturefolder;
-
+                    {
+                        if (domain == "byg" && decVersion == 1.15)
+                            workingBlockTextureFolder = "blocks";
+                        else
+                            workingBlockTextureFolder = blocktexturefolder;
+                    }
 
                     if (domain == "forestry")
                     {
