@@ -96,6 +96,12 @@
     <None Include="templates\1.10\advancement\recipe.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_log_end.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_log_middle.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_padded_end.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -106,6 +112,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_padded_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_log_single.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_single.template">

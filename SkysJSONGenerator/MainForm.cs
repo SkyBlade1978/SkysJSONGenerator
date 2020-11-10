@@ -175,12 +175,12 @@ namespace SkysJSONGenerator
                     }, "Mineralogy 1.10 - Irregular Blocks");
 
                 var iafProfile110 = new Profile("1.10", "ironagefurniture", new List<string>
-                    {  "minecraft:oak:planks_{materialname}:log_{materialname}"
-                        , "minecraft:spruce:planks_{materialname}:log_{materialname}"
-                        , "minecraft:birch:planks_{materialname}:log_{materialname}"
-                        , "minecraft:jungle:planks_{materialname}:log_{materialname}"
-                        , "minecraft:acacia:planks_{materialname}:log_{materialname}"
-                        , "minecraft:big_oak:planks_{materialname}:log_{materialname}"
+                    {  "minecraft:oak:planks_{materialname}:log_{materialname}:log_{materialname}_top"
+                        , "minecraft:spruce:planks_{materialname}:log_{materialname}:log_{materialname}_top"
+                        , "minecraft:birch:planks_{materialname}:log_{materialname}:log_{materialname}_top"
+                        , "minecraft:jungle:planks_{materialname}:log_{materialname}:log_{materialname}_top"
+                        , "minecraft:acacia:planks_{materialname}:log_{materialname}:log_{materialname}_top"
+                        , "minecraft:big_oak:planks_{materialname}:log_{materialname}:log_{materialname}_top"
                      , "biomesoplenty:umbran:{materialname}_planks:{materialname}_log"
                      , "biomesoplenty:willow:{materialname}_planks:{materialname}_log"
                      , "biomesoplenty:magic:{materialname}_planks:{materialname}_log"
