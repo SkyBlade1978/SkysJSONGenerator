@@ -1,0 +1,14 @@
+﻿{{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    {{
+      "item": "minecraft:shield"
+    }},
+    {{
+      "item": "{modid}:chair_wood_ironage_classic_{ingredientdomain}{materialname}"
+    }}
+  ],
+  "result": {{
+    "item": "{modid}:{blockname}"
+  }}
+}}

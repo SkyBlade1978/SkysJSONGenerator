@@ -1,0 +1,33 @@
+﻿{{
+  "type": "forge:conditional",
+  "recipes": [
+    {{
+      "conditions": [
+        {{
+          "modid": "{domain}",
+          "type": "forge:mod_loaded"
+        }}
+      ],
+      "recipe": {{
+  "type": "minecraft:crafting_shaped",
+  "group": "furniture",
+  "pattern": [
+    " x ",
+    "yyy",
+    "yyy"
+  ],
+  "key": {{
+    "y": {{
+      "tag": "forge:rods/wooden"
+    }},
+  "x": {{
+    "item": "{ingredient1}"
+  }}}},
+    "result": {{
+        "item": "{modid}:{blockname}",
+        "count": 1
+    }}
+      }}
+   }}
+  ]
+}}

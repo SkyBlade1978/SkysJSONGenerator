@@ -135,7 +135,8 @@ namespace SkysJSONGenerator
                     .Replace("{bricksuffix}", "{12}").Replace("{ingredient1}", "{13}").Replace("{meta1}", "{14}")
                     .Replace("{ingredient2}", "{15}").Replace("{meta2}", "{16}")
                     .Replace("{ingredient3}", "{17}").Replace("{meta3}", "{18}")
-                    .Replace("{conditions}", "{19}").Replace("{ingredientdomain}", "{20}");
+                    .Replace("{conditions}", "{19}").Replace("{ingredientdomain}", "{20}")
+                    .Replace("{domain}", "{21}");
 
                 if (data.Textures.Length > 0)
                     texture1 = data.Textures[0];
@@ -156,7 +157,7 @@ namespace SkysJSONGenerator
                     ingredient3 = data.Ingredients[2];
 
                 var ingredientDomain = string.Empty;
-
+                
                 if (data.IngredientDomain != "" && data.IngredientDomain != "minecraft")
                     ingredientDomain = data.IngredientDomain + "_";
 
@@ -165,7 +166,7 @@ namespace SkysJSONGenerator
                     return string.Format(@template, modid, data.BlockName, data.MaterialName, data.TopSuffix, data.SideSuffix, blocktexturefolder, 
                         data.WallList, data.LangName, texture1, texture2, texture3, data.SmoothSuffix, data.BrickSuffix, 
                         ingredient1.Key, ingredient1.Value, ingredient2.Key, ingredient2.Value, ingredient3.Key, ingredient3.Value,
-                        data.Conditions, ingredientDomain);
+                        data.Conditions, ingredientDomain, data.IngredientDomain);
                 }
                 catch (Exception)
                 {
@@ -760,6 +761,10 @@ namespace SkysJSONGenerator
                 domain = materialNameArray[0];
                 materialname = materialNameArray[1];
 
+                double decVersion;
+
+                double.TryParse(this.version, out decVersion);
+
                 // natura has it's own "special" way of structuring it's assets :(
                 if (domain == "natura")
                 {
@@ -796,15 +801,17 @@ namespace SkysJSONGenerator
                 } else
                 {
                     string workingBlockTextureFolder;
-                    double decVersion;
 
-                    double.TryParse(this.version, out decVersion);
 
                     if (domain == "minecraft" && decVersion >= 1.14)
                         workingBlockTextureFolder = "block";
                     else
-                        workingBlockTextureFolder = blocktexturefolder;
-
+                    {
+                        if (domain == "byg" && decVersion == 1.15)
+                            workingBlockTextureFolder = "blocks";
+                        else
+                            workingBlockTextureFolder = blocktexturefolder;
+                    }
 
                     if (domain == "forestry")
                     {
@@ -862,8 +869,8 @@ namespace SkysJSONGenerator
                 foreach (var file in Directory.EnumerateFiles(_blockModelTemplateFolder))
                 {
                     var materialname = item;
-
-                    if (!file.Contains("\\chair_wood_") || file.Contains("_inventory"))
+                    
+                    if (!file.Contains("\\chair_wood_") || file.Contains("_inventory") || file.Contains("_conditional"))
                         continue;
 
                     var filePathArray = file.Split('\\');
@@ -922,7 +929,12 @@ namespace SkysJSONGenerator
                         tasks.Add(WriteFile(_recipeAdvancementsPath + blockModelFilename, @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe"))));
 
                     if (_renderRecipe)
-                        tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder))));
+                    {
+                        if (domain == "minecraft")
+                            tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder))));
+                        else
+                            tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder).WithName(fileNameArray[0] + "_conditional"))));
+                    }
 
                     if (!langs)
                         continue;
