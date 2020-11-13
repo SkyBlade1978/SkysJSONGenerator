@@ -279,6 +279,9 @@
     <None Include="templates\1.10\blockmodels\wall_side.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="templates\1.10\blockstates\chair_wood_ironage_bench_log_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="templates\1.10\blockstates\chair_wood_ironage_bench_padded_single.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -337,6 +340,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.10\blockmodels\bark.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\itemmodels\chair_wood_ironage_bench_log_single.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.10\itemmodels\chair_wood_ironage_bench_padded_single.template">
