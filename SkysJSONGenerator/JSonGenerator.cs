@@ -721,6 +721,9 @@ namespace SkysJSONGenerator
             if (input.Contains("log"))
                return $"blocks/logs/{overUnder}";
 
+            if (input.Contains("heart"))
+                return $"blocks/logs/{overUnder}";
+
             if (input.Contains("plank"))
                 return $"blocks/planks/{overUnder}";
 

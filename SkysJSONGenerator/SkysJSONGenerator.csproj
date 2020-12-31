@@ -96,13 +96,46 @@
     <None Include="templates\1.10\advancement\recipe.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_log_end.template">
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_back_padded_left.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_back_padded_middle.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_back_middle.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_back_padded_right.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_back_right.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_back_left.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_back_padded_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_right.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_log_right.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_log_left.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_log_middle.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_padded_end.template">
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_back_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_padded_right.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_padded_left.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_padded_middle.template">
@@ -279,10 +312,16 @@
     <None Include="templates\1.10\blockmodels\wall_side.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="templates\1.10\blockstates\chair_wood_ironage_bench_back_padded_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="templates\1.10\blockstates\chair_wood_ironage_bench_log_single.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.10\blockstates\chair_wood_ironage_bench_padded_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockstates\chair_wood_ironage_bench_back_single.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.10\blockstates\chair_wood_ironage_bench_single.template">
@@ -342,7 +381,13 @@
     <None Include="templates\1.10\blockmodels\bark.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="templates\1.10\itemmodels\chair_wood_ironage_bench_back_padded_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="templates\1.10\itemmodels\chair_wood_ironage_bench_log_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\itemmodels\chair_wood_ironage_bench_back_single.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.10\itemmodels\chair_wood_ironage_bench_padded_single.template">
@@ -1070,7 +1115,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_end.template">
+    <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_left.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
