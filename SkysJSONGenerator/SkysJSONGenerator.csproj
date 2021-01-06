@@ -159,15 +159,6 @@
     <None Include="templates\1.10\blockmodels\block.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="templates\1.10\blockmodels\chair_wood_ironage_shield_inventory.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="templates\1.10\blockmodels\chair_wood_ironage_stool_short_inventory.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="templates\1.10\blockmodels\chair_wood_ironage_stool_tall_inventory.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="templates\1.10\blockmodels\leaves.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1108,11 +1099,6 @@
   <ItemGroup>
     <Folder Include="templates\1.10\loot_table\" />
     <Folder Include="templates\1.12\loot_table\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="templates\1.10\blockmodels\chair_wood_ironage_classic_inventory.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="templates\1.10\blockmodels\chair_wood_ironage_bench_left.template">
