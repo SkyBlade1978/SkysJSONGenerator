@@ -1,0 +1,23 @@
+﻿{{
+  "type": "forge:ore_shaped",
+  "result": {{
+    "item": "{modid}:{blockname}",
+    "data": 0
+  }},
+  "pattern": [
+    "xx",
+    "yy"
+  ],
+  "key": {{
+    "x": {{
+      "item": "{ingredient1}",
+      "data": {meta1}
+    }},
+    "y": {{
+      "item": "minecraft:stick",
+      "data": 0
+    }}
+  }},
+  "group": "furniture"
+    {conditions}
+}}

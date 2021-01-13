@@ -1,0 +1,17 @@
+﻿{{
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {{ 
+      "item":"minecraft:carpet",
+      "data": {colourMeta}
+    }},
+	{{
+	    "item":"{modid}:chair_wood_ironage_bench_single_{ingredientdomain}{materialname}"
+	}}
+    ],
+    "result": {{
+	"item": "{modid}:{blockname}"
+    }},
+  "group": "furniture"
+    {conditions}
+}}

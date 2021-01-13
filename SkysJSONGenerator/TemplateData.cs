@@ -18,6 +18,7 @@ namespace SkysJSONGenerator
          public List<KeyValuePair<string, int>> Ingredients;
          public string Conditions { get; set; }
          public string IngredientDomain { get; set; }
+         public string ColourMeta { get; set; }
 
         private TemplateData Clone()
          {
@@ -27,7 +28,7 @@ namespace SkysJSONGenerator
                  TopSuffix = this.TopSuffix, SideSuffix = this.SideSuffix, WallList = this.WallList,
                  LangName = this.LangName, Textures = this.Textures, SmoothSuffix = this.SmoothSuffix,
                  BrickSuffix = this.BrickSuffix, Ingredients = this.Ingredients, Conditions = this.Conditions,
-                 IngredientDomain = this.IngredientDomain
+                 IngredientDomain = this.IngredientDomain, ColourMeta = this.ColourMeta
              };
          }
 

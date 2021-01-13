@@ -116,6 +116,8 @@ namespace SkysJSONGenerator
             var texture1 = string.Empty;
             var texture2 = string.Empty;
             var texture3 = string.Empty;
+            var texture4 = string.Empty;
+
 
             var ingredient1 = new KeyValuePair<string, int>("", 0);
             var ingredient2 = new KeyValuePair<string, int>("", 0);
@@ -123,6 +125,9 @@ namespace SkysJSONGenerator
 
             if (File.Exists(overridePath))
                 fullPath = overridePath;
+
+            if (!File.Exists(fullPath) && fullPath.Contains("conditional"))
+                fullPath = fullPath.Replace("_conditional", "");
 
             if (File.Exists(fullPath))
             {
@@ -136,8 +141,9 @@ namespace SkysJSONGenerator
                     .Replace("{ingredient2}", "{15}").Replace("{meta2}", "{16}")
                     .Replace("{ingredient3}", "{17}").Replace("{meta3}", "{18}")
                     .Replace("{conditions}", "{19}").Replace("{ingredientdomain}", "{20}")
-                    .Replace("{domain}", "{21}");
-
+                    .Replace("{domain}", "{21}").Replace("{colourMeta}", "{22}")
+                    .Replace("{texture4}", "{23}");
+                
                 if (data.Textures.Length > 0)
                     texture1 = data.Textures[0];
 
@@ -146,6 +152,9 @@ namespace SkysJSONGenerator
 
                 if (data.Textures.Length > 2)
                     texture3 = data.Textures[2];
+
+                if (data.Textures.Length > 3)
+                    texture4 = data.Textures[3];
 
                 if (data.Ingredients.Count > 0)
                     ingredient1 = data.Ingredients[0];
@@ -166,7 +175,7 @@ namespace SkysJSONGenerator
                     return string.Format(@template, modid, data.BlockName, data.MaterialName, data.TopSuffix, data.SideSuffix, blocktexturefolder, 
                         data.WallList, data.LangName, texture1, texture2, texture3, data.SmoothSuffix, data.BrickSuffix, 
                         ingredient1.Key, ingredient1.Value, ingredient2.Key, ingredient2.Value, ingredient3.Key, ingredient3.Value,
-                        data.Conditions, ingredientDomain, data.IngredientDomain);
+                        data.Conditions, ingredientDomain, data.IngredientDomain, data.ColourMeta, texture4);
                 }
                 catch (Exception)
                 {
@@ -754,6 +763,8 @@ namespace SkysJSONGenerator
             var texture1 = domain + ":" + blocktexturefolder + "\\" + materialname;
             var texture2 = domain + ":" + blocktexturefolder + "\\" + materialname;
             var texture3 = domain + ":" + blocktexturefolder + "\\" + materialname;
+            var texture4 = domain + ":" + blocktexturefolder + "\\" + materialname;
+
 
             var ingredients = new List<KeyValuePair<string, int>>();
 
@@ -801,6 +812,16 @@ namespace SkysJSONGenerator
                                    materialNameArray[4].Replace("{materialname}", materialname);
                     else
                         texture3 = string.Empty;
+
+                    if (materialNameArray.Length > 5)
+                        if (materialNameArray[5] == "ingredients")
+                            ingredients = GetIngredients(materialNameArray, 6, materialname);
+                        else
+                        if (ingredients.Count == 0)
+                            texture4 = domain + ":" + GetNaturaBlockFolder(materialNameArray[5], materialname) + "/" +
+                                       materialNameArray[5].Replace("{materialname}", materialname);
+                        else
+                            texture4 = string.Empty;
                 } else
                 {
                     string workingBlockTextureFolder;
@@ -848,6 +869,14 @@ namespace SkysJSONGenerator
                     else
                         texture3 = string.Empty;
 
+                    if (materialNameArray.Length > 5)
+                        if (materialNameArray[5] == "ingredients")
+                            ingredients = GetIngredients(materialNameArray, 6, materialname);
+                        else
+                        if (ingredients.Count == 0)
+                            texture4 = domain + ":" + workingBlockTextureFolder + "/" + materialNameArray[5].Replace("{materialname}", materialname);
+                        else
+                            texture4 = string.Empty;
                 }
             }
 
@@ -855,7 +884,7 @@ namespace SkysJSONGenerator
             materialNameOut = materialname;
             ingredientsOut = ingredients;
 
-            return new[] {texture1, texture2, texture3};
+            return new[] {texture1, texture2, texture3, texture4 };
         }
 
         private async Task RenderChairJSON(bool langs)
@@ -933,10 +962,29 @@ namespace SkysJSONGenerator
 
                     if (_renderRecipe)
                     {
-                        if (domain == "minecraft")
-                            tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder))));
+                        if (chairName.Contains("padded") && chairName.Contains("single"))
+                        {
+                            for (var i = 0; i < 16; i++)
+                            {
+                                data.ColourMeta = i.ToString();
+                                
+                                var recipeName = $"\\{chairName}_{i.ToString()}.json";
+
+                                if (domain == "minecraft")
+                                    tasks.Add(WriteFile(_recipePath + recipeName, @LoadTemplate(data.WithPath(_recipeTemplateFolder))));
+                                else
+                                    tasks.Add(WriteFile(_recipePath + recipeName, @LoadTemplate(data.WithPath(_recipeTemplateFolder).WithName(fileNameArray[0] + "_conditional"))));
+                            }
+                        }
                         else
-                            tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder).WithName(fileNameArray[0] + "_conditional"))));
+                        {
+                            if (domain == "minecraft")
+                                tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder))));
+                            else
+                                tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder).WithName(fileNameArray[0] + "_conditional"))));
+                        }
+
+                        
                     }
 
                     if (!langs)
@@ -1278,11 +1326,15 @@ namespace SkysJSONGenerator
             double.TryParse(this.version, out version);
 
             if (version >= 1.14)
+            {
                 if (!Directory.Exists(_basePath + "\\data\\" + modid + "\\recipes"))
                     Directory.CreateDirectory(_basePath + "\\data\\" + modid + "\\recipes");
+            }
             else
+            {
                 if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\recipes"))
                     Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\recipes");
+            }
 
             if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\advancements\\" + modid))
                 Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\advancements\\" + modid);

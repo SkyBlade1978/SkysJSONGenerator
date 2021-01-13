@@ -459,6 +459,66 @@
     <None Include="templates\1.12\blockmodels\brick.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_back_left.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_back_middle.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_back_padded_left.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_back_padded_middle.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_back_padded_right.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_back_padded_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_back_right.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_back_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_left.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_log_left.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_log_middle.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_log_right.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_log_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_middle.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_padded_left.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_padded_middle.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_padded_right.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_padded_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_right.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockmodels\chair_wood_ironage_bench_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="templates\1.12\blockmodels\chair_wood_ironage_classic.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -657,6 +717,21 @@
     <None Include="templates\1.12\blockstates\brick.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="templates\1.12\blockstates\chair_wood_ironage_bench_back_padded_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockstates\chair_wood_ironage_bench_back_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockstates\chair_wood_ironage_bench_log_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockstates\chair_wood_ironage_bench_padded_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\blockstates\chair_wood_ironage_bench_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="templates\1.12\blockstates\chair_wood_ironage_classic.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -717,6 +792,21 @@
     <None Include="templates\1.12\itemmodels\brick.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="templates\1.12\itemmodels\chair_wood_ironage_bench_back_padded_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\itemmodels\chair_wood_ironage_bench_back_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\itemmodels\chair_wood_ironage_bench_log_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\itemmodels\chair_wood_ironage_bench_padded_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\itemmodels\chair_wood_ironage_bench_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="templates\1.12\itemmodels\chair_wood_ironage_classic.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -766,6 +856,21 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.12\lang\lang.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\recipe\chair_wood_ironage_bench_back_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\recipe\chair_wood_ironage_bench_back_padded_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\recipe\chair_wood_ironage_bench_log_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\recipe\chair_wood_ironage_bench_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.12\recipe\chair_wood_ironage_bench_padded_single.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.12\recipe\chair_wood_ironage_stool_tall.template">
@@ -1098,6 +1203,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="templates\1.10\loot_table\" />
+    <Folder Include="templates\1.12\blockmodels\NewFolder1\" />
     <Folder Include="templates\1.12\loot_table\" />
   </ItemGroup>
   <ItemGroup>
