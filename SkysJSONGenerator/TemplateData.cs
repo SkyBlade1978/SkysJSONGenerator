@@ -19,7 +19,7 @@ namespace SkysJSONGenerator
          public string Conditions { get; set; }
          public string IngredientDomain { get; set; }
          public string ColourMeta { get; set; }
-
+         public  string Colour { get; set; }
         private TemplateData Clone()
          {
              return new TemplateData
@@ -28,7 +28,7 @@ namespace SkysJSONGenerator
                  TopSuffix = this.TopSuffix, SideSuffix = this.SideSuffix, WallList = this.WallList,
                  LangName = this.LangName, Textures = this.Textures, SmoothSuffix = this.SmoothSuffix,
                  BrickSuffix = this.BrickSuffix, Ingredients = this.Ingredients, Conditions = this.Conditions,
-                 IngredientDomain = this.IngredientDomain, ColourMeta = this.ColourMeta
+                 IngredientDomain = this.IngredientDomain, ColourMeta = this.ColourMeta, Colour = this.Colour
              };
          }
 

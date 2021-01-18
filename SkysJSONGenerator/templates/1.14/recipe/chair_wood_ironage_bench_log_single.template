@@ -1,0 +1,15 @@
+﻿{{
+  "type": "minecraft:crafting_shaped",
+  "group": "furniture",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {{
+  "x": {{
+    "item": "{ingredient2}"
+  }}}},
+    "result": {{
+        "item": "{modid}:{blockname}",
+        "count": 3
+    }}
+}}

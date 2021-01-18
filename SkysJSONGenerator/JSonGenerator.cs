@@ -142,7 +142,7 @@ namespace SkysJSONGenerator
                     .Replace("{ingredient3}", "{17}").Replace("{meta3}", "{18}")
                     .Replace("{conditions}", "{19}").Replace("{ingredientdomain}", "{20}")
                     .Replace("{domain}", "{21}").Replace("{colourMeta}", "{22}")
-                    .Replace("{texture4}", "{23}");
+                    .Replace("{texture4}", "{23}").Replace("{colour}", "{24}");
                 
                 if (data.Textures.Length > 0)
                     texture1 = data.Textures[0];
@@ -175,7 +175,7 @@ namespace SkysJSONGenerator
                     return string.Format(@template, modid, data.BlockName, data.MaterialName, data.TopSuffix, data.SideSuffix, blocktexturefolder, 
                         data.WallList, data.LangName, texture1, texture2, texture3, data.SmoothSuffix, data.BrickSuffix, 
                         ingredient1.Key, ingredient1.Value, ingredient2.Key, ingredient2.Value, ingredient3.Key, ingredient3.Value,
-                        data.Conditions, ingredientDomain, data.IngredientDomain, data.ColourMeta, texture4);
+                        data.Conditions, ingredientDomain, data.IngredientDomain, data.ColourMeta, texture4, data.Colour);
                 }
                 catch (Exception)
                 {
@@ -745,12 +745,20 @@ namespace SkysJSONGenerator
 
             for (var i = startPos; i < arrayIn.Length; i++)
             {
-                if (arrayIn.Length > i + 2)
-                    returnList.Add(new KeyValuePair<string, int>(arrayIn[i] + ":" + arrayIn[i+1].Replace("{materialname}", materialname), int.Parse(arrayIn[i+2])));
+                int meta;
+
+                if (arrayIn.Length > i + 2 && int.TryParse(arrayIn[i + 2], out meta))
+                {
+                    returnList.Add(new KeyValuePair<string, int>(
+                        arrayIn[i] + ":" + arrayIn[i + 1].Replace("{materialname}", materialname),
+                        int.Parse(arrayIn[i + 2])));
+
+                    i++;
+                }
                 else
                     returnList.Add(new KeyValuePair<string, int>(arrayIn[i] + ":" + arrayIn[i + 1].Replace("{materialname}", materialname), -1));
                 
-                i++; i++;
+                i++; 
             }
 
             return returnList;
@@ -760,10 +768,10 @@ namespace SkysJSONGenerator
         {
             var domain = modid;
 
-            var texture1 = domain + ":" + blocktexturefolder + "\\" + materialname;
-            var texture2 = domain + ":" + blocktexturefolder + "\\" + materialname;
-            var texture3 = domain + ":" + blocktexturefolder + "\\" + materialname;
-            var texture4 = domain + ":" + blocktexturefolder + "\\" + materialname;
+            var texture1 = string.Empty; //domain + ":" + blocktexturefolder + "\\" + materialname;
+            var texture2 = string.Empty; //domain + ":" + blocktexturefolder + "\\" + materialname;
+            var texture3 = string.Empty; //domain + ":" + blocktexturefolder + "\\" + materialname;
+            var texture4 = string.Empty; //domain + ":" + blocktexturefolder + "\\" + materialname;
 
 
             var ingredients = new List<KeyValuePair<string, int>>();
@@ -897,7 +905,7 @@ namespace SkysJSONGenerator
                 var sideSuffix = string.Empty;
                 var conditions = string.Empty;
                 var ingredientDomain = string.Empty;
-
+                
                 foreach (var file in Directory.EnumerateFiles(_blockModelTemplateFolder))
                 {
                     var materialname = item;
@@ -952,39 +960,103 @@ namespace SkysJSONGenerator
 
                     var fileName = "\\" + chairName + ".json";
 
-                    tasks.Add(WriteFile(_modelsBlockPath + blockModelFilename, @LoadTemplate(data)));
-                    tasks.Add(WriteFile(_modelsBlockPath + blockModelInventoryFilename, @LoadTemplate(data.WithName(fileNameArray[0] + "_inventory"))));
-                    tasks.Add(WriteFile(_blockstatesPath + blockModelFilename, @LoadTemplate(data.WithPath(_blockstateTemplateFolder))));
-                    tasks.Add(WriteFile(_modelsItemPath + blockModelFilename, @LoadTemplate(data.WithPath(_itemModelTemplateFolder))));
-                    tasks.Add(WriteFile(_lootTablePath + fileName, @LoadTemplate(data.WithPath(_lootTableTemplateFolder))));
-                    if (_renderAdvancement)
-                        tasks.Add(WriteFile(_recipeAdvancementsPath + blockModelFilename, @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe"))));
-
-                    if (_renderRecipe)
+                    if (fileName.Contains("colour"))
                     {
-                        if (chairName.Contains("padded") && chairName.Contains("single"))
+                        var colours = new[]
                         {
-                            for (var i = 0; i < 16; i++)
-                            {
-                                data.ColourMeta = i.ToString();
-                                
-                                var recipeName = $"\\{chairName}_{i.ToString()}.json";
+                            "green",
+                            "light_blue",
+                            "light_gray",
+                            "lime",
+                            "magenta",
+                            "orange",
+                            "pink",
+                            "purple",
+                            "red",
+                            "white",
+                            "yellow",
+                            "black",
+                            "blue",
+                            "brown",
+                            "cyan",
+                            "gray"
+                        };
 
-                                if (domain == "minecraft")
-                                    tasks.Add(WriteFile(_recipePath + recipeName, @LoadTemplate(data.WithPath(_recipeTemplateFolder))));
-                                else
-                                    tasks.Add(WriteFile(_recipePath + recipeName, @LoadTemplate(data.WithPath(_recipeTemplateFolder).WithName(fileNameArray[0] + "_conditional"))));
-                            }
-                        }
-                        else
+                        var blockNameTemplate = data.BlockName;
+
+                        foreach (var colour in colours)
                         {
+                            data.Colour = colour;
+                            data.BlockName = blockNameTemplate.Replace("colour", colour);
+
+                            tasks.Add(WriteFile(_modelsBlockPath + blockModelFilename.Replace("colour", colour), @LoadTemplate(data)));
+
+                            //tasks.Add(WriteFile(_modelsBlockPath + blockModelInventoryFilename.Replace("colour", colour),
+                            //    @LoadTemplate(data.WithName(fileNameArray[0] + "_inventory"))));
+
+                            tasks.Add(WriteFile(_blockstatesPath + blockModelFilename.Replace("colour", colour),
+                                @LoadTemplate(data.WithPath(_blockstateTemplateFolder))));
+
+                            tasks.Add(WriteFile(_modelsItemPath + blockModelFilename.Replace("colour", colour),
+                                @LoadTemplate(data.WithPath(_itemModelTemplateFolder))));
+
+                            tasks.Add(WriteFile(_lootTablePath + fileName.Replace("colour", colour),
+                                @LoadTemplate(data.WithPath(_lootTableTemplateFolder))));
+
+                            if (_renderAdvancement)
+                                tasks.Add(WriteFile(_recipeAdvancementsPath + blockModelFilename.Replace("colour", colour),
+                                    @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe"))));
+
+                            if (!_renderRecipe)
+                                continue;
+                            
                             if (domain == "minecraft")
-                                tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder))));
+                                tasks.Add(WriteFile(_recipePath + blockModelFilename.Replace("colour", colour),
+                                    @LoadTemplate(data.WithPath(_recipeTemplateFolder))));
                             else
-                                tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder).WithName(fileNameArray[0] + "_conditional"))));
+                                tasks.Add(WriteFile(_recipePath + blockModelFilename.Replace("colour", colour),
+                                    @LoadTemplate(data.WithPath(_recipeTemplateFolder)
+                                        .WithName(fileNameArray[0] + "_conditional"))));
+                        }
+                    }
+                    else
+                    {
+                        tasks.Add(WriteFile(_modelsBlockPath + blockModelFilename, @LoadTemplate(data)));
+                        tasks.Add(WriteFile(_modelsBlockPath + blockModelInventoryFilename, @LoadTemplate(data.WithName(fileNameArray[0] + "_inventory"))));
+                        tasks.Add(WriteFile(_blockstatesPath + blockModelFilename, @LoadTemplate(data.WithPath(_blockstateTemplateFolder))));
+                        tasks.Add(WriteFile(_modelsItemPath + blockModelFilename, @LoadTemplate(data.WithPath(_itemModelTemplateFolder))));
+                        tasks.Add(WriteFile(_lootTablePath + fileName, @LoadTemplate(data.WithPath(_lootTableTemplateFolder))));
+
+                        if (_renderAdvancement)
+                            tasks.Add(WriteFile(_recipeAdvancementsPath + blockModelFilename, @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe"))));
+
+                        if (_renderRecipe)
+                        {
+                            if (chairName.Contains("padded") && chairName.Contains("single"))
+                            {
+                                for (var i = 0; i < 16; i++)
+                                {
+                                    data.ColourMeta = i.ToString();
+
+                                    var recipeName = $"\\{chairName}_{i.ToString()}.json";
+
+                                    if (domain == "minecraft")
+                                        tasks.Add(WriteFile(_recipePath + recipeName, @LoadTemplate(data.WithPath(_recipeTemplateFolder))));
+                                    else
+                                        tasks.Add(WriteFile(_recipePath + recipeName, @LoadTemplate(data.WithPath(_recipeTemplateFolder).WithName(fileNameArray[0] + "_conditional"))));
+                                }
+                            }
+                            else
+                            {
+                                if (domain == "minecraft")
+                                    tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder))));
+                                else
+                                    tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder).WithName(fileNameArray[0] + "_conditional"))));
+                            }
+
+
                         }
 
-                        
                     }
 
                     if (!langs)
@@ -1247,7 +1319,17 @@ namespace SkysJSONGenerator
             if (File.Exists(path))
                 File.Delete(path);
 
-            var parsedJson = JToken.Parse(content);
+            JToken parsedJson;
+
+            try
+            {
+                parsedJson = JToken.Parse(content);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
 
             var beautified = parsedJson.ToString(Formatting.Indented);
 
