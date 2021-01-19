@@ -885,6 +885,9 @@
     <None Include="templates\1.12\recipe\chair_wood_ironage_classic.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="templates\1.14\advancement\ironagefurniture_recipe_conditional.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="templates\1.14\blockmodels\chair_wood_ironage_bench_back_left.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -973,6 +976,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.14\itemmodels\chair_wood_ironage_bench_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.14\loot_table\chair_wood_ironage_bench_back_padded_colour_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.14\loot_table\chair_wood_ironage_bench_padded_colour_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.14\loot_table\chair_wood_ironage_bench_single.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.14\loot_table\chair_wood_ironage_bench_back_single.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.14\recipe\chair_wood_ironage_bench_back_padded_colour_single_conditional.template">

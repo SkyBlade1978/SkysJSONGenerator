@@ -75,18 +75,21 @@ namespace SkysJSONGenerator
             _lootTablePath = $"{_basePath}\\data\\{modid}\\loot_tables\\blocks";
             _blockstatesPath = $"{_basePath}\\assets\\{modid}\\blockstates";
             _advancementsPath = $"{_basePath}\\assets\\{modid}\\advancements\\{modid}";
-            _recipeAdvancementsPath = $"{_basePath}\\assets\\{modid}\\advancements\\recipes";
-
-
+            
             double versionNumber;
 
             double.TryParse(version, out versionNumber);
 
             if (versionNumber >= 1.14)
+            {
                 _recipePath = $"{_basePath}\\data\\{modid}\\recipes";
+                _recipeAdvancementsPath = $"{_basePath}\\data\\{modid}\\advancements\\recipes";
+            }
             else
+            {
                 _recipePath = $"{_basePath}\\assets\\{modid}\\recipes";
-
+                _recipeAdvancementsPath = $"{_basePath}\\assets\\{modid}\\advancements\\recipes";
+            }
 
             _langPath = $"{_basePath}\\assets\\{modid}\\lang";
             _modelsPath = $"{_basePath}\\assets\\{modid}\\models";
@@ -1004,8 +1007,21 @@ namespace SkysJSONGenerator
                                 @LoadTemplate(data.WithPath(_lootTableTemplateFolder))));
 
                             if (_renderAdvancement)
-                                tasks.Add(WriteFile(_recipeAdvancementsPath + blockModelFilename.Replace("colour", colour),
+                            {
+                                double parsedVersion;
+
+                                double.TryParse(this.version, out parsedVersion);
+                                var recipeAdvancementPath = _recipeAdvancementsPath;
+
+                                if (parsedVersion >= 1.14)
+                                {
+                                    recipeAdvancementPath += "\\chairs";
+                                }
+
+                                tasks.Add(WriteFile(
+                                    recipeAdvancementPath + blockModelFilename.Replace("colour", colour),
                                     @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe"))));
+                            }
 
                             if (!_renderRecipe)
                                 continue;
@@ -1070,6 +1086,9 @@ namespace SkysJSONGenerator
                             langName +=  " " + templateNameArray[i].FirstCharToUpper();
 
                     langName += " " + "Chair";
+
+                    if (!string.IsNullOrEmpty(data.Colour))
+                        langName = langName.Replace("Colour", data.Colour.FirstCharToUpper());
 
                     data.LangName = langName;
 
@@ -1399,10 +1418,7 @@ namespace SkysJSONGenerator
 
             if (!Directory.Exists(_basePath + "\\assets\\" + modid))
                 Directory.CreateDirectory(_basePath + "\\assets\\" + modid);
-
-            if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\advancements"))
-                Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\advancements");
-
+            
             double version;
 
             double.TryParse(this.version, out version);
@@ -1411,18 +1427,33 @@ namespace SkysJSONGenerator
             {
                 if (!Directory.Exists(_basePath + "\\data\\" + modid + "\\recipes"))
                     Directory.CreateDirectory(_basePath + "\\data\\" + modid + "\\recipes");
+
+                if (!Directory.Exists(_basePath + "\\data\\" + modid + "\\advancements"))
+                    Directory.CreateDirectory(_basePath + "\\data\\" + modid + "\\advancements");
+
+                if (!Directory.Exists(_basePath + "\\data\\" + modid + "\\advancements\\recipes"))
+                    Directory.CreateDirectory(_basePath + "\\data\\" + modid + "\\advancements\\recipes");
+
+                if (!Directory.Exists(_basePath + "\\data\\" + modid + "\\advancements\\recipes\\chairs"))
+                    Directory.CreateDirectory(_basePath + "\\data\\" + modid + "\\advancements\\recipes\\chairs");
+
             }
             else
             {
                 if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\recipes"))
                     Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\recipes");
+
+                if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\advancements"))
+                    Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\advancements");
+
+                if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\advancements\\recipes"))
+                    Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\advancements\\recipes");
             }
 
             if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\advancements\\" + modid))
                 Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\advancements\\" + modid);
 
-            if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\advancements\\recipes"))
-                Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\advancements\\recipes");
+            
 
             if (!Directory.Exists(_basePath + "\\assets\\" + modid + "\\lang"))
                 Directory.CreateDirectory(_basePath + "\\assets\\" + modid + "\\lang");
