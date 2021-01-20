@@ -34,6 +34,7 @@ namespace SkysJSONGenerator
         bool renderGate;
         bool renderFence;
         bool renderRecipe;
+        bool renderCode;
 
         Profile selectedProfile;
         string basePath;
@@ -353,56 +354,56 @@ namespace SkysJSONGenerator
                    }, "Iron Age Furniture 1.14 ");
 
                 var iafProfile115 = new Profile("1.15", "ironagefurniture", new List<string>
-                    {  "minecraft:oak:{materialname}_planks:{materialname}_log:ingredients:minecraft:{materialname}_planks"
-                        , "minecraft:spruce:{materialname}_planks:{materialname}_log:ingredients:minecraft:{materialname}_planks"
-                        , "minecraft:birch:{materialname}_planks:{materialname}_log:ingredients:minecraft:{materialname}_planks"
-                        , "minecraft:jungle:{materialname}_planks:{materialname}_log:ingredients:minecraft:{materialname}_planks"
-                        , "minecraft:acacia:{materialname}_planks:{materialname}_log:ingredients:minecraft:{materialname}_planks"
-                        , "minecraft:dark_oak:{materialname}_planks:{materialname}_log:ingredients:minecraft:{materialname}_planks"
-                        , "biomesoplenty:cherry:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
-                        , "biomesoplenty:fir:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
-                        , "biomesoplenty:hellbark:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
-                        , "biomesoplenty:jacaranda:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
-                        , "biomesoplenty:magic:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
-                        , "biomesoplenty:mahogany:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
-                        , "biomesoplenty:palm:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
-                        , "biomesoplenty:redwood:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
-                        , "biomesoplenty:umbran:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
-                        , "biomesoplenty:willow:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
-                        , "biomesoplenty:dead:{materialname}_planks:{materialname}_log:ingredients:biomesoplenty:{materialname}_planks"
-                        , "immersiveengineering:treated_wood:wooden_decoration/{materialname}_vertical:wooden_decoration/{materialname}_packaged:ingredients:immersiveengineering:{materialname}_packaged"
-                         , "byg:aspen:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:baobab:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:blue_enchanted:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:bulbis:{materialname}_planks:{materialname}_planks:ingredients:byg:{materialname}_planks"
-                         , "byg:cherry:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:cika:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:cypress:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:ebony:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:embur:{materialname}_planks:{materialname}_planks:ingredients:byg:{materialname}_planks"
-                         , "byg:fir:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:glacial_oak:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:green_enchanted:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:holly:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:jacaranda:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:mahogany:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:mangrove:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:maple:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:pine:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:rainbow_eucalyptus:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:redwood:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:skyris:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:willow:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:witch_hazel:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-                         , "byg:zelkova:{materialname}_planks:{materialname}_log:ingredients:byg:{materialname}_planks"
-
+                    {  "minecraft:oak:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:minecraft:{materialname}_planks:minecraft:{materialname}_log"
+                        , "minecraft:spruce:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:minecraft:{materialname}_planks:minecraft:{materialname}_log"
+                        , "minecraft:birch:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:minecraft:{materialname}_planks:minecraft:{materialname}_log"
+                        , "minecraft:jungle:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:minecraft:{materialname}_planks:minecraft:{materialname}_log"
+                        , "minecraft:acacia:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:minecraft:{materialname}_planks:minecraft:{materialname}_log"
+                        , "minecraft:dark_oak:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:minecraft:{materialname}_planks:minecraft:{materialname}_log"
+                        , "biomesoplenty:cherry:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "biomesoplenty:fir:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "biomesoplenty:hellbark:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "biomesoplenty:jacaranda:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "biomesoplenty:magic:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "biomesoplenty:mahogany:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "biomesoplenty:palm:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "biomesoplenty:redwood:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "biomesoplenty:umbran:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "biomesoplenty:willow:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "biomesoplenty:dead:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "immersiveengineering:treated_wood:wooden_decoration/{materialname}_vertical:wooden_decoration/{materialname}_packaged:log_top:ingredients:immersiveengineering:{materialname}_packaged:immersiveengineering:logs"
+                         , "byg:aspen:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:baobab:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:blue_enchanted:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:bulbis:{materialname}_planks:{materialname}_planks:{materialname}_stem_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:cherry:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:cika:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:cypress:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:ebony:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:embur:{materialname}_planks:{materialname}_planks:{materialname}_pedu_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:fir:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:glacial_oak:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:green_enchanted:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:holly:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:jacaranda:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:mahogany:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:mangrove:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:maple:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:pine:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:rainbow_eucalyptus:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:redwood:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:skyris:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:willow:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:witch_hazel:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "byg:zelkova:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
                     },
                    "block", "items", 3, new List<Block>
                    {
                         new Block { Name = "WoodChairs", Side = false, Top = false },
                         new Block { Name = "Lang", Side = true, Top = true },
                         new Block { Name = "Advancement", Side = false, Top = false },
-                        new Block { Name = "Recipe", Side = false, Top = false }
+                        new Block { Name = "Recipe", Side = false, Top = false },
+                        new Block { Name = "Code", Side = false, Top = false }
                    }, "Iron Age Furniture 1.15 ");
 
                 var spookyBiomes112 = new Profile("1.12", "spookybiomes", new List<string>
@@ -508,6 +509,7 @@ namespace SkysJSONGenerator
                 renderGate = false;
                 renderFence = false;
                 renderRecipe = false;
+                renderCode = false;
 
                 selectedProfile = (Profile)comboBoxMod.SelectedItem;
                 basePath = "out\\" + selectedProfile.Modid + "\\" + selectedProfile.Version;
@@ -592,6 +594,9 @@ namespace SkysJSONGenerator
                         case "Recipe":
                             renderRecipe = true;
                             break;
+                        case "Code":
+                            renderCode = true;
+                            break;
                     }
                 }
 
@@ -632,7 +637,7 @@ namespace SkysJSONGenerator
 
             generator.FileProcessedEvent += counter => worker?.ReportProgress(counter);
             
-            generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs, renderLangs, renderChairs, renderLeaves, renderLog, renderPlanks, renderWoodStairs, renderDoor, renderDoubleSlab, renderAdvancement, renderWoodSlabs, renderGate, renderFence, renderRecipe).GetAwaiter().GetResult();
+            generated = generator.RenderJSON(renderBlocks, renderStairs, renderWalls, renderSlabs, renderSmooth, renderBrick, renderFurnace, renderReliefs, renderLangs, renderChairs, renderLeaves, renderLog, renderPlanks, renderWoodStairs, renderDoor, renderDoubleSlab, renderAdvancement, renderWoodSlabs, renderGate, renderFence, renderRecipe, renderCode).GetAwaiter().GetResult();
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

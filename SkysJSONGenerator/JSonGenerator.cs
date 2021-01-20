@@ -39,6 +39,7 @@ namespace SkysJSONGenerator
         private readonly string _tagTemplateFolder;
         private readonly string _advancementTemplateFolder;
         private readonly string _recipeTemplateFolder;
+        private readonly string _codeTemplateFolder;
         private readonly string _wallItemTagPath;
         private readonly string _wallTagPath;
         private readonly string _basePath;
@@ -48,6 +49,7 @@ namespace SkysJSONGenerator
         private readonly string _modelsItemPath;
         private readonly string _lootTablePath;
         private readonly string _langPath;
+        private readonly string _codePath;
         private readonly string _recipeAdvancementsPath;
         private readonly string _recipePath;
         private readonly string _advancementsPath;
@@ -92,6 +94,7 @@ namespace SkysJSONGenerator
             }
 
             _langPath = $"{_basePath}\\assets\\{modid}\\lang";
+            _codePath = $"{_basePath}\\src";
             _modelsPath = $"{_basePath}\\assets\\{modid}\\models";
             _modelsBlockPath = _modelsPath + "\\block";
             _modelsItemPath = _modelsPath + "\\item";
@@ -107,8 +110,7 @@ namespace SkysJSONGenerator
             _tagTemplateFolder = _baseTemplateFolder + "\\tags";
             _advancementTemplateFolder = _baseTemplateFolder + "\\advancement";
             _recipeTemplateFolder = _baseTemplateFolder + "\\recipe";
-
-
+            _codeTemplateFolder = _baseTemplateFolder + "\\code";
         }
 
         private string LoadTemplate(TemplateData data)
@@ -898,7 +900,7 @@ namespace SkysJSONGenerator
             return new[] {texture1, texture2, texture3, texture4 };
         }
 
-        private async Task RenderChairJSON(bool langs)
+        private async Task RenderChairJSON(bool langs, bool code)
         {
             var tasks = new List<Task>();
 
@@ -1033,6 +1035,40 @@ namespace SkysJSONGenerator
                                 tasks.Add(WriteFile(_recipePath + blockModelFilename.Replace("colour", colour),
                                     @LoadTemplate(data.WithPath(_recipeTemplateFolder)
                                         .WithName(fileNameArray[0] + "_conditional"))));
+
+                            if (langs)
+                            {
+
+                                var templateNameArray = fileNameArray[0].Split('_');
+                                var langName = materialname.FirstCharToUpper();
+
+                                for (var i = 0; i < templateNameArray.Length; i++)
+                                    if (i > 1)
+                                        langName += " " + templateNameArray[i].FirstCharToUpper();
+
+                                langName += " " + "Chair";
+
+                                if (!string.IsNullOrEmpty(data.Colour))
+                                    langName = langName.Replace("Colour", data.Colour.FirstCharToUpper());
+
+                                data.LangName = langName;
+
+                                AppendFile(_langPath + "\\en_EN.lang",
+                                    @LoadTemplate(data.WithPath(_langTemplateFolder).WithName("lang")));
+                            }
+
+                            if (code)
+                            {
+                                foreach (var codeTemplate in Directory.EnumerateFiles(_codeTemplateFolder))
+                                {
+                                    var codeFilePathArray = codeTemplate.Split('\\');
+                                    var codeFileNameArray = codeFilePathArray[codeFilePathArray.Length - 1].Split('.');
+                                    var codeFileName = codeFileNameArray[0];
+
+                                    AppendFile(_codePath + $"\\{codeFileName}.java",
+                                        @LoadTemplate(data.WithPath(_codeTemplateFolder).WithName(codeFileName)));
+                                }
+                            }
                         }
                     }
                     else
@@ -1069,30 +1105,39 @@ namespace SkysJSONGenerator
                                 else
                                     tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder).WithName(fileNameArray[0] + "_conditional"))));
                             }
-
-
                         }
 
+                        if (langs)
+                        {
+
+                            var templateNameArray = fileNameArray[0].Split('_');
+                            var langName = materialname.FirstCharToUpper();
+
+                            for (var i = 0; i < templateNameArray.Length; i++)
+                                if (i > 1)
+                                    langName += " " + templateNameArray[i].FirstCharToUpper();
+
+                            langName += " " + "Chair";
+                            
+                            data.LangName = langName;
+
+                            AppendFile(_langPath + "\\en_EN.lang",
+                                @LoadTemplate(data.WithPath(_langTemplateFolder).WithName("lang")));
+                        }
                     }
 
-                    if (!langs)
-                        continue;
+                    if (code)
+                    {
+                        foreach (var codeTemplate in Directory.EnumerateFiles(_codeTemplateFolder))
+                        {
+                            var codeFilePathArray = codeTemplate.Split('\\');
+                            var codeFileNameArray = codeFilePathArray[codeFilePathArray.Length -1].Split('.');
+                            var codeFileName = codeFileNameArray[0];
 
-                    var templateNameArray = fileNameArray[0].Split('_');
-                    var langName = materialname.FirstCharToUpper();
-
-                    for (var i = 0; i < templateNameArray.Length; i++)
-                        if (i > 1)
-                            langName +=  " " + templateNameArray[i].FirstCharToUpper();
-
-                    langName += " " + "Chair";
-
-                    if (!string.IsNullOrEmpty(data.Colour))
-                        langName = langName.Replace("Colour", data.Colour.FirstCharToUpper());
-
-                    data.LangName = langName;
-
-                    AppendFile(_langPath + "\\en_EN.lang", @LoadTemplate(data.WithPath(_langTemplateFolder).WithName("lang")));
+                            AppendFile(_codePath + $"\\{codeFileName}.java",
+                                @LoadTemplate(data.WithPath(_codeTemplateFolder).WithName(codeFileName)));
+                        }
+                    }
                 }
             }
 
@@ -1374,7 +1419,7 @@ namespace SkysJSONGenerator
         public async Task<int> RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, 
             bool furnace, bool releifs, bool langs, bool chairs, bool leaves, bool log, bool planks, bool woodStairs, 
             bool renderDoor, bool renderDoubleSlab, bool renderAdvancement, bool renderWoodSlabs, bool renderGate, 
-            bool renderFence, bool renderRecipe)
+            bool renderFence, bool renderRecipe, bool renderCode)
         {
             _filesGenerated = 0;
             _renderAdvancement = renderAdvancement;
@@ -1395,6 +1440,9 @@ namespace SkysJSONGenerator
             if (!Directory.Exists(_basePath + "\\data"))
                 Directory.CreateDirectory(_basePath + "\\data");
 
+            if (!Directory.Exists(_basePath + "\\src"))
+                Directory.CreateDirectory(_basePath + "\\src");
+            
             if (!Directory.Exists(_basePath + "\\data\\minecraft"))
                 Directory.CreateDirectory(_basePath + "\\data\\minecraft");
 
@@ -1542,7 +1590,7 @@ namespace SkysJSONGenerator
 
             if (releifs) await RenderReleifJSON(langs);
 
-            if (chairs) await RenderChairJSON(langs);
+            if (chairs) await RenderChairJSON(langs, renderCode);
 
             if (leaves) await RenderBlockJSON("leaves");
 
