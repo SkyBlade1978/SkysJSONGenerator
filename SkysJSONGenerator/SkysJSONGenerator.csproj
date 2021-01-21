@@ -522,25 +522,13 @@
     <None Include="templates\1.12\blockmodels\chair_wood_ironage_classic.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="templates\1.12\blockmodels\chair_wood_ironage_classic_inventory.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="templates\1.12\blockmodels\chair_wood_ironage_shield.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="templates\1.12\blockmodels\chair_wood_ironage_shield_inventory.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.12\blockmodels\chair_wood_ironage_stool_short.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="templates\1.12\blockmodels\chair_wood_ironage_stool_short_inventory.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="templates\1.12\blockmodels\chair_wood_ironage_stool_tall.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="templates\1.12\blockmodels\chair_wood_ironage_stool_tall_inventory.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.12\blockmodels\door_bottom.template">
@@ -1398,25 +1386,13 @@
     <None Include="templates\1.15\blockmodels\chair_wood_ironage_classic.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="templates\1.15\blockmodels\chair_wood_ironage_classic_inventory.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="templates\1.15\blockmodels\chair_wood_ironage_shield.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="templates\1.15\blockmodels\chair_wood_ironage_shield_inventory.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.15\blockmodels\chair_wood_ironage_stool_short.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="templates\1.15\blockmodels\chair_wood_ironage_stool_short_inventory.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="templates\1.15\blockmodels\chair_wood_ironage_stool_tall.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="templates\1.15\blockmodels\chair_wood_ironage_stool_tall_inventory.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.15\blockmodels\inner_stairs.template">
@@ -1635,25 +1611,13 @@
     <None Include="templates\1.14\blockmodels\chair_wood_ironage_classic.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="templates\1.14\blockmodels\chair_wood_ironage_classic_inventory.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="templates\1.14\blockmodels\chair_wood_ironage_shield.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="templates\1.14\blockmodels\chair_wood_ironage_shield_inventory.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.14\blockmodels\chair_wood_ironage_stool_short.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="templates\1.14\blockmodels\chair_wood_ironage_stool_short_inventory.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="templates\1.14\blockmodels\chair_wood_ironage_stool_tall.template">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="templates\1.14\blockmodels\chair_wood_ironage_stool_tall_inventory.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.14\blockmodels\inner_stairs.template">
