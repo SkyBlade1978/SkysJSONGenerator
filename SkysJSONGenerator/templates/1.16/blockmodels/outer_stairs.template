@@ -1,0 +1,8 @@
+﻿{{
+                                "parent": "block/outer_stairs",
+                                "textures": {{
+                                    "bottom": "{modid}:{blocktexturefolder}/{materialname}",
+                                    "top": "{modid}:{blocktexturefolder}/{materialname}",
+                                    "side": "{modid}:{blocktexturefolder}/{materialname}"
+                                }}
+                            }}
