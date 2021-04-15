@@ -1,0 +1,36 @@
+﻿{{
+  "variants": {{
+    "facing=north,lit=lit": {{
+      "model": "{modid}:light_metal_ironage_sconce_wall_celestial_{ingredientdomain}{materialname}",
+      "y": 0
+    }},
+  "facing=east,lit=lit": {{
+    "model": "ironagefurniture:light_metal_ironage_sconce_wall_celestial_{ingredientdomain}{materialname}",
+    "y": 90
+  }},
+    "facing=south,lit=lit": {{
+      "model": "ironagefurniture:light_metal_ironage_sconce_wall_celestial_{ingredientdomain}{materialname}",
+      "y": 180
+    }},
+    "facing=west,lit=lit": {{
+      "model": "ironagefurniture:light_metal_ironage_sconce_wall_celestial_{ingredientdomain}{materialname}",
+      "y": 270
+    }},
+    "facing=north,lit=unlit": {{
+      "model": "ironagefurniture:light_metal_ironage_sconce_wall_celestial_{ingredientdomain}{materialname}",
+      "y": 0
+    }},
+    "facing=east,lit=unlit": {{
+      "model": "ironagefurniture:light_metal_ironage_sconce_wall_celestial_{ingredientdomain}{materialname}",
+      "y": 90
+    }},
+    "facing=south,lit=unlit": {{
+      "model": "ironagefurniture:light_metal_ironage_sconce_wall_celestial_{ingredientdomain}{materialname}",
+      "y": 180
+    }},
+    "facing=west,lit=unlit": {{
+      "model": "ironagefurniture:light_metal_ironage_sconce_wall_celestial_{ingredientdomain}{materialname}",
+      "y": 270
+    }}
+  }}
+}}

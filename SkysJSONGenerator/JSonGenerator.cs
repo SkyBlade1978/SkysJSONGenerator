@@ -785,6 +785,12 @@ namespace SkysJSONGenerator
             {
                 var materialNameArray = materialname.Split(':');
 
+                var materialType = materialNameArray[0];
+
+                materialname = materialname.Substring(materialType.Length + 1, (materialname.Length - materialType.Length) - 1);
+
+                materialNameArray = materialname.Split(':');
+
                 domain = materialNameArray[0];
                 materialname = materialNameArray[1];
 
@@ -911,6 +917,9 @@ namespace SkysJSONGenerator
                 var conditions = string.Empty;
                 var ingredientDomain = string.Empty;
                 
+                if (item.Split(':')[0] != "wood")
+                    continue;
+                
                 foreach (var file in Directory.EnumerateFiles(_blockModelTemplateFolder))
                 {
                     var materialname = item;
@@ -927,6 +936,7 @@ namespace SkysJSONGenerator
 
                     List<KeyValuePair<string, int>> ingredients;
                     var textures = GetTextureOverrides(materialname, out materialname, out domain, out ingredients);
+                    
 
                     if (ingredients.Any())
                     {
@@ -1132,6 +1142,250 @@ namespace SkysJSONGenerator
                         {
                             var codeFilePathArray = codeTemplate.Split('\\');
                             var codeFileNameArray = codeFilePathArray[codeFilePathArray.Length -1].Split('.');
+                            var codeFileName = codeFileNameArray[0];
+
+                            AppendFile(_codePath + $"\\{codeFileName}.java",
+                                @LoadTemplate(data.WithPath(_codeTemplateFolder).WithName(codeFileName)));
+                        }
+                    }
+                }
+            }
+
+            await Task.WhenAll(tasks.ToArray());
+        }
+
+        private async Task RenderSconceJSON(bool langs, bool code)
+        {
+            var tasks = new List<Task>();
+
+            foreach (var item in _profile.Materials)
+            {
+                var topSuffix = string.Empty;
+                var sideSuffix = string.Empty;
+                var conditions = string.Empty;
+                var ingredientDomain = string.Empty;
+
+                if (item.Split(':')[0] != "metal")
+                    continue;
+                
+                foreach (var file in Directory.EnumerateFiles(_blockModelTemplateFolder))
+                {
+                    var materialname = item;
+
+                    if (!file.Contains("_sconce_") || file.Contains("_inventory") || file.Contains("_conditional"))
+                        continue;
+
+                    var filePathArray = file.Split('\\');
+                    var fileNameArray = filePathArray[filePathArray.Length - 1].Split('.');
+
+                    var sconceName = fileNameArray[0];
+
+                    string domain;
+
+                    List<KeyValuePair<string, int>> ingredients;
+                    var textures = GetTextureOverrides(materialname, out materialname, out domain, out ingredients);
+
+                    if (ingredients.Any())
+                    {
+                        ingredientDomain = ingredients.First().Key.Split(':')[0];
+
+                        if (ingredientDomain != "minecraft")
+                            conditions = @", ""conditions"":[{ ""type"":""forge:mod_loaded"", ""modid"":""" + ingredientDomain + @"""}]";
+                    }
+
+                    if (domain == "minecraft")
+                        sconceName += "_" + materialname;
+                    else
+                    {
+                        sconceName += "_" + domain + "_" + materialname;
+                        ingredientDomain = domain;
+                    }
+                    
+                    var blockModelFilename = $"\\{sconceName}.json";
+                    
+                    var data = new TemplateData
+                    {
+                        Path = _blockModelTemplateFolder,
+                        Name = fileNameArray[0],
+                        BlockName = sconceName,
+                        MaterialName = materialname,
+                        TopSuffix = topSuffix,
+                        SideSuffix = sideSuffix,
+                        Textures = textures,
+                        Ingredients = ingredients,
+                        Conditions = conditions,
+                        IngredientDomain = ingredientDomain
+                    };
+
+                    var fileName = "\\" + sconceName + ".json";
+
+                    if (fileName.Contains("colour"))
+                    {
+                        var colours = new[]
+                        {
+                            "green",
+                            "light_blue",
+                            "light_gray",
+                            "lime",
+                            "magenta",
+                            "orange",
+                            "pink",
+                            "purple",
+                            "red",
+                            "white",
+                            "yellow",
+                            "black",
+                            "blue",
+                            "brown",
+                            "cyan",
+                            "gray"
+                        };
+
+                        var blockNameTemplate = data.BlockName;
+
+                        foreach (var colour in colours)
+                        {
+                            data.Colour = colour;
+                            data.BlockName = blockNameTemplate.Replace("colour", colour);
+
+                            tasks.Add(WriteFile(_modelsBlockPath + blockModelFilename.Replace("colour", colour), @LoadTemplate(data)));
+
+                            //tasks.Add(WriteFile(_modelsBlockPath + blockModelInventoryFilename.Replace("colour", colour),
+                            //    @LoadTemplate(data.WithName(fileNameArray[0] + "_inventory"))));
+
+                            tasks.Add(WriteFile(_blockstatesPath + blockModelFilename.Replace("colour", colour),
+                                @LoadTemplate(data.WithPath(_blockstateTemplateFolder))));
+
+                            tasks.Add(WriteFile(_modelsItemPath + blockModelFilename.Replace("colour", colour),
+                                @LoadTemplate(data.WithPath(_itemModelTemplateFolder))));
+
+                            tasks.Add(WriteFile(_lootTablePath + fileName.Replace("colour", colour),
+                                @LoadTemplate(data.WithPath(_lootTableTemplateFolder))));
+
+                            if (_renderAdvancement)
+                            {
+                                double parsedVersion;
+
+                                double.TryParse(this.version, out parsedVersion);
+                                var recipeAdvancementPath = _recipeAdvancementsPath;
+
+                                if (parsedVersion >= 1.14)
+                                {
+                                    recipeAdvancementPath += "\\chairs";
+                                }
+
+                                tasks.Add(WriteFile(
+                                    recipeAdvancementPath + blockModelFilename.Replace("colour", colour),
+                                    @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe"))));
+                            }
+
+                            if (!_renderRecipe)
+                                continue;
+
+                            if (domain == "minecraft")
+                                tasks.Add(WriteFile(_recipePath + blockModelFilename.Replace("colour", colour),
+                                    @LoadTemplate(data.WithPath(_recipeTemplateFolder))));
+                            else
+                                tasks.Add(WriteFile(_recipePath + blockModelFilename.Replace("colour", colour),
+                                    @LoadTemplate(data.WithPath(_recipeTemplateFolder)
+                                        .WithName(fileNameArray[0] + "_conditional"))));
+
+                            if (langs)
+                            {
+
+                                var templateNameArray = fileNameArray[0].Split('_');
+                                var langName = materialname.FirstCharToUpper();
+
+                                for (var i = 0; i < templateNameArray.Length; i++)
+                                    if (i > 1)
+                                        langName += " " + templateNameArray[i].FirstCharToUpper();
+
+                                langName += " " + "Sconce";
+
+                                if (!string.IsNullOrEmpty(data.Colour))
+                                    langName = langName.Replace("Colour", data.Colour.FirstCharToUpper());
+
+                                data.LangName = langName;
+
+                                AppendFile(_langPath + "\\en_EN.lang",
+                                    @LoadTemplate(data.WithPath(_langTemplateFolder).WithName("lang")));
+                            }
+
+                            if (code)
+                            {
+                                foreach (var codeTemplate in Directory.EnumerateFiles(_codeTemplateFolder))
+                                {
+                                    var codeFilePathArray = codeTemplate.Split('\\');
+                                    var codeFileNameArray = codeFilePathArray[codeFilePathArray.Length - 1].Split('.');
+                                    var codeFileName = codeFileNameArray[0];
+
+                                    AppendFile(_codePath + $"\\{codeFileName}.java",
+                                        @LoadTemplate(data.WithPath(_codeTemplateFolder).WithName(codeFileName)));
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        tasks.Add(WriteFile(_modelsBlockPath + blockModelFilename, @LoadTemplate(data)));
+                        //tasks.Add(WriteFile(_modelsBlockPath + blockModelInventoryFilename, @LoadTemplate(data.WithName(fileNameArray[0] + "_inventory"))));
+                        tasks.Add(WriteFile(_blockstatesPath + blockModelFilename, @LoadTemplate(data.WithPath(_blockstateTemplateFolder))));
+                        tasks.Add(WriteFile(_modelsItemPath + blockModelFilename, @LoadTemplate(data.WithPath(_itemModelTemplateFolder))));
+                        tasks.Add(WriteFile(_lootTablePath + fileName, @LoadTemplate(data.WithPath(_lootTableTemplateFolder))));
+
+                        if (_renderAdvancement)
+                            tasks.Add(WriteFile(_recipeAdvancementsPath + blockModelFilename, @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe"))));
+
+                        if (_renderRecipe)
+                        {
+                            //if (sconceName.Contains("empty"))
+                            //{
+                            //    for (var i = 0; i < 16; i++)
+                            //    {
+                            //        data.ColourMeta = i.ToString();
+
+                            //        var recipeName = $"\\{sconceName}_{i.ToString()}.json";
+
+                            //        if (domain == "minecraft")
+                            //            tasks.Add(WriteFile(_recipePath + recipeName, @LoadTemplate(data.WithPath(_recipeTemplateFolder))));
+                            //        else
+                            //            tasks.Add(WriteFile(_recipePath + recipeName, @LoadTemplate(data.WithPath(_recipeTemplateFolder).WithName(fileNameArray[0] + "_conditional"))));
+                            //    }
+                            //}
+                            //else
+                            //{
+                                if (domain == "minecraft")
+                                    tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder))));
+                                else
+                                    tasks.Add(WriteFile(_recipePath + blockModelFilename, @LoadTemplate(data.WithPath(_recipeTemplateFolder).WithName(fileNameArray[0] + "_conditional"))));
+                            //}
+                        }
+
+                        if (langs)
+                        {
+
+                            var templateNameArray = fileNameArray[0].Split('_');
+                            var langName = materialname.FirstCharToUpper();
+
+                            for (var i = 0; i < templateNameArray.Length; i++)
+                                if (i > 1)
+                                    langName += " " + templateNameArray[i].FirstCharToUpper();
+
+                            langName += " " + "Sconce";
+
+                            data.LangName = langName;
+
+                            AppendFile(_langPath + "\\en_EN.lang",
+                                @LoadTemplate(data.WithPath(_langTemplateFolder).WithName("lang")));
+                        }
+                    }
+
+                    if (code)
+                    {
+                        foreach (var codeTemplate in Directory.EnumerateFiles(_codeTemplateFolder))
+                        {
+                            var codeFilePathArray = codeTemplate.Split('\\');
+                            var codeFileNameArray = codeFilePathArray[codeFilePathArray.Length - 1].Split('.');
                             var codeFileName = codeFileNameArray[0];
 
                             AppendFile(_codePath + $"\\{codeFileName}.java",
@@ -1419,7 +1673,7 @@ namespace SkysJSONGenerator
         public async Task<int> RenderJSON(bool blocks, bool stairs, bool walls, bool slabs, bool smooth, bool brick, 
             bool furnace, bool releifs, bool langs, bool chairs, bool leaves, bool log, bool planks, bool woodStairs, 
             bool renderDoor, bool renderDoubleSlab, bool renderAdvancement, bool renderWoodSlabs, bool renderGate, 
-            bool renderFence, bool renderRecipe, bool renderCode)
+            bool renderFence, bool renderRecipe, bool renderCode, bool sconces)
         {
             _filesGenerated = 0;
             _renderAdvancement = renderAdvancement;
@@ -1591,6 +1845,8 @@ namespace SkysJSONGenerator
             if (releifs) await RenderReleifJSON(langs);
 
             if (chairs) await RenderChairJSON(langs, renderCode);
+
+            if (sconces) await RenderSconceJSON(langs, renderCode);
 
             if (leaves) await RenderBlockJSON("leaves");
 
