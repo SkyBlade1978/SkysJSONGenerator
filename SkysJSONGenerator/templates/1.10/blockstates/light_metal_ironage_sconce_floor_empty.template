@@ -1,0 +1,20 @@
+﻿{{
+  "variants": {{
+    "facing=north": {{
+      "model": "{modid}:light_metal_ironage_sconce_floor_empty_{ingredientdomain}{materialname}",
+      "y": 0
+    }},
+    "facing=east": {{
+      "model": "{modid}:light_metal_ironage_sconce_floor_empty_{ingredientdomain}{materialname}",
+      "y": 90
+    }},
+    "facing=south": {{
+      "model": "{modid}:light_metal_ironage_sconce_floor_empty_{ingredientdomain}{materialname}",
+      "y": 180
+    }},
+    "facing=west": {{
+      "model": "{modid}:light_metal_ironage_sconce_floor_empty_{ingredientdomain}{materialname}",
+      "y": 270
+    }}
+  }}
+}}

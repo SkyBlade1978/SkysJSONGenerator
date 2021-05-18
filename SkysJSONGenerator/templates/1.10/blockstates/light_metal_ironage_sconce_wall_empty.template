@@ -1,35 +1,19 @@
 ﻿{{
   "variants": {{
-    "facing=north,type=wall": {{
+    "facing=north": {{
       "model": "{modid}:light_metal_ironage_sconce_wall_empty_{ingredientdomain}{materialname}",
       "y": 0
     }},
-  "facing=east,type=wall": {{
-    "model": "{modid}:light_metal_ironage_sconce_wall_empty_{ingredientdomain}{materialname}",
-    "y": 90
-  }},
-    "facing=south,type=wall": {{
+    "facing=east": {{
       "model": "{modid}:light_metal_ironage_sconce_wall_empty_{ingredientdomain}{materialname}",
-      "y": 180
-    }},
-    "facing=west,type=wall": {{
-      "model": "{modid}:light_metal_ironage_sconce_wall_empty_{ingredientdomain}{materialname}",
-      "y": 270
-    }},
-    "facing=north,type=floor": {{
-      "model": "{modid}:light_metal_ironage_sconce_floor_empty_{ingredientdomain}{materialname}",
-      "y": 0
-    }},
-    "facing=east,type=floor": {{
-      "model": "{modid}:light_metal_ironage_sconce_floor_empty_{ingredientdomain}{materialname}",
       "y": 90
     }},
-    "facing=south,type=floor": {{
-      "model": "{modid}:light_metal_ironage_sconce_floor_empty_{ingredientdomain}{materialname}",
+    "facing=south": {{
+      "model": "{modid}:light_metal_ironage_sconce_wall_empty_{ingredientdomain}{materialname}",
       "y": 180
     }},
-    "facing=west,type=floor": {{
-      "model": "{modid}:light_metal_ironage_sconce_floor_empty_{ingredientdomain}{materialname}",
+    "facing=west": {{
+      "model": "{modid}:light_metal_ironage_sconce_wall_empty_{ingredientdomain}{materialname}",
       "y": 270
     }}
   }}

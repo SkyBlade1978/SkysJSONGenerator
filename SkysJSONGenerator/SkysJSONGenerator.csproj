@@ -345,13 +345,25 @@
     <None Include="templates\1.10\blockstates\chair_wood_ironage_bench_back_single.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="templates\1.10\blockstates\light_metal_ironage_sconce_floor_torch_unlit.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="templates\1.10\blockstates\light_metal_ironage_sconce_wall_celestial.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockstates\light_metal_ironage_sconce_floor_empty.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.10\blockstates\light_metal_ironage_sconce_wall_glowstone.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.10\blockstates\light_metal_ironage_sconce_wall_candle.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockstates\light_metal_ironage_sconce_floor_torch.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\blockstates\light_metal_ironage_sconce_wall_torch_unlit.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.10\blockstates\light_metal_ironage_sconce_wall_torch.template">
@@ -432,13 +444,25 @@
     <None Include="templates\1.10\itemmodels\chair_wood_ironage_bench_single.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="templates\1.10\itemmodels\light_metal_ironage_sconce_wall_torch_unlit.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\itemmodels\light_metal_ironage_sconce_floor_torch_unlit.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="templates\1.10\itemmodels\light_metal_ironage_sconce_wall_candle.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.10\itemmodels\light_metal_ironage_sconce_wall_celestial.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="templates\1.10\itemmodels\light_metal_ironage_sconce_floor_empty.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="templates\1.10\itemmodels\light_metal_ironage_sconce_wall_glowstone.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\1.10\itemmodels\light_metal_ironage_sconce_floor_torch.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\1.10\itemmodels\light_metal_ironage_sconce_wall_torch.template">

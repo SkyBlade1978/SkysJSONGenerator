@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {{
 		"0": "{texture1}",
-		"1": "{texture2}",
+		"2": "minecraft:blocks/torch_on",
 		"particle": "{texture1}"
 	}},
 	"elements": [

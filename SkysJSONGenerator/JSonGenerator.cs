@@ -1256,8 +1256,15 @@ namespace SkysJSONGenerator
                             tasks.Add(WriteFile(_blockstatesPath + blockModelFilename.Replace("colour", colour),
                                 @LoadTemplate(data.WithPath(_blockstateTemplateFolder))));
 
-                            tasks.Add(WriteFile(_modelsItemPath + blockModelFilename.Replace("colour", colour),
-                                @LoadTemplate(data.WithPath(_itemModelTemplateFolder))));
+                            tasks.Add(WriteFile(_blockstatesPath + blockModelFilename.Replace("colour", colour),
+                                @LoadTemplate(data.WithPath(_blockstateTemplateFolder))));
+
+                            var unlitSconceName = $"{sconceName}_unlit";
+                            var unlitSconceFileName = $"\\{unlitSconceName}.json";
+
+
+                            tasks.Add(WriteFile(_modelsItemPath + unlitSconceFileName.Replace("colour", colour),
+                                @LoadTemplate(data.WithPath(_itemModelTemplateFolder).WithName(unlitSconceName))));
 
                             tasks.Add(WriteFile(_lootTablePath + fileName.Replace("colour", colour),
                                 @LoadTemplate(data.WithPath(_lootTableTemplateFolder))));
@@ -1270,10 +1277,8 @@ namespace SkysJSONGenerator
                                 var recipeAdvancementPath = _recipeAdvancementsPath;
 
                                 if (parsedVersion >= 1.14)
-                                {
-                                    recipeAdvancementPath += "\\chairs";
-                                }
-
+                                    recipeAdvancementPath += "\\sconces";
+                                
                                 tasks.Add(WriteFile(
                                     recipeAdvancementPath + blockModelFilename.Replace("colour", colour),
                                     @LoadTemplate(data.WithPath(_advancementTemplateFolder).WithName("recipe"))));
@@ -1329,6 +1334,15 @@ namespace SkysJSONGenerator
                     {
                         tasks.Add(WriteFile(_modelsBlockPath + blockModelFilename, @LoadTemplate(data)));
                         //tasks.Add(WriteFile(_modelsBlockPath + blockModelInventoryFilename, @LoadTemplate(data.WithName(fileNameArray[0] + "_inventory"))));
+
+                        var unlitSconceName = $"{sconceName}_unlit";
+                        var unlitSconceFileName = $"\\{unlitSconceName}.json";
+
+                        tasks.Add(WriteFile(_modelsItemPath + unlitSconceFileName,
+                            @LoadTemplate(data.WithPath(_itemModelTemplateFolder).WithName(unlitSconceName))));
+
+                        tasks.Add(WriteFile(_blockstatesPath + unlitSconceFileName, @LoadTemplate(data.WithPath(_blockstateTemplateFolder).WithName(data.Name + "_unlit"))));
+
                         tasks.Add(WriteFile(_blockstatesPath + blockModelFilename, @LoadTemplate(data.WithPath(_blockstateTemplateFolder))));
                         tasks.Add(WriteFile(_modelsItemPath + blockModelFilename, @LoadTemplate(data.WithPath(_itemModelTemplateFolder))));
                         tasks.Add(WriteFile(_lootTablePath + fileName, @LoadTemplate(data.WithPath(_lootTableTemplateFolder))));
