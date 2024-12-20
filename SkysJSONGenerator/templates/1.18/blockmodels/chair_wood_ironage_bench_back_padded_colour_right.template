@@ -1,0 +1,8 @@
+﻿{{
+  "parent": "ironagefurniture:block/template_chair_wood_ironage_bench_back_padded_right",
+  "textures": {{
+    "log": "{texture2}",
+    "planks": "{texture1}",
+	"wool": "minecraft:block/{colour}_wool"
+  }}
+}}

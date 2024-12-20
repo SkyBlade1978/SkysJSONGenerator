@@ -461,6 +461,66 @@ namespace SkysJSONGenerator
                         new Block { Name = "Code", Side = false, Top = false }
    }, "Iron Age Furniture 1.16 ");
 
+                var iafProfile118 = new Profile("1.18", "ironagefurniture", new List<string>
+                    {  "wood:minecraft:oak:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:minecraft:{materialname}_planks:minecraft:{materialname}_log"
+                        , "wood:minecraft:spruce:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:minecraft:{materialname}_planks:minecraft:{materialname}_log"
+                        , "wood:minecraft:birch:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:minecraft:{materialname}_planks:minecraft:{materialname}_log"
+                        , "wood:minecraft:jungle:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:minecraft:{materialname}_planks:minecraft:{materialname}_log"
+                        , "wood:minecraft:acacia:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:minecraft:{materialname}_planks:minecraft:{materialname}_log"
+                        , "wood:minecraft:dark_oak:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:minecraft:{materialname}_planks:minecraft:{materialname}_log"
+                        , "wood:minecraft:warped:{materialname}_planks:{materialname}_stem:{materialname}_stem_top:ingredients:minecraft:{materialname}_planks:minecraft:{materialname}_stem"
+                        , "wood:minecraft:crimson:{materialname}_planks:{materialname}_stem:{materialname}_stem_top:ingredients:minecraft:{materialname}_planks:minecraft:{materialname}_stem"
+                        , "wood:biomesoplenty:cherry:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "wood:biomesoplenty:fir:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "wood:biomesoplenty:hellbark:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "wood:biomesoplenty:jacaranda:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "wood:biomesoplenty:magic:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "wood:biomesoplenty:mahogany:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "wood:biomesoplenty:palm:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "wood:biomesoplenty:redwood:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "wood:biomesoplenty:umbran:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "wood:biomesoplenty:willow:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "wood:biomesoplenty:dead:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:biomesoplenty:{materialname}_planks:biomesoplenty:{materialname}_log"
+                        , "wood:immersiveengineering:treated_wood:wooden_decoration/{materialname}_vertical:wooden_decoration/{materialname}_packaged:log_top:ingredients:immersiveengineering:{materialname}_packaged:immersiveengineering:logs"
+                         , "wood:byg:aspen:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:baobab:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:blue_enchanted:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:bulbis:{materialname}_planks:{materialname}_planks:{materialname}_stem_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:cherry:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:cika:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:cypress:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:ebony:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:embur:{materialname}_planks:{materialname}_planks:{materialname}_pedu_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:fir:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:glacial_oak:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:green_enchanted:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:holly:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:jacaranda:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:mahogany:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:mangrove:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:maple:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:pine:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:rainbow_eucalyptus:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:redwood:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:skyris:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:willow:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:witch_hazel:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:zelkova:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:ether:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:ironwood:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:lament:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:nightshade:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                         , "wood:byg:palm:{materialname}_planks:{materialname}_log:{materialname}_log_top:ingredients:byg:{materialname}_planks:byg:{materialname}_log"
+                    },
+   "block", "items", 3, new List<Block>
+   {
+                        new Block { Name = "WoodChairs", Side = false, Top = false },
+                        new Block { Name = "Lang", Side = true, Top = true },
+                        new Block { Name = "Advancement", Side = false, Top = false },
+                        new Block { Name = "Recipe", Side = false, Top = false },
+                        new Block { Name = "Code", Side = false, Top = false }
+   }, "Iron Age Furniture 1.18 ");
+
 
                 var spookyBiomes112 = new Profile("1.12", "spookybiomes", new List<string>
                     {  "bloodwood"
@@ -491,6 +551,7 @@ namespace SkysJSONGenerator
                 _profiles.Add((iafProfile114));
                 _profiles.Add((iafProfile115));
                 _profiles.Add((iafProfile116));
+                _profiles.Add((iafProfile118));
 
                 if (!Directory.Exists("profiles"))
                     Directory.CreateDirectory("profiles");
