@@ -1,0 +1,14 @@
+﻿{{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    {{
+      "item": "minecraft:{colour}_carpet"
+    }},
+    {{
+      "item":"{modid}:chair_wood_ironage_bench_back_single_{ingredientdomain}{materialname}"
+    }}
+  ],
+  "result": {{
+    "item": "{modid}:{blockname}"
+  }}
+}}

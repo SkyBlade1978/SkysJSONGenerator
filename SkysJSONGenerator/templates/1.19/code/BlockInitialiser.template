@@ -1,0 +1,1 @@
+﻿event.getRegistry().register(new Chair(1,10, SoundType.WOOD, "{blockname}"));

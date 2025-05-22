@@ -1,0 +1,7 @@
+﻿{{
+  "parent": "ironagefurniture:block/template_chair_wood_ironage_bench_back_left",
+  "textures": {{
+    "log": "{texture2}",
+    "planks": "{texture1}"
+  }}
+}}
